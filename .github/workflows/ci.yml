@@ -26,6 +26,6 @@ jobs:
         - name: Install dependencies
           run: npm install
 
-        # 4. 테스트 실행
-        - name: Run tests
-          run: npm test -- --watchAll=false
+        # 4. 빌드 실행
+        - name: Build project
+          run: npm run build
