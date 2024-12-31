@@ -1,0 +1,31 @@
+name: CI Pipeline
+
+on:
+    # develop 브랜치로 pull request를 생성하거나 
+    # pull request를 생성한 후 새로운 커밋을 푸쉬할 떄 실행
+    pull_request:
+        branches:
+            - develop
+
+jobs:
+    build-and-test:
+        runs-on: ubuntu-latest
+
+        steps:
+        # 1. 리포지토리 클론
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        # 2. Node.js 설치
+        - name: Set up Node.js
+          uses: actions/setup-node@v4
+          with:
+            node-version: '20'
+
+        # 3. 의존성 설치
+        - name: Install dependencies
+          run: npm install
+
+        # 4. 테스트 실행
+        - name: Run tests
+          run: npm test -- --watchAll=false
