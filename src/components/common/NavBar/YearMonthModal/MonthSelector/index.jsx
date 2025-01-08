@@ -78,7 +78,7 @@ const MonthSelector = ({ onDateChange, initialMonth }) => {
             const newScrollTop = (targetIndex * ITEM_HEIGHT);
 
             // 부드러운 스크롤 효과 적용
-            smoothScrollTo(ref.current, newScrollTop, 100); // 50ms 동안 부드럽게 이동
+            smoothScrollTo(ref.current, newScrollTop, 100); // 100ms 동안 부드럽게 이동
 
             setSelected(targetIndex + 1);
             onDateChange(targetIndex + 1);
