@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route  } from "react-router-dom";
 
+import "./index.css";
 import Onboarding from "./pages/Onboarding" // 온보딩
 import Alarm from "./pages/Alarm"; // 알림 페이지
 import Community from "./pages/Community"; // 커뮤니티
