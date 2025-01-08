@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom'; 
 import { IconContainer, Icon, FloatingButtonWrapper } from '../../../../styles/common/FloatingButton/FinancePlusButton/style';
 
 import PlusIcon from "../../../../assets/icons/common/Plus.svg";
@@ -18,12 +19,18 @@ const FloatingButton = () => {
       </FloatingButtonWrapper>
       {showIcons && (
         <>
-        <FloatingButtonWrapper >
-            <Icon src={FinanceWrite} alt="Finance Write Icon" showIcons={showIcons} />
+        {/* 가계부 작성 페이지로 이동 */}
+        <Link to="/"> 
+          <FloatingButtonWrapper >
+              <Icon src={FinanceWrite} alt="Finance Write Icon" showIcons={showIcons} />
           </FloatingButtonWrapper>
+        </Link>
+        {/* 카메라로.. */}
+        <Link to="/"> 
           <FloatingButtonWrapper>
-            <Icon src={Camera} alt="Camera Icon" showIcons={showIcons} />
+              <Icon src={Camera} alt="Camera Icon" showIcons={showIcons} />
           </FloatingButtonWrapper>
+        </Link>
         </>
           
       )}
