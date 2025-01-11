@@ -47,19 +47,6 @@ const Calendar = ({
         return days;
     };
 
-    const buildCalendarTag = (calendarDays) => {
-        return calendarDays.map((day, i) => {
-            return (
-                <S.DayCell
-                    key={day ? day.getDate() : `empty-${i}`}
-                    $isSelected={day && day.getDate() === selectedDate.day}
-                    onClick={() => onClickDay(day)}
-                >
-                    {day ? day.getDate() : ""}
-                </S.DayCell>
-            );
-        });
-    };
 
     const calendarDays = buildCalendarDays();
 
@@ -81,7 +68,7 @@ const Calendar = ({
                 {calendarDays.map((day, i) => (
                     <S.DayCell
                         key={day ? day.getDate() : `empty-${i}`}
-                        $isSelected={day && day.getDate() === selectedDate.day}
+                        $isSelected={day && isSameDay(selectedDate, day)}
                         onClick={() => onClickDay(day)}
                     >
                         {day ? day.getDate() : ""}
