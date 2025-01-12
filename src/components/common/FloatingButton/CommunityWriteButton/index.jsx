@@ -7,8 +7,7 @@ import CommunityWrite from "../../../../assets/icons/common/CommunityWrite.svg";
 const CommunityWriteButton = () => {
   return (
     <IconContainer>
-    {/* 게시물 작성 페이지로 이동 (임시 링크 설정) */}
-        <Link to="/onboarding"> 
+        <Link to="/postwrite"> 
             <FloatingButtonWrapper>
                 <Icon src={CommunityWrite} alt="Community Write Icon" />
             </FloatingButtonWrapper>

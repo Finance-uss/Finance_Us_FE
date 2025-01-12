@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route  } from "react-router-dom";
 import "./index.css";
 
+import Layout from "./layouts/layout"; // 레이아웃
 import Onboarding from "./pages/Onboarding" // 온보딩
 import Alarm from "./pages/Alarm"; // 알림 페이지
 import Community from "./pages/Community"; // 커뮤니티
@@ -14,7 +15,8 @@ import ProfileSetting from './pages/ProfileSetting'; // 프로필 설정
 import User from './pages/User'; // 마이페이지
 import Finance from './pages/Finance'; // 가계부
 import NotFound from './pages/NotFound';
-
+import PostWrite from './pages/PostWrite'; // 글쓰기 페이지
+import Search from './pages/Search'; // 검색 페이지
 function App() {
   const [count, setCount] = useState(0);
 
@@ -35,8 +37,14 @@ function App() {
 
           {/* 가계부 페이지 */}
           <Route path="/finance" element={<Finance />} />
+          
+          {/* <Route element={<Layout/>}> */}
           {/* 커뮤니티 페이지 */}
           <Route path="/community" element={<Community />} />
+          <Route path="/postwrite" element={<PostWrite />} />
+          <Route path="/search" element={<Search />} />
+          {/* </Route> */}
+          
           {/* 통계 페이지 */}
           <Route path="/statistics" element={<Statistics />} />
           {/* 마이페이지 */}
