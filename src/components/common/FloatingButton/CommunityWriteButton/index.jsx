@@ -7,7 +7,7 @@ import CommunityWrite from "../../../../assets/icons/common/CommunityWrite.svg";
 const CommunityWriteButton = () => {
   return (
     <IconContainer>
-        <Link to="/postwrite"> 
+        <Link to="/community/postwrite"> 
             <FloatingButtonWrapper>
                 <Icon src={CommunityWrite} alt="Community Write Icon" />
             </FloatingButtonWrapper>

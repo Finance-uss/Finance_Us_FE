@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import * as S from '../../styles/Community/PostWrite/style';
-import BeforeHeader from '../../components/common/BeforeHeader';
-import SubmitButton from '../../components/common/SubmitButton';
-import CameraIconSrc from '../../assets/icons/common/Camera.svg';
-import CateSelect from '../../components/Community/Category/CateSelect';
+import * as S from '../../../styles/Community/PostWrite/style';
+import BeforeHeader from '../../../components/common/BeforeHeader';
+import SubmitButton from '../../../components/common/SubmitButton';
+import CameraIconSrc from '../../../assets/icons/common/Camera.svg';
+import CateSelect from '../../../components/Community/Category/CateSelect';
 
 
 const Community = () => {

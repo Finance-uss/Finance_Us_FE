@@ -15,7 +15,7 @@ import ProfileSetting from './pages/ProfileSetting'; // 프로필 설정
 import User from './pages/User'; // 마이페이지
 import Finance from './pages/Finance'; // 가계부
 import NotFound from './pages/NotFound';
-import PostWrite from './pages/PostWrite'; // 글쓰기 페이지
+import PostWrite from './pages/Community/PostWrite'; // 글쓰기 페이지
 import Search from './pages/Search'; // 검색 페이지
 function App() {
   const [count, setCount] = useState(0);
@@ -41,7 +41,7 @@ function App() {
           {/* <Route element={<Layout/>}> */}
           {/* 커뮤니티 페이지 */}
           <Route path="/community" element={<Community />} />
-          <Route path="/postwrite" element={<PostWrite />} />
+          <Route path="/community/postwrite" element={<PostWrite />} />
           <Route path="/search" element={<Search />} />
           {/* </Route> */}
           
