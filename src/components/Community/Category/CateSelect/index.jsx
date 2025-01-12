@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import CheckIcon from '../../../../assets/icons/common/Community/checked.svg';
+import CheckIcon from '../../../../assets/icons/common/Community/Checked.svg';
 import { RadioGroup, RadioButton } from '../../../../styles/Community/Category/CateSelect/style';
 
 const CateSelct = () => {
