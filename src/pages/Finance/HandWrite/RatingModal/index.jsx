@@ -1,6 +1,6 @@
 import React from 'react';
 import * as S from '../../../../styles/Finance/HandWrite/style';
-import line from '../../../../assets/icons/finance/line.svg';
+import line from '../../../../assets/icons/finance/Line.svg';
 
 const satisfactionTexts = ["아쉬워요", "그저 그래요", "괜찮아요", "만족해요", "좋아요"];
 

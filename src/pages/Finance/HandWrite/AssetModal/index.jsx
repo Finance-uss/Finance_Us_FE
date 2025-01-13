@@ -1,6 +1,6 @@
 import React from 'react';
 import * as S from '../../../../styles/Finance/HandWrite/style';
-import line from '../../../../assets/icons/finance/line.svg';
+import line from '../../../../assets/icons/finance/Line.svg';
 
 const assetData = [
     { main: "체크카드", sub: ["국민카드", "삼성카드", "우리카드"] },

@@ -1,6 +1,6 @@
 import React from 'react';
 import * as S from '../../../../styles/Finance/HandWrite/style';
-import line from '../../../../assets/icons/finance/line.svg';
+import line from '../../../../assets/icons/finance/Line.svg';
 
 const categoryData = [
     { main: "식비", sub: ["식당", "카페", "배달 음식"] },
