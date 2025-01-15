@@ -12,6 +12,7 @@ import Login from "./pages/Login"; // 로그인
 import FindId from "./pages/FindId";   // 아이디 찾기
 import FindPW from "./pages/FindPW";  // 비밀번호 찾기
 import SignUp from './pages/SignUp'; // 회원가입
+import SetPW from './pages/SetPW'; // 비번설정 페이지 추가
 import Statistics from './pages/Statistics'; // 통계
 import ProfileSetting from './pages/ProfileSetting'; // 프로필 설정
 import User from './pages/User'; // 마이페이지
@@ -38,6 +39,7 @@ function App() {
           </Route>
           {/* 회원가입 페이지 */}
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/setpw" element={<SetPW />} />
           <Route path="/profileSetting" element={<ProfileSetting />} />
 
           {/* 가계부 페이지 */}
