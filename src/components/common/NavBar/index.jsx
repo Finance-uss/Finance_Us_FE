@@ -4,7 +4,7 @@ import YearMonthModal from "./YearMonthModal/index.jsx";
 
 import CaretDownIcon from "../../../assets/icons/common/NavBar/CaretDown.svg";
 
-const NavBar = ({ selectedDate, setSelectedDate }) => {
+const NavBar = ({ selectedDate, setSelectedDate, icon }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleYearChange = (year) => {
@@ -18,10 +18,13 @@ const NavBar = ({ selectedDate, setSelectedDate }) => {
     return (
         <>
             <S.NavBarWrapper>
-                <S.SelectedDateText>
-                    {selectedDate.year}년 {selectedDate.month}월 
-                </S.SelectedDateText>
-                <S.DropdownIcon src={CaretDownIcon} alt="Caretdown Icon" onClick={() => setIsModalOpen(!isModalOpen)}/>
+                <S.DateSelectContiner>
+                    <S.SelectedDateText>
+                        {selectedDate.year}년 {selectedDate.month}월 
+                    </S.SelectedDateText>
+                    <S.DropdownIcon src={CaretDownIcon} alt="Caretdown Icon" onClick={() => setIsModalOpen(!isModalOpen)}/>
+                </S.DateSelectContiner>
+                {icon && <S.AlertIcon src={icon} alt="Alert Icon" />}
             </S.NavBarWrapper>
 
             {isModalOpen && (
