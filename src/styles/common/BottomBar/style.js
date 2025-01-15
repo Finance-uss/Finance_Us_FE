@@ -6,6 +6,7 @@ export const Bottom = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  // max-width: 393px;
   height: 75px;
   background-color: #ffffff;
   position: fixed;
