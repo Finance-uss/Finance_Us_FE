@@ -12,7 +12,7 @@ const Satisfaction = ({ selectedDate }) => {
             </S.SatisfactionText>
             <Link 
                 to={{
-                    pathname: "satisfaction",
+                    pathname: "report",
                     state: { selectedDate }
                 }}
             >
