@@ -1,6 +1,8 @@
 import React, {useState} from 'react';
 import NavBar from '../../../components/common/NavBar/index';
+import Satisfaction from '../../../components/Finance/Satisfaction';
 import Calendar from '../../../components/Finance/Calendar/index';
+import FinancePlusButton from '../../../components/common/FloatingButton/FinancePlusButton';
 
 import { FinanceContainer } from '../../../styles/Finance/FinanceMain/style';
 import Bell from '../../../assets/icons/common/Bell.svg';
@@ -14,8 +16,10 @@ const FinanceMain = () => {
     });
     return (
         <FinanceContainer>
-            <NavBar selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+            <NavBar icon={Bell} selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+            <Satisfaction selectedDate={selectedDate}/>
             <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate}/>
+            <FinancePlusButton />
         </FinanceContainer>
     );
 };
