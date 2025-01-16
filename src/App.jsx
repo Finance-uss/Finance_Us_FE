@@ -15,6 +15,8 @@ import Statistics from './pages/Statistics'; // 통계
 import ProfileSetting from './pages/ProfileSetting'; // 프로필 설정
 import User from './pages/User'; // 마이페이지
 import Finance from './pages/Finance'; // 가계부
+import FinanceMain from './pages/Finance/FinanceMain';
+import HandWrite from './pages/Finance/HandWrite';
 import NotFound from './pages/NotFound';
 import PostWrite from './pages/Community/PostWrite'; // 글쓰기 페이지
 import Search from './pages/Search'; // 검색 페이지
@@ -37,9 +39,11 @@ function App() {
           <Route path="/profileSetting" element={<ProfileSetting />} />
 
           {/* 가계부 페이지 */}
-          <Route path="/finance" element={<Finance />} />
-          
-          {/* <Route element={<Layout/>}> */}
+          <Route path="/finance" element={<Finance />} >
+            <Route index element={<FinanceMain />} />
+            <Route path="handwrite" element={<HandWrite />} />
+          </Route>
+
           {/* 커뮤니티 페이지 */}
           <Route path="/community" element={<Community />}>
             <Route index element={<CommunityMain />} />
