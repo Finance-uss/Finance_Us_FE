@@ -1,15 +1,21 @@
 import styled from "styled-components";
 
 export const NavBarWrapper = styled.div`
-    position: relative;
+    position: fixed;
     display: flex;
-    justify-content: left;
+    justify-content: space-between;
     align-items: center;
     width: 40%;
+    top: 44px;
     left: 5%;
     height: 24px; 
     gap: 6px;
     margin-bottom: 7px;
+`;
+
+export const DateSelectContiner = styled.div`
+    display: flex;
+    flex-direction: row;
 `;
 
 export const SelectedDateText = styled.div`
@@ -23,5 +29,9 @@ export const SelectedDateText = styled.div`
 `;
 
 export const DropdownIcon = styled.img`
+    cursor: pointer;
+`;
 
+export const AlertIcon = styled.img`
+    cursor: pointer;
 `;

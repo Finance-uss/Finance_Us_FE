@@ -3,21 +3,24 @@ import styled from "styled-components";
 export const ModalWrapper = styled.div`
     display: flex;
     justify-content: center;
-    position: relative;
-    width: 100%;
-    height: 206px;
-    
+    position: fixed;
+    width: 100%; 
+    height: calc(100% - 75px);
+    top: 75px;
+    left: 0;
+    z-index: 1000;
 `;
 
 export const ModalContent = styled.div`
+    position: absolute;
     display: flex;
     background: #F7F7F7;
     justify-content: center;
     align-items: center;
     width: 87%;
-    height: 100%;
+    height: 206px;
+    top: 7px;
     border-radius: 8px;
-    z-index: 1000;
 
     /* 상단 수평선 */
     &::before {
