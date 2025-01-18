@@ -14,12 +14,28 @@ import SignUp from './pages/SignUp'; // 회원가입
 import Statistics from './pages/Statistics'; // 통계
 import ProfileSetting from './pages/ProfileSetting'; // 프로필 설정
 import User from './pages/User'; // 마이페이지
+import UserMain from './pages/User/UserMain'; // 마이페이지 메인
+import CategoryPage from './pages/User/Setting/Category'; // 카테고리 설정
+import AssetsPage from './pages/User/Setting/Assets'; // 자산 설정
+import ExpensePage from './pages/User/Setting/Expense'; // 지출 목표 금액 설정
+import IncomePage from './pages/User/Setting/Income'; // 수익 목표 금액 설정 
+import MyPosts from './pages/User/Setting/My'; // 내가 작성한 글
+import LikedPosts from './pages/User/Setting/Liked'; // 내가 좋아요한 글
+import CommentedPosts from './pages/User/Setting/Commented'; // 내가 댓글 단 글
+import ScrappedPosts from './pages/User/Setting/Scrapped'; //내가 스크랩한 글
+import CalendarSetPage from './pages/User/Panel/Calendar'; // 캘린더 관리
+import ChangeProfilePage from './pages/User/Panel/Profile'; // 프로필 변경
+import ChangeEmailPage from './pages/User/Panel/Email'; // 이메일 변경
+import ChangePasswordPage from './pages/User/Panel/Password'; // 비밀번호 변경
+import LogoutPage from './pages/User/Panel/Logout'; // 로그아웃
+import DeleteAccountPage from './pages/User/Panel/Delete'; // 회원 탈퇴
 import Finance from './pages/Finance'; // 가계부
 import FinanceMain from './pages/Finance/FinanceMain';
 import HandWrite from './pages/Finance/HandWrite';
 import NotFound from './pages/NotFound';
 import PostWrite from './pages/Community/PostWrite'; // 글쓰기 페이지
 import Search from './pages/Search'; // 검색 페이지
+
 function App() {
   const [count, setCount] = useState(0);
 
@@ -57,7 +73,23 @@ function App() {
           {/* 통계 페이지 */}
           <Route path="/statistics" element={<Statistics />} />
           {/* 마이페이지 */}
-          <Route path="/user" element={<User />} />
+          <Route path="/user" element={<User />}>
+              <Route index element={<UserMain />} />
+              <Route path="category" element={<CategoryPage />} />
+              <Route path="assets" element={<AssetsPage />} />
+              <Route path="expense" element={<ExpensePage />} />
+              <Route path="income" element={<IncomePage />} />
+              <Route path="my-posts" element={<MyPosts />} />
+              <Route path="liked-posts" element={<LikedPosts />} />
+              <Route path="commented-posts" element={<CommentedPosts />} />
+              <Route path="scrapped-posts" element={<ScrappedPosts />} />
+              <Route path="calendar" element={<CalendarSetPage />} />
+              <Route path="profile-edit" element={<ChangeProfilePage />} />
+              <Route path="email-edit" element={<ChangeEmailPage />} />
+              <Route path="password-edit" element={<ChangePasswordPage />} />
+              <Route path="logout" element={<LogoutPage />} />
+              <Route path="delete-account" element={<DeleteAccountPage />} />
+          </Route>
 
           {/* 알림 페이지 */}
           <Route path="/alarm" element={<Alarm />} />
@@ -69,4 +101,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
