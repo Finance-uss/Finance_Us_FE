@@ -20,7 +20,7 @@ const FloatingButton = () => {
       {showIcons && (
         <>
         {/* 가계부 작성 페이지로 이동 */}
-        <Link to="/"> 
+        <Link to="handwrite"> 
           <FloatingButtonWrapper >
               <Icon src={FinanceWrite} alt="Finance Write Icon" showIcons={showIcons} />
           </FloatingButtonWrapper>
