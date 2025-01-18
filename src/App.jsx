@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route  } from "react-router-dom";
+import "normalize.css"
 import "./index.css";
 
 import Layout from "./layouts/layout"; // 레이아웃
@@ -16,6 +17,7 @@ import ProfileSetting from './pages/ProfileSetting'; // 프로필 설정
 import User from './pages/User'; // 마이페이지
 import Finance from './pages/Finance'; // 가계부
 import FinanceMain from './pages/Finance/FinanceMain';
+import Report from './pages/Finance/Report';
 import HandWrite from './pages/Finance/HandWrite';
 import NotFound from './pages/NotFound';
 import PostWrite from './pages/Community/PostWrite'; // 글쓰기 페이지
@@ -41,6 +43,7 @@ function App() {
           {/* 가계부 페이지 */}
           <Route path="/finance" element={<Finance />} >
             <Route index element={<FinanceMain />} />
+            <Route path="report" element={<Report />} />
             <Route path="handwrite" element={<HandWrite />} />
           </Route>
 

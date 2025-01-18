@@ -25,4 +25,5 @@ export const Title = styled.h1`
   position: absolute;
   left: 50%;
   transform: translateX(-50%); 
+  white-space: nowrap; /* 줄바꿈 방지 */
 `;
