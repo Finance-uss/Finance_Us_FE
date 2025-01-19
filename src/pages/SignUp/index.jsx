@@ -122,12 +122,7 @@ const SignUp = () => {
                 </InputContainer>
                 {emailMessage && (
                     <p style={{ 
-                        color: isEmailValid ? '#142755' : 'red', 
-                        marginTop: '8px', 
-                        fontSize: '14px', 
-                        fontStyle: 'normal', 
-                        fontWeight: 400, 
-                        lineHeight: '100%' 
+                        color: isEmailValid ? '#142755' : 'red' 
                     }}>
                         {emailMessage}
                     </p>
@@ -157,13 +152,7 @@ const SignUp = () => {
                 </InputContainer>
                 {authCodeMessage && (
                     <p style={{ 
-                        color: 'red', 
-                        marginTop: '8px', 
-                        fontSize: '14px', 
-                        fontStyle: 'normal', 
-                        fontWeight: 400, 
-                        lineHeight: '100%' 
-                    }}>
+                        color: 'red'}}>
                         {authCodeMessage}
                     </p>
                 )}

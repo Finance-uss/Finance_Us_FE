@@ -34,10 +34,10 @@ export const Input = styled.input`
     flex: 1; /* 입력 필드가 가능한 한 넓게 차지 */
     padding: 5px;
     border: none;
-    border-bottom: 1px solid #d9d9d9; /* 회색 줄 */
-    outline: none; /* 포커스 시 노란색 제거 */
+    border-bottom: 1px solid #d9d9d9; 
+    outline: none;
     &:focus {
-        border-bottom: 1px solid #142755; /* 포커스 시 색상 강조 */
+        border-bottom: 1px solid #142755;
     }
 `;
 
@@ -60,7 +60,7 @@ export const VerifyButton = styled.button`
 `;
 
 export const ButtonContainer = styled.div`
-    margin-top: 50px; 
+    margin-top: 40px; 
 `;
 
 export const SubmitButtonStyled = styled.button`

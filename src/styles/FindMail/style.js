@@ -7,7 +7,6 @@ export const Container = styled.div`
     width: 100%;
     box-sizing: border-box; 
     padding: 26px;
-    color: #b4b4b4;
 `;
 
 export const Title = styled.h1`
@@ -18,13 +17,12 @@ export const Title = styled.h1`
     letter-spacing: 0.2px;
     margin-top: 125px;
     margin-bottom: 40px;
-    color: black;
 `;
 
 export const Input = styled.input`
     width: 100%;
     padding: 5px;
-    margin: 10px 0;
+    margin-bottom: 40px;
     border: none;
     border-bottom: 1px solid #d9d9d9; 
     box-sizing: border-box;
@@ -32,10 +30,6 @@ export const Input = styled.input`
     &:focus {
         outline: none; 
     }
-`;
-
-export const ButtonContainer = styled.div`
-    margin-top: 40px; 
 `;
 
 export const LinkContainer = styled.div`
