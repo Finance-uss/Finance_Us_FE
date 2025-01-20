@@ -32,17 +32,17 @@ export const CloseIcon = styled.img`
     width: 20px;
     height: 20px;
     cursor: pointer;
-    font-weight: bold; /* 아이콘이 볼드 느낌 */
-    outline: none; /* 불필요한 외곽선 제거 */
+    font-weight: bold; 
+    outline: none; 
 `;
 
 export const ButtonWrapper = styled.div`
     display: flex;
     flex-wrap: wrap;
-    gap: 16px 10px; /* 상하 16px, 좌우 10px 간격 */
+    gap: 16px 10px; 
 `;
 
 export const ButtonBox = styled.div`
-    width: calc((100% - 20px) / 3); /* 한 줄에 3개 */
+    width: calc((100% - 20px) / 3);
     flex-shrink: 0;
 `;

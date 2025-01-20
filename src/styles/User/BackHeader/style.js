@@ -6,7 +6,7 @@ export const HeaderContainer = styled.div`
     padding: 44px 20px 0;
     display: flex;
     align-items: center;
-    position: relative; /* BackButton과 Title 위치를 조정하기 위해 사용 */
+    position: relative; 
 `;
 
 export const BackButton = styled.button`
@@ -37,5 +37,5 @@ export const Title = styled.h1`
     text-underline-position: from-font;
     text-decoration-skip-ink: none;
     margin: 0 auto;
-    flex: 1; /* 가운데 정렬을 위해 flex 사용 */
+    flex: 1; 
 `;

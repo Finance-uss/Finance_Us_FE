@@ -7,7 +7,7 @@ import PlusCateButton from '../../../../components/User/PlusCateButton';
 import CompleteButtonComponent from '../../../../components/User/CompleteButton';
 import { useNavigate } from 'react-router-dom';
 
-const CategoryPage = () => {
+const CategoryExpensePage = () => {
     const defaultCategories = [
         {
           id: 0,
@@ -31,8 +31,9 @@ const CategoryPage = () => {
         },
     ];
     const navigate = useNavigate();
-    
-    const [cateContainers, setCateContainers] = useState(defaultCategories); // 기본 4개
+    const [selectedTab, setSelectedTab] = useState(0); 
+
+    const [cateContainers, setCateContainers] = useState(defaultCategories); 
 
     const addCateContainer = () => {
         const newId = cateContainers.length;
@@ -57,12 +58,27 @@ const CategoryPage = () => {
         navigate('/user');
     };
 
+    // 탭 클릭 이벤트 핸들러
+    const handleTabClick = (index) => {
+        setSelectedTab(index);
+        if (index === 0) {
+            navigate("/user/expense-category"); // 지출 페이지
+        } else {
+            navigate("/user/profit-category"); // 수익 페이지
+        }
+    };
+
     return (
         <CategoryPageContainer>
             <FixedHeaderWrapper>
                 <BackHeader title="카테고리 설정" onBackClick={handleBackClick} />
                 <TopBarWrapper>
-                    <TopBar leftText="지출" rightText="수익" />
+                <TopBar
+                    leftText="지출"
+                    rightText="수익"
+                    onTabClick={handleTabClick}
+                    selectedTab={selectedTab} 
+                />
                 </TopBarWrapper>
             </FixedHeaderWrapper>
             <ContentWrapper>
@@ -72,7 +88,7 @@ const CategoryPage = () => {
                         key={container.id}
                         id={container.id}
                         title={container.title}
-                        subcategories={container.subcategories} // 전달
+                        subcategories={container.subcategories} 
                         onRemove={removeCateContainer}
                     />
                 ))}
@@ -86,14 +102,14 @@ const CategoryPage = () => {
     );
 };
 
-export default CategoryPage;
+export default CategoryExpensePage;
 
 const CategoryPageContainer = styled.div`
     display: flex;
     flex-direction: column;
     height: 100vh;
-    overflow-x: hidden; /* 가로 스크롤 방지 */
-    overflow-y: hidden; /* 세로 스크롤 방지 */
+    overflow-x: hidden;
+    overflow-y: hidden;
 `;
 
 const FixedHeaderWrapper = styled.div`
@@ -101,26 +117,26 @@ const FixedHeaderWrapper = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 10; /* 고정된 헤더 레이어 */
-    background-color: white; /* 헤더 배경 */
+    z-index: 10; 
+    background-color: white; 
 `;
 
 const TopBarWrapper = styled.div`
     position: absolute;
-    top: 88px; /* 상단에서 88px 아래 */
-    padding: 0 20px; /* 양 옆 20px 패딩 */
+    top: 88px;
+    padding: 0 20px; 
 `;
 
 const ContentWrapper = styled.div`
     margin-top: 156px;
     display: flex;
     flex-direction: column;
-    gap: 40px; /* CateContainer 간 간격 */
-    padding: 0 20px; /* 양 옆 20px 패딩 */
+    gap: 40px; 
+    padding: 0 20px; 
     flex: 1;
-    overflow-y: auto; /* 세로 스크롤 가능 */
-    overflow-x: hidden; /* 가로 스크롤 방지 */
-    padding-bottom: 120px; /* CompleteButton과 겹치지 않도록 여백 */
+    overflow-y: auto; 
+    overflow-x: hidden; 
+    padding-bottom: 120px; 
 `;
 
 const PlusCateButtonWrapper = styled.div`
