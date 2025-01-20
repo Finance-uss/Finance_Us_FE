@@ -1,6 +1,8 @@
 import * as S from "../../../styles/Finance/Calendar/style"
 
 const Calendar = ({
+    top,
+    header,
     selectedDate,
     setSelectedDate
 }) => {
@@ -51,10 +53,10 @@ const Calendar = ({
     const calendarDays = buildCalendarDays();
 
     return (
-        <S.CalendarContainer>
+        <S.CalendarContainer top={top}>
             <S.SummaryWrapper>
                 <S.Summary>
-                    지출 0원 수익 0원
+                    {header}
                 </S.Summary>
             </S.SummaryWrapper>
             <S.TableHeader>
