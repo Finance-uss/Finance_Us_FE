@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { useState } from 'react';
+import { Container, ProfileList } from '../../../styles/Community/CommunityMain/style';
 
 import Profile from '../../../components/Community/Profile';
 import icon from '../../../assets/icons/common/Community/exam.png';
@@ -11,8 +11,20 @@ import FloatingButton from '../../../components/common/FloatingButton/CommunityW
 import CateButton from '../../../components/Community/Category/CateButton';
 
 const CommunityMain = () => {
+    const [selectedTab, setSelectedTab] = useState(0); 
+
+    const handleLeftClick = () => {
+        setSelectedTab(0); // 자유게시판
+    };
+
+    const handleRightClick = () => {
+        setSelectedTab(1); // 정보게시판
+    };
+
+    const categoryFreeBoard = ['자유', '정보', '낭비했어요', '절약했어요'];
+    const categoryInfoBoard = ['칼럼', '강연', '홍보'];
+
     return (
-        <>
         <Container>
             <SearchHeader/>
             <ProfileList>
@@ -21,29 +33,21 @@ const CommunityMain = () => {
                 <Profile image={icon} name="김동글"/>
                 <Profile image={icon} name="김동글"/>
             </ProfileList>
-            <TopBar leftText="자유게시판" rightText="정보게시판"/>
-            <CateButton/>
+            <TopBar 
+                leftText="자유게시판" 
+                rightText="정보게시판" 
+                onLeftClick={handleLeftClick} 
+                onRightClick={handleRightClick} 
+                selectedTab={selectedTab} 
+            />
+            {/* selectedTab 값에 따라 다른 카테고리 버튼 렌더링 */}
+            {selectedTab === 0 && <CateButton categories={categoryFreeBoard}/>}
+            {selectedTab === 1 && <CateButton categories={categoryInfoBoard}/>}
+
             <FloatingButton/>
             <BottomBar/>
         </Container>
-        
-        </>
     );
 };
 
 export default CommunityMain;
-
-const ProfileList = styled.div`
-  display: flex;
-  flex-direction: row; 
-  justify-content: flex-start; 
-`;
-const Container = styled.div`
-    display: flex;
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    margin:20px auto;
-    padding-bottom: 65px;
-    // background-color: #142755;
-`;

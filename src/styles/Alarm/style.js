@@ -1,10 +1,13 @@
 import styled from "styled-components";
 
+export const Container = styled.div`
+    padding:20px;
+`;
 export const AlarmContainer = styled.div`
-    width: 353px;
+    width: 100%;
     padding: 16px 0 0 0;
     border-radius: 10px;
-    margin: 20px auto;
+    margin: 20px 0 20px 0 ;
     opacity: 1;
     background:  #f7f7f7;
     box-shadow: 0px 0px 3px 0px #00000040;

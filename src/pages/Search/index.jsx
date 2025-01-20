@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useState } from 'react';
+import SearchBar from '../../components/Community/SearchBar';
+import SearchResult from './SearchResult';
+
+import styled from 'styled-components';
+
+const Container = styled.div`
+    padding: 20px;
+`;
+
 const Search = () => {
+ 
     return (
-        <h1>검색 페이지</h1>
+        <Container>
+            <SearchBar/>
+            <SearchResult/>
+        </Container>
     );
 };
 

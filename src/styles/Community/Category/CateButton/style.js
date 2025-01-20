@@ -1,9 +1,8 @@
 import styled from 'styled-components';
 
 export const ButtonWrapper = styled.div`
-  
   display: flex;
-  justify-content: center; 
+  justify-content: flex-start; 
   align-items: center;
   width:100%;
   margin: 20px auto;
