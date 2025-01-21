@@ -67,7 +67,6 @@ const YearSelector = ({ onDateChange, initialYear }) => {
         clearTimeout(timerRef.current);
         timerRef.current = setTimeout(() => {
             const direction = Math.sign(e.deltaY);
-            console.log(direction);
 
             const targetIndex = Math.min(
                 Math.max(

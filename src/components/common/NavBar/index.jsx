@@ -4,8 +4,10 @@ import YearMonthModal from "./YearMonthModal/index.jsx";
 
 import CaretDownIcon from "../../../assets/icons/common/NavBar/CaretDown.svg";
 
-const NavBar = ({ selectedDate, setSelectedDate, icon }) => {
+const NavBar = ({ selectedDate, setSelectedDate, icon, top }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const modalTop = `calc(${top} + 31px)`;
 
     const handleYearChange = (year) => {
         setSelectedDate((prev) => ({ ...prev, year })); // 연도만 변경
@@ -17,7 +19,7 @@ const NavBar = ({ selectedDate, setSelectedDate, icon }) => {
 
     return (
         <>
-            <S.NavBarWrapper>
+            <S.NavBarWrapper $top={top}>
                 <S.DateSelectContiner>
                     <S.SelectedDateText>
                         {selectedDate.year}년 {selectedDate.month}월 
@@ -33,6 +35,7 @@ const NavBar = ({ selectedDate, setSelectedDate, icon }) => {
                     onClose={() => setIsModalOpen(false)} // 모달 닫기
                     onYearChange={handleYearChange}
                     onMonthChange={handleMonthChange}
+                    modalTop={modalTop}
                 />
             )}
             
