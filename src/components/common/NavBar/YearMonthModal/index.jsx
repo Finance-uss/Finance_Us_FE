@@ -3,9 +3,9 @@ import * as S from "../../../../styles/common/NavBar/YearMonthModal/style.js";
 import YearSelector from "./YearSelector/index.jsx";
 import MonthSelector from "./MonthSelector/index.jsx";
 
-const YearMonthModal = ({ selectedDate, onYearChange, onMonthChange }) => {
+const YearMonthModal = ({ selectedDate, onYearChange, onMonthChange, modalTop }) => {
     return (
-        <S.ModalWrapper>
+        <S.ModalWrapper $modalTop={modalTop}>
             <S.ModalContent>
                 <YearSelector 
                     onDateChange={onYearChange} 
