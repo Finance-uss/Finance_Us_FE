@@ -1,19 +1,14 @@
 import React, { useState } from 'react';
 import SearchBar from '../../components/Community/SearchBar';
-import SearchResult from './SearchResult';
-
-import styled from 'styled-components';
-
-const Container = styled.div`
-    padding: 20px;
-`;
+import RecentSearch from '../../components/Community/Search/RecentSearch';
+import { Container } from '../../styles/Community/Search/style'
 
 const Search = () => {
  
     return (
         <Container>
             <SearchBar/>
-            <SearchResult/>
+            <RecentSearch/>
         </Container>
     );
 };

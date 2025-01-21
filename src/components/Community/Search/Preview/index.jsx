@@ -1,23 +1,21 @@
 import React from "react";
-import * as S from '../../../../styles/Community/SearchPreview/style';
-
-const post = [
-  {id:1, category:"자유", title:"멍청소비 줄여야 하는데", preview:"너네는 멍청비용 어떻게 줄임? 돈이 너무 줄줄줄 나간다 너네는 멍청비용 어떻게 줄임? 돈이 너무 줄줄줄 나간다 죽겟다!"},
-  {id:2, category:"자유", title:"멍청소비 줄여야 하는데", preview:"멍청멍청 멍청소비 멍청멍청 멍청소비 멍청멍청 멍청소비 멍청멍청 멍청소비"},
-  {id:3, category:"자유", title:"멍청소비 줄여야 하는데", preview:"너네는 멍청비용 어떻게 줄임? 돈이 너무 줄줄줄 나간다"},
-];
-
-const Preview = () => {
+import * as S from "../../../../styles/Community/SearchPreview/style";
+// + 선택시 게시글 상세페이지로 이동 기능 추가!!
+const Preview = ({ posts }) => {
   return (
     <S.Container>
-      {post.map((item) => (
-        <S.Wrapper key={item.id}>
-          <S.Category>{item.category}</S.Category>
-          <S.Title>{item.title}</S.Title>
-          <S.Preview>{item.preview}</S.Preview>
-          <S.Line />
-        </S.Wrapper>
-      ))}
+      {posts.length === 0 ? (
+        <S.EmptyMessage>검색 결과가 없습니다.</S.EmptyMessage>
+      ) : (
+        posts.map((item) => (
+          <S.Wrapper key={item.id}>
+            <S.Category>{item.category || "카테고리 없음"}</S.Category>
+            <S.Title>{item.title}</S.Title>
+            <S.Preview>{item.preview}</S.Preview>
+            <S.Line />
+          </S.Wrapper>
+        ))
+      )}
     </S.Container>
   );
 };

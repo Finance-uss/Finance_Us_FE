@@ -2,7 +2,6 @@ import React from "react";
 
 import Exam from "../../../assets/icons/common/Community/exam.png";
 import BeforeHeader from "../../../components/common/BeforeHeader";
-import Detail from "../../../components/Community/Post/Detail";
 import BottomBar from "../../../components/common/BottomBar";
 
 const PostDetail = () => {

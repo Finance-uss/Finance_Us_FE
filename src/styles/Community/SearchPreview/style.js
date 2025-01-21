@@ -24,7 +24,7 @@ export const Preview = styled.div`
     color:#5c5c5c;
     white-space: nowrap; 
     overflow: hidden;    
-    text-overflow: ellipsis; /* 넘치는 텍스트 "..."으로 대체 */
+    text-overflow: ellipsis; /* 넘치는 텍스트 ...으로 */
 `;
 
 export const Line = styled.div`

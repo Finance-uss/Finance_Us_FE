@@ -4,11 +4,13 @@ import BeforeIconSrc from '../../../assets/icons/common/Before.svg';
 import {HeaderContainer, Icon, Title} from '../../../styles/common/BeforeHeader/style';
 
 
-const BeforeHeader = ({ text }) => {
+const BeforeHeader = ({ text, to }) => {
     const navigate = useNavigate(); 
 
     const handleBackClick = () => {
-        navigate(-1); // 이전 페이지로 이동
+      if(to){
+        navigate(to); 
+      }else navigate(-1); // 이전 페이지로 이동
     };
   return (
     <HeaderContainer>

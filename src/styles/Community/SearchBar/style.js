@@ -1,70 +1,49 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
+  position: relative;
   width: 100%;
+  margin-bottom:40px;
 `;
-export const SearchBarContainer = styled.div`
-  
-`;
-export const SearchContainer = styled.form`
-  width:100%;
-
-`;
-export const Icon = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-right: 12px; 
-  cursor: pointer; 
+export const InputContainer = styled.div`
+  position:relative;
 `;
 export const Input = styled.input`
-  width: 100%;
-  padding: 8px;
+  padding: 0 25px;
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 20px;
   box-sizing: border-box;
-  margin-bottom: 8px;
-  border: none;
-  font-family: 'Pretendard', Arial, sans-serif;
-`;
-
-export const Button = styled.button`
-  display: flex;
   width: 100%;
-  border: none;
-  background-color: #ffffff;
+  height: 32px;
+  border-radius: 10px;
+  border:none;
+  box-shadow: 0px 0px 3px 0px #00000040;
+
+  &::placeholder {
+      color: #5C5C5C;
+  }
 `;
+
 export const BeforeButton = styled.img`
-    width: 24px;
-    height:24px;
-`;
-export const RecentSearch = styled.div`
-  font-size:16px;
-  font-weight:500;
-`;
-export const RecentSearchesContainer = styled.div`
-  border-radius: 4px;
-  margin-top: 8px;
-`;
-
-export const List = styled.ul`
-  list-style-type: none;
-  padding: 0;
-`;
-
-export const ListItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 4px;
-  font-size: 14px;
-`;
-
-export const SearchText = styled.span`
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  width: 9.75px;
+  height: 17.25px;
   cursor: pointer;
-  color: #5c5c5c;
+   z-index: 2;
 `;
 
-export const DeleteButton = styled.button`
-  border: none;
-  background: none;
-  color: #b4b4b4;
+export const SearchButton = styled.img`
+  position: absolute;
+  top: 50%; 
+  right: 10px; 
+  transform: translateY(-50%);
+  width: 16.89px;
+  height: 16.9px;
   cursor: pointer;
+
 `;
+
