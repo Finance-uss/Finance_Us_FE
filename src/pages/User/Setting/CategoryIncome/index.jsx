@@ -7,8 +7,8 @@ import PlusCateButton from '../../../../components/User/PlusCateButton';
 import CompleteButtonComponent from '../../../../components/User/CompleteButton';
 import { useNavigate } from 'react-router-dom';
 
-const CategoryProfitPage = () => {
-    const defaultCategories = [
+const CategoryIncomePage = () => {
+    const defaultCategories = [ 
         {
         id: 0,
         title: "급여",
@@ -55,7 +55,7 @@ const CategoryProfitPage = () => {
         if (index === 0) {
             navigate("/user/expense-category"); // 지출 페이지
         } else {
-            navigate("/user/profit-category"); // 수익 페이지
+            navigate("/user/income-category"); // 수익 페이지
         }
     };
 
@@ -93,7 +93,7 @@ const CategoryProfitPage = () => {
     );
 };
 
-export default CategoryProfitPage;
+export default CategoryIncomePage;
 
 const CategoryPageContainer = styled.div`
   display: flex;

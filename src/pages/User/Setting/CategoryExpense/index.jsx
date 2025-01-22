@@ -64,7 +64,7 @@ const CategoryExpensePage = () => {
         if (index === 0) {
             navigate("/user/expense-category"); // 지출 페이지
         } else {
-            navigate("/user/profit-category"); // 수익 페이지
+            navigate("/user/income-category"); // 수익 페이지
         }
     };
 

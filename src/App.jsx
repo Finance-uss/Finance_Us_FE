@@ -16,7 +16,7 @@ import ProfileSetting from './pages/ProfileSetting'; // 프로필 설정
 import User from './pages/User'; // 마이페이지
 import UserMain from './pages/User/UserMain'; // 마이페이지 메인
 import CategoryExpensePage from './pages/User/Setting/CategoryExpense'; // 카테고리-지출 설정
-import CategoryProfitPage from './pages/User/Setting/CategoryProfit'; // 카테고리-수익 설정
+import CategoryIncomePage from './pages/User/Setting/CategoryIncome'; // 카테고리-수익 설정
 import AssetsPage from './pages/User/Setting/Assets'; // 자산 설정
 import ExpensePage from './pages/User/Setting/Expense'; // 지출 목표 금액 설정
 import IncomePage from './pages/User/Setting/Income'; // 수익 목표 금액 설정 
@@ -77,7 +77,7 @@ function App() {
           <Route path="/user" element={<User />}>
               <Route index element={<UserMain />} />
               <Route path="expense-category" element={<CategoryExpensePage />} />
-              <Route path="profit-category" element={<CategoryProfitPage />} />
+              <Route path="income-category" element={<CategoryIncomePage />} />
               <Route path="assets" element={<AssetsPage />} />
               <Route path="expense" element={<ExpensePage />} />
               <Route path="income" element={<IncomePage />} />

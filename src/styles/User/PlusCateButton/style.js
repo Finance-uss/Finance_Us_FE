@@ -10,7 +10,7 @@ export const StyledPlusCateButton = styled.button`
     height: 39px;
     background-color: #f7f7f7;
     border: none;
-    border-radius: 8px;
+    border-radius: 4px;
     box-shadow: 0px 0px 2px rgba(0, 0, 0, 0.25); /* Drop shadow 설정 */
     cursor: pointer;
 `;
