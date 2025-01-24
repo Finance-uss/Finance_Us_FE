@@ -25,16 +25,16 @@ export const TopButton = styled.div`
 export const LeftTopButton = styled(TopButton)`
     padding-top: 13.5px;
     padding-left: 56px;
-`
+`;
 
 export const RightTopButton = styled(TopButton)`
     padding-top: 13.5px;
     padding-left: 78.5px;
-`
+`;
 
 export const TopText = styled.span`
     font-size: 16px;
-    color: ${(props) => (props.isSelected ? '#142755' : '#818C99')};
+    color: ${({ $isSelected }) => ($isSelected ? '#142755' : '#818C99')}; // isSelected를 $isSelected로 변경
     text-align: center;
     margin: 0;
 `;
@@ -49,8 +49,8 @@ export const TopUnderline = styled.img`
 
 export const LeftTopUnderline = styled(TopUnderline)`
     left: 0px;
-`
+`;
 
 export const RightTopUnderline = styled(TopUnderline)`
     left: 8.5px;
-`
+`;

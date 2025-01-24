@@ -9,7 +9,7 @@ export const Button = styled.button`
     background-color: ${({ $active }) => ($active ? '#142755' : '#f0f0f0')}; 
     color: ${({ $active }) => ($active ? '#ffffff' : '#000000')}; 
     border-radius: 5px;
-    height: 22px;
+    height: 35px;
     border: none;
     padding: 0px 20px; 
     font-size: 16px;
