@@ -6,9 +6,8 @@ export const ModalWrapper = styled.div`
     position: fixed;
     width: 100%; 
     height: calc(100% - 75px);
-    top: 75px;
+    top: ${(props) => props.$modalTop || "75px"};
     left: 0;
-    z-index: 1000;
 `;
 
 export const ModalContent = styled.div`
@@ -17,10 +16,11 @@ export const ModalContent = styled.div`
     background: #F7F7F7;
     justify-content: center;
     align-items: center;
-    width: 87%;
+    width: calc(100% - 40px);
     height: 206px;
     top: 7px;
     border-radius: 8px;
+    box-shadow: 0px 0px 3px 0px #00000040;
 
     /* 상단 수평선 */
     &::before {

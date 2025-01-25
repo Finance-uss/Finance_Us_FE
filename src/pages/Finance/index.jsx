@@ -1,12 +1,13 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
-import { FinanceProvider } from '../../contexts/financeContext';
+import { DateProvider } from '../../contexts/DateContext';
 
 const Finance = () => {
     return (
-        <FinanceProvider>
+        <DateProvider>
             <Outlet />
-        </FinanceProvider>
+        </DateProvider>
+        
     );
 };
 
