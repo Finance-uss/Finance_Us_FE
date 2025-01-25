@@ -11,20 +11,16 @@ import {
   CategoryProgressContainer,
   CategoryBar,
   CategoryLabel,
-  CategoryChartContainer,
-  LegendContainer,
-  LegendItem,
-  LegendColorBox,
+  Title,
+  Separator,
 } from '../../styles/Statistics/style';
 import TopBar from '../../components/common/TopBar';
 import FinanceButton from '../../components/common/FinanceButton';
 import NavBar from '../../components/common/NavBar';
 import SearchIcon from '../../assets/icons/common/Search.svg';
 import BellIcon from '../../assets/icons/common/Bell.svg';
-import { Pie } from 'react-chartjs-2';
-import { Chart, registerables } from 'chart.js';
-
-Chart.register(...registerables);
+import DonutChart from '../../components/Chart/DonutChart'; 
+import BarChart from '../../components/Chart/BarChart'; 
 
 const Statistics = () => {
   const navigate = useNavigate();
@@ -34,116 +30,88 @@ const Statistics = () => {
     month: today.getMonth() + 1,
     day: today.getDate(),
   });
-
-  const [totalSpent, setTotalSpent] = useState(0);
+  const [activeButton, setActiveButton] = useState('expense');
+  const [totalAmount, setTotalAmount] = useState(0);
   const [goalAmount, setGoalAmount] = useState(1600000);
   const [progressPercentage, setProgressPercentage] = useState(0);
-  const [activeButton, setActiveButton] = useState('expense');
+  const [isCategoryView, setIsCategoryView] = useState(true); // 카테고리 뷰 여부
 
-  // 카테고리 데이터 설정
-  const categoryData = {
+  const expenseData = {
     식비: { goal: 600000, spent: 360000 },
     카페: { goal: 200000, spent: 120000 },
     쇼핑: { goal: 200000, spent: 120000 },
   };
 
-  useEffect(() => {
-    const totalSpent = Object.values(categoryData).reduce(
-      (sum, category) => sum + category.spent,
-      0
-    );
-    setTotalSpent(totalSpent);
-    setProgressPercentage((totalSpent / goalAmount) * 100);
-  }, [selectedDate]);
-
-  // 카테고리 그래프 데이터
-  const pieChartData = {
-    labels: Object.keys(categoryData),
-    datasets: [
-      {
-        data: Object.values(categoryData).map((data) => data.spent),
-        backgroundColor: ['#3f51b5', '#ff9800', '#ff4081'],
-        borderWidth: 0,
-      },
-    ],
+  const incomeData = {
+    급여: { goal: 2000000, earned: 1500000 },
+    투자: { goal: 500000, earned: 300000 },
+    기타: { goal: 300000, earned: 200000 },
   };
 
-  const pieChartOptions = {
-    maintainAspectRatio: false,
-    plugins: {
-      tooltip: { enabled: false },
-      legend: { display: false },
-    },
-    cutout: '55%',
+  const categoryData = activeButton === 'expense' ? expenseData : incomeData;
+
+  useEffect(() => {
+    const total = Object.values(categoryData).reduce(
+      (sum, category) => sum + (activeButton === 'expense' ? category.spent : category.earned),
+      0
+    );
+    setTotalAmount(total);
+    setProgressPercentage((total / goalAmount) * 100);
+  }, [selectedDate, activeButton]);
+
+  const handleFinanceButtonClick = (buttonType) => {
+    setActiveButton(buttonType);
+    setIsCategoryView(buttonType === 'expense'); // 'expense' 버튼 클릭 시 카테고리 뷰로 설정
   };
 
   return (
     <Container>
       <IconContainer>
-        <Icon
-          src={SearchIcon}
-          alt="검색 아이콘"
-          onClick={() => navigate('/search')}
-        />
-        <Icon
-          src={BellIcon}
-          alt="알림 아이콘"
-          onClick={() => navigate('/alarm')}
-        />
+        <Icon src={SearchIcon} alt="검색 아이콘" onClick={() => navigate('/search')} />
+        <Icon src={BellIcon} alt="알림 아이콘" onClick={() => navigate('/alarm')} />
       </IconContainer>
       <TopSection>
         <TopBar leftText="카테고리" rightText="기간" />
-        <FinanceButton
-          activeButton={activeButton}
-          setActiveButton={setActiveButton}
+        <FinanceButton 
+          activeButton={activeButton} 
+          setActiveButton={handleFinanceButtonClick} // 클릭 핸들러 전달
         />
       </TopSection>
-      <NavBar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+      <NavBar 
+        selectedDate={selectedDate} 
+        setSelectedDate={setSelectedDate} 
+      />
 
-      {/* 카테고리 그래프 섹션 */}
-      <CategoryChartContainer>
-        <h3>{activeButton === 'expense' ? '월 목표 총 지출 현황' : '월 목표 총 수익 현황'}</h3>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <div style={{ position: 'relative', width: '250px', height: '250px' }}>
-            <Pie data={pieChartData} options={pieChartOptions} />
-          </div>
-          {/* 범례 */}
-          <LegendContainer>
-            {Object.entries(categoryData).map(([category, data], index) => (
-              <LegendItem key={index}>
-                <LegendColorBox
-                  style={{
-                    backgroundColor: ['#3f51b5', '#ff9800', '#ff4081'][index],
-                  }}
-                />
-                <span>
-                  {category}: {data.spent.toLocaleString()}원
-                </span>
-              </LegendItem>
-            ))}
-          </LegendContainer>
-        </div>
-      </CategoryChartContainer>
+      {/* 카테고리 뷰일 때 도넛 차트 표시 */}
+      {isCategoryView && <DonutChart categoryData={categoryData} activeButton={activeButton} />}
 
-      {/* 총 수입 현황 */}
+      {/* 기간 뷰일 때 바 차트 표시 */}
+      {!isCategoryView && <BarChart categoryData={categoryData} activeButton={activeButton} />}
+
       <TotalProgressContainer>
+        <Title>
+          {selectedDate.month}월 목표 총 {activeButton === 'expense' ? '지출' : '수익'} 현황
+        </Title>
         <ProgressBar $percentage={progressPercentage} />
         <Amount>
-          <span>{totalSpent.toLocaleString()}원</span> /{' '}
+          <span>{totalAmount.toLocaleString()}원</span> {' '}
           <span>{goalAmount.toLocaleString()}원</span>
         </Amount>
       </TotalProgressContainer>
+      <Separator />
 
       {/* 카테고리별 수입 현황 */}
       <CategoryProgressContainer>
-        <h3>{selectedDate.month}월 카테고리 별 수입 지출 현황</h3>
+        <Title style={{ marginTop: '20px' }}>
+          {selectedDate.month}월 카테고리 별 목표 {activeButton === 'expense' ? '지출' : '수익'} 현황
+        </Title>
         {Object.entries(categoryData).map(([category, data]) => (
           <CategoryBar key={category}>
             <CategoryLabel>{category}</CategoryLabel>
-            <ProgressBar $percentage={(data.spent / data.goal) * 100} />
+            <ProgressBar $percentage={(data[activeButton === 'expense' ? 'spent' : 'earned'] / data.goal) * 100} />
             <Amount>
-              <span>{Math.min(data.spent, data.goal).toLocaleString()}원</span>{' '}
-              / <span>{data.goal.toLocaleString()}원</span>
+              <span>{Math.min(data[activeButton === 'expense' ? 'spent' : 'earned'], data.goal).toLocaleString()}원</span>{' '}
+              <span>{data.goal.toLocaleString()}원</span>
             </Amount>
           </CategoryBar>
         ))}

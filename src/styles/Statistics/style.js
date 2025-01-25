@@ -10,8 +10,7 @@ export const Container = styled.div`
 export const IconContainer = styled.div`
   display: flex;
   justify-content: flex-end; 
-  margin-top: 30px;
-  margin-bottom: 50px;
+  margin-bottom: 20px; 
 `;
 
 export const TopSection = styled.div`
@@ -22,14 +21,14 @@ export const TopSection = styled.div`
 `;
 
 export const TotalProgressContainer = styled.div`
-  margin: 20px 0;
+  margin-bottom: 40px;
 `;
 
 export const ProgressBar = styled.div`
   width: 100%;
   height: 20px;
-  background-color: #e0e0e0;
-  border-radius: 10px;
+  background-color: #E9ECF1;
+  border-radius: 2px;
   overflow: hidden;
 
   &::after {
@@ -37,7 +36,7 @@ export const ProgressBar = styled.div`
     display: block;
     height: 100%;
     width: ${({ $percentage }) => $percentage}%;
-    background-color: #3f51b5;
+    background-color: #142755;
   }
 `;
 
@@ -49,7 +48,7 @@ export const Amount = styled.div`
 `;
 
 export const Icon = styled.img`
-  width: 24px; 
+  width: 24px;
   height: 24px;
   margin-left: 16px; 
   cursor: pointer; 
@@ -60,43 +59,24 @@ export const CategoryProgressContainer = styled.div`
 `;
 
 export const CategoryBar = styled.div`
-  margin: 10px 0;
+  margin: 20px 0;
 `;
 
 export const CategoryLabel = styled.span`
   margin-right: 10px;
 `;
 
-export const CategoryChartContainer = styled.div`
-  margin: 20px 0;
-  text-align: center;
-`;
-
-export const CategoryChart = styled.div`
+export const Separator = styled.div`
   width: 100%;
-  height: 130px; 
-  background-color: #f0f0f0; 
-  border-radius: 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  height: 1px;
+  background-color: #d4d4d4;
+  margin: 10px 0; // 위아래 여백
 `;
 
-export const LegendContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-top: 10px;
-`;
-
-export const LegendItem = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-export const LegendColorBox = styled.div`
-  width: 15px;
-  height: 15px;
-  border-radius: 3px;
-  margin-right: 5px;
+export const Title = styled.h3`
+  margin: 20px 0; // 제목 위아래 여백
+  font-size: 22px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 `;
