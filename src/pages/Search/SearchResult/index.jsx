@@ -53,9 +53,8 @@ const SearchResult = () => {
             <TopBar 
                 leftText="제목·내용"
                 rightText="프로필"
-                selectedTab={selectedTab} // 현재 선택된 탭 전달
-                onLeftClick={() => setSelectedTab(0)} // 왼쪽 탭 클릭 핸들러
-                onRightClick={() => setSelectedTab(1)} // 오른쪽 탭 클릭 핸들러
+                selectedTab={selectedTab}
+                onTabClick={setSelectedTab} 
               />
               <div>
               {selectedTab === 0 ? (

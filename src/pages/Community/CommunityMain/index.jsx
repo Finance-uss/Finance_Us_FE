@@ -13,12 +13,8 @@ import CateButton from '../../../components/Community/Category/CateButton';
 const CommunityMain = () => {
     const [selectedTab, setSelectedTab] = useState(0); 
 
-    const handleLeftClick = () => {
-        setSelectedTab(0); // 자유게시판
-    };
-
-    const handleRightClick = () => {
-        setSelectedTab(1); // 정보게시판
+    const handleTabClick = (index) => {
+        setSelectedTab(index);
     };
 
     const categoryFreeBoard = ['자유', '정보', '낭비했어요', '절약했어요'];
@@ -36,8 +32,7 @@ const CommunityMain = () => {
             <TopBar 
                 leftText="자유게시판" 
                 rightText="정보게시판" 
-                onLeftClick={handleLeftClick} 
-                onRightClick={handleRightClick} 
+                onTabClick={handleTabClick} 
                 selectedTab={selectedTab} 
             />
             {/* selectedTab 값에 따라 다른 카테고리 버튼 렌더링 */}
