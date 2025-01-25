@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const SubmitButton = styled.button`
-  background-color: #142755; 
+  background-color: #142755;
   color: #ffffff;
   border: none;
   border-radius: 6px; 
@@ -11,10 +11,11 @@ export const SubmitButton = styled.button`
   font-size: 16px; 
   font-weight: 400;
   font-style: normal;
-  line-height: 100%; /* 16px */
+  line-height: 100%;
   letter-spacing: -0.4px;
   cursor: pointer; 
   text-align: center;
+   opacity: ${({ opacity, disabled }) => (disabled ? 0.5 : opacity || 1)};
   
 
   &:hover {
