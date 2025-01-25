@@ -9,13 +9,13 @@ import BottomBar from '../../../components/common/BottomBar';
 
 const UserMain = () => {
     const categoryOptions = [
-        { label: '카테고리', path: 'category' },
+        { label: '카테고리', path: 'expense-category' },
         { label: '자산', path: 'assets' },
     ];
     
     const targetOptions = [
         { label: '지출', path: 'expense' },
-        { label: '수익', path: 'income' }, //나중에 라우트 바꿈
+        { label: '수익', path: 'income' }, 
     ];
 
     const communityOptions = [
