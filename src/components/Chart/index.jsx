@@ -44,27 +44,20 @@ const StatisticsChart = ({ data }) => {
           padding: 20, // 범례 항목 간의 간격
           generateLabels: (chart) => {
             const labels = ChartJS.defaults.plugins.legend.labels.generateLabels(chart);
-            const updatedLabels = labels.map((label, index) => {
+            return labels.map((label, index) => {
               // 데이터의 인덱스와 범례의 인덱스를 매칭
-              const datasetIndex = label.datasetIndex; // 해당 범례의 데이터셋 인덱스
-              if (datasetIndex >= 0 && datasetIndex < data.length) {
-                const amount = data[datasetIndex].amount.toLocaleString();
-                const percentage = ((data[datasetIndex].amount / totalAmount) * 100).toFixed(0);
-                label.text = `${label.text} - ${amount}원 (${percentage}%)`; // 금액과 비율 포함
-              } else {
-                label.text = `${label.text} - 0원 (0%)`; // 데이터가 없을 경우 기본값 설정
-              }
+              const amount = data[index]?.amount.toLocaleString() || '0'; // 금액
+              label.text = `${data[index]?.category} - ${amount}원`; // 카테고리와 금액만 표시
               return label;
             });
-            return updatedLabels;
           },
         },
       },
       tooltip: {
         callbacks: {
           label: (tooltipItem) => {
-            const percentage = ((tooltipItem.raw / totalAmount) * 100).toFixed(0);
-            return `${percentage}%`;
+            const amount = tooltipItem.raw.toLocaleString();
+            return `${amount}원`; // 툴팁에는 금액만 표시
           },
         },
       },

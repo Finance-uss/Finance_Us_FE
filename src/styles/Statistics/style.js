@@ -4,33 +4,25 @@ import styled from 'styled-components';
 export const Container = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  width: 100%;
-  box-sizing: border-box; 
   padding: 26px;
 `;
 
-export const TopSection = styled.div`
-  margin: 0px; // TopSection과 NavBar 사이의 간격 조정
-`;
-
-export const NavBarContainer = styled.div`
-  margin-top: 40px; // 차트와의 간격 조정
-  position: relative; // NavBar가 흐름에 따라 배치되도록 설정
-`;
-
-export const ChartContainer = styled.div`
+export const IconContainer = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  justify-content: flex-end; 
+  margin-top: 30px;
+  margin-bottom: 50px;
 `;
 
-export const ProgressContainer = styled.div`
-  margin-top: 20px;
+export const TopSection = styled.div`
+  display: flex;
+  flex-direction: column; 
+  width: 100%; 
+  margin-bottom: 0px;
+`;
+
+export const TotalProgressContainer = styled.div`
+  margin: 20px 0;
 `;
 
 export const ProgressBar = styled.div`
@@ -54,4 +46,57 @@ export const Amount = styled.div`
   justify-content: space-between;
   margin-top: 10px;
   font-size: 16px;
+`;
+
+export const Icon = styled.img`
+  width: 24px; 
+  height: 24px;
+  margin-left: 16px; 
+  cursor: pointer; 
+`;
+
+export const CategoryProgressContainer = styled.div`
+  margin: 20px 0;
+`;
+
+export const CategoryBar = styled.div`
+  margin: 10px 0;
+`;
+
+export const CategoryLabel = styled.span`
+  margin-right: 10px;
+`;
+
+export const CategoryChartContainer = styled.div`
+  margin: 20px 0;
+  text-align: center;
+`;
+
+export const CategoryChart = styled.div`
+  width: 100%;
+  height: 130px; 
+  background-color: #f0f0f0; 
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const LegendContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-top: 10px;
+`;
+
+export const LegendItem = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+export const LegendColorBox = styled.div`
+  width: 15px;
+  height: 15px;
+  border-radius: 3px;
+  margin-right: 5px;
 `;
