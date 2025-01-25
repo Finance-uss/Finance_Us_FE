@@ -28,7 +28,7 @@ const PostWrite = () => {
     };
 
     return (
-        <>
+        <S.Container>
             <BeforeHeader text="게시글 작성" />
             <S.Wrapper>
                 <CateSelect onCategoryChange={handleCategoryChange} />
@@ -48,7 +48,7 @@ const PostWrite = () => {
             </S.Wrapper>
             <S.CameraButton src={CameraIconSrc} alt="카메라 아이콘" />
             <SubmitButton text="작성 완료" disabled={!selectedCategory || !title || !content} />
-        </>
+        </S.Container>
     );
 };
 
