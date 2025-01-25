@@ -6,7 +6,7 @@ import CameraIconSrc from '../../../assets/icons/common/Camera.svg';
 import CateSelect from '../../../components/Community/Category/CateSelect';
 
 
-const Community = () => {
+const PostWrite = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -52,4 +52,4 @@ const Community = () => {
     );
 };
 
-export default Community;
+export default PostWrite;

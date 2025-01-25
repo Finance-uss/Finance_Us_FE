@@ -37,7 +37,7 @@ import HandWrite from './pages/Finance/HandWrite';
 import NotFound from './pages/NotFound';
 import PostWrite from './pages/Community/PostWrite'; // 글쓰기 페이지
 import Search from './pages/Search'; // 검색 페이지
-
+import PostDetail from './pages/Community/PostDetail';
 function App() {
   const [count, setCount] = useState(0);
 
@@ -67,8 +67,10 @@ function App() {
           <Route path="/community" element={<Community />}>
             <Route index element={<CommunityMain />} />
             <Route path="postwrite" element={<PostWrite />} />
+            <Route path="postdetail" element={<PostDetail/>}/>
           </Route>
-          
+          {/* 게시글 수정 */}
+          <Route path="/update/:postId" element={<PostWrite />} />          
           
           <Route path="/search" element={<Search />} />
           {/* </Route> */}
