@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import { TopContainer, LeftTopButton, RightTopButton, TopText, LeftTopUnderline, RightTopUnderline } from '../../../styles/common/TopBar/style';
 import underline from '../../../assets/icons/common/Hide-Indicator.svg';
 

@@ -39,8 +39,10 @@ import Report from './pages/Finance/Report';
 import HandWrite from './pages/Finance/HandWrite';
 import NotFound from './pages/NotFound';
 import PostWrite from './pages/Community/PostWrite'; // 글쓰기 페이지
+import PostDetail from './pages/Community/PostDetail'; // 글 상세 페이지
 import Search from './pages/Search'; // 검색 페이지
-
+import SearchResult from './pages/Search/SearchResult'; // 검색 결과 페이지
+import FollowFinance from './pages/Community/FollowFinance'; // 팔로우 가계부 페이지
 function App() {
   const [count, setCount] = useState(0);
 
@@ -70,12 +72,17 @@ function App() {
           {/* 커뮤니티 페이지 */}
           <Route path="/community" element={<Community />}>
             <Route index element={<CommunityMain />} />
+            <Route path="followfinance/:name" element={<FollowFinance />} />
             <Route path="postwrite" element={<PostWrite />} />
+            <Route path="postdetail" element={<PostDetail />} />
           </Route>
           
+          {/* 검색 페이지 */}
+          <Route>
+            <Route path="/search" element={<Search />} />
+            <Route path="/search-result" element={<SearchResult />} />
+          </Route>
           
-          <Route path="/search" element={<Search />} />
-          {/* </Route> */}
           
           {/* 통계 페이지 */}
           <Route path="/statistics" element={<Statistics />} />

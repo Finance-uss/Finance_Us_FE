@@ -4,8 +4,6 @@ export const RadioGroup = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  gap: 14px;
-  // margin: 14px 0;
 `;
 
 export const RadioButton = styled.label`
@@ -14,20 +12,16 @@ export const RadioButton = styled.label`
   cursor: pointer;
   font-size: 16px;
   color: #b4b4b4; 
-
+  margin-right: 7px;
+  margin-bottom:20px;
   input {
     display: none;
   }
 
-  input:checked + .circle + span {
-    color: #142755; 
-    font-weight: 500;
-  }
-
   span {
     display: inline-block;
-    margin-left: 7px;
-    margin-right:-7px;
+    margin-left: 5px;
+   
   }
 
   .circle {
@@ -42,16 +36,12 @@ export const RadioButton = styled.label`
   }
 
   input:checked + .circle {
-    border-color: #142755; 
+    background-color: #142755;
+    border-color: #142755;  
   }
 
-  .circle .check-icon {
-    display: none; 
-    width: 12px;
-    height: 12px;
-  }
-
-  input:checked + .circle .check-icon {
-    display: block;
+  input:checked + .circle + span {
+    color: #142755; 
+    font-weight: 500;
   }
 `;
