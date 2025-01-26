@@ -4,9 +4,6 @@ export const HeaderContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: 50px;
-  padding-bottom:20px;
-
 `;
 
 export const Icon = styled.img`

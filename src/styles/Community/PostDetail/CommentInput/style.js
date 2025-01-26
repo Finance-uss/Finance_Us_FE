@@ -2,12 +2,12 @@ import styled from 'styled-components';
 export const CommentInputContainer = styled.div`
     display: flex;
     align-items: center;
-    width:100%;
+    width:calc(100% - 40px);
     justify-content: space-between;
     background-color:#f7f7f7;
     padding:12px 20px;
     position:fixed;
-    bottom:75px;
+    bottom:77px;
     
 `;
 
