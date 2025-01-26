@@ -1,18 +1,21 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
-import { ChartContainer, ChartWrapper } from '../../../styles/Chart/BarChart/style'; // 수정된 경로
 import { Chart, registerables } from 'chart.js';
+import { ChartContainer, ChartWrapper } from '../../../styles/Chart/BarChart/style';
 
 Chart.register(...registerables);
 
-const BarChart = ({ categoryData, activeButton }) => {
+const BarChart = ({ categoryData, labels }) => {
   const barChartData = {
-    labels: Object.keys(categoryData),
+    labels: labels, // 동적으로 설정된 라벨
     datasets: [
       {
-        label: activeButton === 'expense' ? '지출' : '수익',
-        data: Object.values(categoryData).map(data => (activeButton === 'expense' ? data.spent : data.earned)),
-        backgroundColor: '#F17357',
+        label: '지출',
+        data: categoryData,
+        backgroundColor: '#142755',
+        borderColor: '#0A1E3F',
+        borderWidth: 1,
+        borderRadius: 5,
       },
     ],
   };
@@ -22,6 +25,26 @@ const BarChart = ({ categoryData, activeButton }) => {
     scales: {
       y: {
         beginAtZero: true,
+        display: false,
+      },
+      x: {
+        display: true,
+        ticks: {
+          display: true,
+          font: {
+            size: 14,
+            family: 'Arial, sans-serif',
+            color: '#333',
+          },
+        },
+        grid: {
+          display: false,
+        },
+      },
+    },
+    plugins: {
+      legend: {
+        display: false,
       },
     },
   };

@@ -19,8 +19,8 @@ import FinanceButton from '../../components/common/FinanceButton';
 import NavBar from '../../components/common/NavBar';
 import SearchIcon from '../../assets/icons/common/Search.svg';
 import BellIcon from '../../assets/icons/common/Bell.svg';
-import DonutChart from '../../components/Chart/DonutChart'; 
-import BarChart from '../../components/Chart/BarChart'; 
+import DonutChart from '../../components/Chart/DonutChart';
+import BarChart from '../../components/Chart/BarChart';
 
 const Statistics = () => {
   const navigate = useNavigate();
@@ -28,14 +28,13 @@ const Statistics = () => {
   const [selectedDate, setSelectedDate] = useState({
     year: today.getFullYear(),
     month: today.getMonth() + 1,
-    day: today.getDate(),
   });
   const [activeButton, setActiveButton] = useState('expense');
   const [totalAmount, setTotalAmount] = useState(0);
   const [goalAmount, setGoalAmount] = useState(1600000);
   const [progressPercentage, setProgressPercentage] = useState(0);
-  const [isCategoryView, setIsCategoryView] = useState(true); // 카테고리 뷰 여부
-
+  const [selectedTab, setSelectedTab] = useState(0);
+  
   const expenseData = {
     식비: { goal: 600000, spent: 360000 },
     카페: { goal: 200000, spent: 120000 },
@@ -51,18 +50,42 @@ const Statistics = () => {
   const categoryData = activeButton === 'expense' ? expenseData : incomeData;
 
   useEffect(() => {
-    const total = Object.values(categoryData).reduce(
-      (sum, category) => sum + (activeButton === 'expense' ? category.spent : category.earned),
-      0
-    );
+    const total = Object.values(categoryData).reduce((sum, category) => {
+      return sum + (activeButton === 'expense' ? category.spent : category.earned) || 0;
+    }, 0);
     setTotalAmount(total);
     setProgressPercentage((total / goalAmount) * 100);
-  }, [selectedDate, activeButton]);
+  }, [activeButton, categoryData]);
 
   const handleFinanceButtonClick = (buttonType) => {
     setActiveButton(buttonType);
-    setIsCategoryView(buttonType === 'expense'); // 'expense' 버튼 클릭 시 카테고리 뷰로 설정
   };
+
+  const handleTabClick = (index) => {
+    setSelectedTab(index);
+  };
+
+  // 선택한 기간에 맞는 월별 데이터 생성
+  const getFilteredMonthlyData = () => {
+    const filteredData = Array(12).fill(0);
+    const startMonth = selectedDate.month - 1; // 0-indexed
+    const endMonth = selectedDate.month - 1; // 0-indexed
+
+    Object.values(categoryData).forEach(category => {
+      filteredData[startMonth] += activeButton === 'expense' ? (category.spent || 0) : (category.earned || 0);
+    });
+
+    return filteredData;
+  };
+
+  // X축 라벨 생성
+  const getFilteredLabels = () => {
+    const labels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+    return labels.slice(selectedDate.month - 1, selectedDate.month); // 선택된 월에 맞춰 라벨 반환
+  };
+
+  const filteredMonthlyData = getFilteredMonthlyData();
+  const filteredLabels = getFilteredLabels();
 
   return (
     <Container>
@@ -71,10 +94,15 @@ const Statistics = () => {
         <Icon src={BellIcon} alt="알림 아이콘" onClick={() => navigate('/alarm')} />
       </IconContainer>
       <TopSection>
-        <TopBar leftText="카테고리" rightText="기간" />
+        <TopBar 
+          leftText="카테고리" 
+          rightText="기간" 
+          onTabClick={handleTabClick} 
+          selectedTab={selectedTab} 
+        />
         <FinanceButton 
           activeButton={activeButton} 
-          setActiveButton={handleFinanceButtonClick} // 클릭 핸들러 전달
+          setActiveButton={handleFinanceButtonClick} 
         />
       </TopSection>
       <NavBar 
@@ -83,14 +111,16 @@ const Statistics = () => {
       />
 
       {/* 카테고리 뷰일 때 도넛 차트 표시 */}
-      {isCategoryView && <DonutChart categoryData={categoryData} activeButton={activeButton} />}
+      {selectedTab === 0 && <DonutChart categoryData={categoryData} activeButton={activeButton} />}
 
       {/* 기간 뷰일 때 바 차트 표시 */}
-      {!isCategoryView && <BarChart categoryData={categoryData} activeButton={activeButton} />}
+      {selectedTab === 1 && (
+        <BarChart categoryData={filteredMonthlyData} labels={filteredLabels} />
+      )}
 
       <TotalProgressContainer>
         <Title>
-          {selectedDate.month}월 목표 총 {activeButton === 'expense' ? '지출' : '수익'} 현황
+          {selectedDate.year}년 {selectedDate.month}월 목표 총 {activeButton === 'expense' ? '지출' : '수익'} 현황
         </Title>
         <ProgressBar $percentage={progressPercentage} />
         <Amount>
@@ -103,14 +133,14 @@ const Statistics = () => {
       {/* 카테고리별 수입 현황 */}
       <CategoryProgressContainer>
         <Title style={{ marginTop: '20px' }}>
-          {selectedDate.month}월 카테고리 별 목표 {activeButton === 'expense' ? '지출' : '수익'} 현황
+          {selectedDate.year}년 {selectedDate.month}월 카테고리 별 목표 {activeButton === 'expense' ? '지출' : '수익'} 현황
         </Title>
         {Object.entries(categoryData).map(([category, data]) => (
           <CategoryBar key={category}>
             <CategoryLabel>{category}</CategoryLabel>
-            <ProgressBar $percentage={(data[activeButton === 'expense' ? 'spent' : 'earned'] / data.goal) * 100} />
+            <ProgressBar $percentage={activeButton === 'expense' ? (data.spent / data.goal) * 100 : (data.earned / data.goal) * 100} />
             <Amount>
-              <span>{Math.min(data[activeButton === 'expense' ? 'spent' : 'earned'], data.goal).toLocaleString()}원</span>{' '}
+              <span>{Math.min(activeButton === 'expense' ? data.spent : data.earned, data.goal).toLocaleString()}원</span>{' '}
               <span>{data.goal.toLocaleString()}원</span>
             </Amount>
           </CategoryBar>
