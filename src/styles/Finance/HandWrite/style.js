@@ -1,27 +1,44 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
+export const TextSection = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    padding: 20px;
+    gap: 20px;
+    margin-top: 40px;
+`;
+
+export const OtherSection = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 `;
 
 export const InputContainer = styled.div`
+    position: relative;
     display: flex;
     align-items: center; /* 세로 정렬 */
     justify-content: space-between; /* 가로 정렬 */
+    height: 19px;
 `;
 
 export const Label = styled.label`
-    font-size: 14px;
-    color: #333;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 19px;
+    color: #000000;
 `;
 
 export const Input = styled.input`
-    padding: 10px;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 19px;
     border: 0;
+    color: #000000;
     text-align: right;
+
+    &::placeholder {
+        color: #B4B4B4;
+    }
 
     /* 화살표 제거 */
     -moz-appearance: textfield; /* Firefox */
@@ -39,17 +56,20 @@ export const Input = styled.input`
     }
 `;
 
-export const ToggleContainer = styled.div`
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+export const Line = styled.div`
+    position: relative;
+    width: 100%;
+    height: 0.5px;
+    background-color: #D7D8D9;
+    margin-top: 20px;
+    margin-bottom: 9.5px;
 `;
 
 export const ToggleSwitch = styled.div`
     position: relative;
     display: inline-block;
-    width: 40px;
-    height: 20px;
+    width: 52px;
+    height: 30px;
     background-color: ${(props) => (props.$checked ? "#35C75A" : "#ccc")};
     border-radius: 20px;
     transition: background-color 0.4s ease;
@@ -60,8 +80,8 @@ export const Slider = styled.span`
     position: absolute;
     top: 2px;
     left: 2px;
-    width: 16px;
-    height: 16px;
+    width: 26px;
+    height: 26px;
     background-color: white;
     border-radius: 50%;
     transition: transform 0.4s ease;
@@ -77,7 +97,7 @@ export const Star = styled.span`
     font-weight: 600;
     font-size: 20px;
     line-height: 20px;
-    color: ${(props) => (props.$filled ? "#142755" : "#ccc")};
+    color: "#142755";
     cursor: pointer;
 `;
 
@@ -86,37 +106,57 @@ export const SatisfactionText = styled.p`
     font-size: 16px;
     line-height: 19px;
     color: ${(props) => (props.$bold ? "#000" : "#B4B4B4")};
+    margin: 0;
 `;
 
 export const ImageUpload = styled.div`
+    position: relative;
+    width: 150px;
+    height: 150px;
     display: flex;
+    justify-content: center;
     align-items: center;
     gap: 10px;
-`;
-
-export const ImagePlaceholder = styled.div`
-    width: 50px;
-    height: 50px;
-    border: 1px solid #ccc;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    color: #ccc;
-`;
-
-export const UploadedImage = styled.img`
-    width: 50px;
-    height: 50px;
     border-radius: 5px;
-    object-fit: cover;
+    background-color: #F7F7F7;
+    box-shadow: 0px 0px 3px 0px #00000040;
+
+    &:hover {
+        border-color: #888;
+    }
+
+    label {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer
+    }
+
+    input {
+        display: none;
+    }
 `;
+
+export const UploadImage = styled.img`
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 5px;
+`;
+
 
 export const Textarea = styled.textarea`
+    position: relative;
+    width: calc(100% - 20px);
     padding: 10px;
-    border: 1px solid #ccc;
+    border: 0;
     border-radius: 5px;
-    height: 100px;
+    height: 115px;
+    margin-bottom: 40px;
+    background-color: #F7F7F7;
+    box-shadow: 0px 0px 3px 0px #00000040;
 
     /* ✅ 클릭(포커스) 시 테두리 제거 */
     &:focus {
@@ -129,18 +169,21 @@ export const ModalOverlay = styled.div`
     position: fixed;
     bottom: 0;
     left: 0;
-    width: 100%;
+    width: calc(100% - 40px);
     height: 100%;
+    padding: 0px 20px;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
     align-items: flex-end;
     justify-content: center;
+    z-index: 1000;
 `;
 
 export const ModalLine = styled.img`
     width: 40%;
     height: 5px;
-
+    color: #D9D9D9;
+    border-radius: 100px;
     cursor: pointer; /* ✅ 클릭 가능하도록 설정 */
 `;
 
@@ -149,7 +192,7 @@ export const ModalContent = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 90%;
+    width: 100%;
     height: fit-content;
     background: #fff;
     border-top-left-radius: 20px;
@@ -223,7 +266,7 @@ export const ModalStar = styled.span`
     font-weight: 500;
     font-size: 40px;
     line-height: 40px;
-    color: ${(props) => (props.$filled ? "#142755" : "#ccc")};
+    color: "#142755";
     cursor: pointer;
 `;
 
