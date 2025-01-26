@@ -8,6 +8,7 @@ export const NavBarWrapper = styled.div`
     width: 100%;
     height: 24px; /* ✅ 높이 지정 */
     z-index: 1000;
+    margin-top: ${(props) => props.$marginTop || "0px"}
 `;
 
 

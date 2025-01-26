@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ButtonContainer = styled.div`
     display: flex;
-    gap: 15px; 
+    gap: 16px; 
 `;
 
 export const Button = styled.button`
@@ -11,7 +11,6 @@ export const Button = styled.button`
     border-radius: 5px;
     height: 35px;
     border: none;
-    padding: 0px 20px; 
     font-size: 16px;
     font-style: normal;
     font-weight: 500;

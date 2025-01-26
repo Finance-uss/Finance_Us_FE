@@ -2,9 +2,12 @@ import styled from 'styled-components';
 
 // 전체 컨테이너
 export const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  padding: 26px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 44px 20px 24px 20px; // top right bottom left;
 `;
 
 export const IconContainer = styled.div`
@@ -17,6 +20,7 @@ export const TopSection = styled.div`
   display: flex;
   flex-direction: column; 
   width: 100%; 
+  gap: 8px;
   margin-bottom: 0px;
 `;
 
@@ -48,7 +52,6 @@ export const Amount = styled.div`
 `;
 
 export const Icon = styled.img`
-  width: 24px;
   height: 24px;
   margin-left: 16px; 
   cursor: pointer; 
