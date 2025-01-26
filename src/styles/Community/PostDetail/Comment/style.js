@@ -1,57 +1,99 @@
-import styled from "styled-components";
-
-export const CommentSection = styled.div`
-  padding: 16px;
+import styled from 'styled-components';
+export const CommentListContainer = styled.div`
+    width: 100%;
+    border-bottom: 0.5px solid #D7D8D9;
+    margin-top: 16px;
+    flex-direction: column;
 `;
 
-export const CommentItem = styled.div`
-  margin-bottom: 16px;
+export const Header = styled.div`
+    display: flex;
+    justify-content: space-between; 
+    width: 100%;
+
 `;
 
-export const CommentAuthor = styled.div`
-  font-size: 14px;
-  font-weight: bold;
-  color: #000000;
+export const User = styled.div`
+    align-items: center;
+    display: flex;
 `;
 
-export const CommentText = styled.p`
-  font-size: 14px;
-  color: #4f4f4f;
-  margin: 4px 0;
+export const Active = styled.div`
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+`;
+
+export const UserIcon = styled.img`
+    width: 40px;
+    height: 40px;
+    border: none;
+    margin-right: 7.1px;
+`;
+
+export const UserWrapper = styled.div`
+    flex-direction: column;
+`;
+
+export const UserName = styled.div`
+    font-size: 14px;
+    font-weight: 500;
 `;
 
 export const CommentDate = styled.div`
-  font-size: 12px;
-  color: #757575;
+    font-size: 12px;
+    font-weight: 400;
+    color: #b4b4b4;
 `;
 
-export const CommentInputWrapper = styled.div`
-  position: fixed;
-  bottom: 40px; /* 하단 네비게이션 바 높이 */
-  // left: 0;
-  width: 100%;
-  max-width: 400px;
-  background-color: #f7f7f7;
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
+export const Recomment = styled.div`
+    display: flex;
+    align-items: center;
 `;
 
-export const CommentInput = styled.input`
-  flex: 1;
-  font-family: Pretendard,sans-serif;
-  background-color: #f7f7f7;
-  border: none;
-  outline: none;
-  font-size: 16px;
-  padding: 8px;
+export const RecommentIcon = styled.img`
+    width: 14px;
+    height: 14px;
+    margin-right: 2px;
 `;
 
-export const CommentSubmit = styled.button`
-  border: none;
-    background-color: #f7f7f7;
-  padding: 8px 16px;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-left: 8px;
+export const RecommentText = styled.div`
+    font-size: 14px;
+    color: #5c5c5c;
+`;
+
+export const Likes = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+export const LikeIcon = styled.img`
+    width: 14px;
+    height: 14px;
+    margin-right: 2px;
+`;
+
+export const LikeCount = styled.div`
+    font-size: 14px;
+    color: #5c5c5c;
+`;
+
+export const MoreIcon = styled.img`
+    width: 2.7px;
+    height: 13px;
+`;
+
+export const CommentText = styled.div`
+    font-size: 16px;
+    margin-top:12px;
+    margin-bottom: 12px;
+    width: 100%;
+`;
+
+export const Replies = styled.div`
+  padding-left: 46px;
+`;
+
+export const Reply = styled.div`
+  margin-bottom: 12px;
 `;

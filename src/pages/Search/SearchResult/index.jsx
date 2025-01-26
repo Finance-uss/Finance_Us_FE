@@ -4,7 +4,6 @@ import TopBar from '../../../components/common/TopBar';
 import Preview from '../../../components/Community/Search/Preview';
 import SearchProfile from '../../../components/Community/Search/SearchProfile';
 import SearchBar from '../../../components/Community/SearchBar/index';
-import { Container } from '../../../styles/Community/Search/style'
 
 const SearchResult = () => {
     const [searchParams] = useSearchParams();
@@ -48,7 +47,7 @@ const SearchResult = () => {
   );
 
     return (
-        <Container>
+        <>
         <SearchBar/>
             <TopBar 
                 leftText="제목·내용"
@@ -70,7 +69,7 @@ const SearchResult = () => {
               )}
 
               </div>
-        </Container>
+        </>
     );
 };
 

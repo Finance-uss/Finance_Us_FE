@@ -62,10 +62,3 @@ export const Consume = styled.span`
     font-size: 16px;
     font-weight: 600;
 `;
-export const Line = styled.div`
-    width: 100%;
-    margin-top: 40px;
-    margin-bottom:20px;
-    height: 0.5px;
-    background-color: #D7D8D9;
-`;
