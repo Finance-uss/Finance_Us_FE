@@ -5,12 +5,7 @@ import Content from "../../../components/Community/Post/Content";
 import CommentList from "../../../components/Community/Post/Comment/CommentList";
 import CustomDate from "../../../components/Community/Post/CustomDate";
 import examImg from "../../../assets/icons/common/Community/exam.png";
-import styled from "styled-components";
-
-export const Container = styled.div`
-  padding: 20px;
-  margin-bottom: 200px;
-`;
+import * as S from '../../../styles/Community/PostDetail/style';
 
 const PostDetail = () => {
   const [likeCount, setLikeCount] = useState(10);
@@ -39,11 +34,13 @@ const PostDetail = () => {
 
   return (
     <>
-      <Container>
+      <S.Container>
         <BeforeHeader />
-        <Content {...post} onLikeCount={handleLikeCount} />
-        <CommentList onCommentCount={handleCommentCount} /> 
-      </Container>
+        <S.Wrapper>
+          <Content {...post} onLikeCount={handleLikeCount} />
+          <CommentList onCommentCount={handleCommentCount} /> 
+        </S.Wrapper>
+      </S.Container>
       <BottomBar />
     </>
   );

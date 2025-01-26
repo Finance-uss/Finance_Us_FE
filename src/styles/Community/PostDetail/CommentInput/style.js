@@ -26,7 +26,7 @@ export const CommentInputBar = styled.input`
 
 export const SubmitButton = styled.img`
     width:24px;
-    height:24px;
+    height:16px;
     cursor: pointer;
     float:right;
 `;

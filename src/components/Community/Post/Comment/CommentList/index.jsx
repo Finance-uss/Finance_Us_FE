@@ -44,7 +44,7 @@ const CommentList = () => {
                 replies: [
                   ...comment.replies,
                   {
-                    id:`${commentId}.${comment.replies.length + 1}` ,
+                    id: `${commentId}.${comment.replies.length + 1}`,
                     userName: '답글동글동글',
                     commentDate: <CustomDate />,
                     comment: newComment,
@@ -57,11 +57,10 @@ const CommentList = () => {
         )
       );
     } else {
-      setComments((comment, commentId, prevComments) => [
+      setComments((prevComments) => [
         ...prevComments,
         {
-          id:`${commentId}.${comment.replies.length + 1}` 
-          ,
+          id: `${prevComments.length + 1}`,
           userName: '새로운동글동글',
           commentDate: <CustomDate />,
           comment: newComment,
