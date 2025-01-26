@@ -5,9 +5,8 @@ export const SatisfactionContainer = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 90%;
+    width: 100%;
     height: 48px;
-    top: 108px;
 `;
 
 export const SatisfactionText = styled.p`
