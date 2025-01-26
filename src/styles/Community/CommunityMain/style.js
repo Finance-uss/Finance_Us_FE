@@ -9,6 +9,6 @@ export const Container = styled.div`
     flex-direction: column; 
     justify-content: center; 
     align-items: center; 
-    padding:20px;
+    // padding:20px;
     padding-bottom: 77px;
 `;

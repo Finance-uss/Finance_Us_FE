@@ -1,10 +1,5 @@
 import styled from 'styled-components';
 
-export const Container = styled.div`
-    padding:20px;
-    margin-bottom:70px;
-`;
-
 export const CheerupMessage = styled.div`
     color:#142755;
     margin-top:15px;
