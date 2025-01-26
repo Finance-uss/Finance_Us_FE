@@ -1,11 +1,17 @@
 import styled from "styled-components";
-
+export const Container = styled.div`
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 44px 20px 24px 20px; // top right bottom left
+`;
 export const AlarmContainer = styled.div`
     width: 100%;
     padding: 16px 0 0 0;
     border-radius: 10px;
-    margin: 20px 0 20px 0 ;
-    opacity: 1;
+    margin-bottom:20px;
     background:  #f7f7f7;
     box-shadow: 0px 0px 3px 0px #00000040;
     display: flex;

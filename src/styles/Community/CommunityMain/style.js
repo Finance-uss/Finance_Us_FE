@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+
 export const ProfileList = styled.div`
   display: flex;
   flex-direction: row; 
@@ -9,6 +10,9 @@ export const Container = styled.div`
     flex-direction: column; 
     justify-content: center; 
     align-items: center; 
-    // padding:20px;
-    padding-bottom: 77px;
+    margin-bottom: 77px;
+    position: relative;
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 44px 20px 24px 20px; // top right bottom left
 `;
