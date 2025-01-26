@@ -6,9 +6,9 @@ export const CalendarContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 77%;
+    width: calc(100% - 48px);
     height: auto;
-    top: 176px;
+    top: ${( props ) => props.top || "0"};
     gap: 20px;
     border-radius: 8px;
     padding: 24px;

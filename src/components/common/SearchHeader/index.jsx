@@ -4,21 +4,20 @@ import styled from 'styled-components';
 import AlarmIcon from '../../../assets/icons/common/Alarm.svg';
 import SearchIcon from '../../../assets/icons/common/Search.svg';
 
-// 스타일 컴포넌트 정의
 const HeaderContainer = styled.div`
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-end; /* 아이콘들을 오른쪽 정렬 */
-  padding: 16px;
+  justify-content: flex-end; 
+  padding: 20px;
   background-color: #ffffff;
 `;
 
 const Icon = styled.img`
   width: 24px;
   height: 24px;
-  margin-left: 16px; /* 아이콘들 간의 간격을 왼쪽에서 오른쪽으로 */
-  cursor: pointer; /* 클릭 가능한 아이콘 */
+  margin-left: 16px;
+  cursor: pointer; 
 `;
 
 const SearchHeader = () => {

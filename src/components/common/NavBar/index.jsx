@@ -1,44 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import * as S from "../../../styles/common/NavBar/style.js";
-import YearMonthModal from "./YearMonthModal/index.jsx";
+import DateSelector from "./DateSelector/index.jsx";
+import AlarmIcon from "./AlarmIcon/index.jsx";
 
-import CaretDownIcon from "../../../assets/icons/common/NavBar/CaretDown.svg";
-
-const NavBar = ({ selectedDate, setSelectedDate, icon }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleYearChange = (year) => {
-        setSelectedDate((prev) => ({ ...prev, year })); // 연도만 변경
-    };
-
-    const handleMonthChange = (month) => {
-        setSelectedDate((prev) => ({ ...prev, month })); // 월만 변경
-    };
+const NavBar = ({ icon, modalTop }) => {
 
     return (
-        <>
-            <S.NavBarWrapper>
-                <S.DateSelectContiner>
-                    <S.SelectedDateText>
-                        {selectedDate.year}년 {selectedDate.month}월 
-                    </S.SelectedDateText>
-                    <S.DropdownIcon src={CaretDownIcon} alt="Caretdown Icon" onClick={() => setIsModalOpen(!isModalOpen)}/>
-                </S.DateSelectContiner>
-                {icon && <S.AlertIcon src={icon} alt="Alert Icon" />}
-            </S.NavBarWrapper>
-
-            {isModalOpen && (
-                <YearMonthModal
-                    selectedDate={selectedDate}
-                    onClose={() => setIsModalOpen(false)} // 모달 닫기
-                    onYearChange={handleYearChange}
-                    onMonthChange={handleMonthChange}
-                />
-            )}
-            
-        </>
-        
+        <S.NavBarWrapper >
+            <DateSelector modalTop={modalTop}/>
+            {icon && <AlarmIcon icon={icon} />}
+        </S.NavBarWrapper>
     );
 };
 
 export default NavBar;
+

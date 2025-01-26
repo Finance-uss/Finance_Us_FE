@@ -1,16 +1,19 @@
 import styled from 'styled-components';
+
+export const Container = styled.div`
+    padding:20px;
+`;
+
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 20px;
-    font-family: 'Pretendard', sans-serif;  
+    padding: 10px;
+    // font-family: 'Pretendard', sans-serif;  
     position: relative;
 `;
 
 export const Title = styled.input`
     width: 100%;
-    margin-top: 10px;
     font-size: 16px;
 
     border: 0px solid #b4b4b4;
@@ -46,6 +49,8 @@ export const Content = styled.textarea`
 export const Line = styled.div`
     width: 100%;
     height: 1px;
+    margin-top:  16px;
+    margin-bottom:16px;
     background-color: #b4b4b4;
 `;
 

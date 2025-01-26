@@ -1,11 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { ButtonWrapper, Button } from '../../../../styles/Community/Category/CateButton/style';
 import PostList from '../../Board/PostList';
 
-const CateButton = () => {
+const CateButton = ({ categories }) => {
   const [selectedCategory, setSelectedCategory] = useState(null); 
-
-  const categories = ['자유', '정보', '낭비했어요', '절약했어요'];
 
   const handleClick = (category) => {
     // 동일한 카테고리를 두 번 클릭하면 취소
