@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 // 버튼 전체
 export const ButtonWrapper = styled.button`
-  width: 107px;
+  width: 100%;
   height: 29px;
   border-radius: 5px;
   background-color: #f7f7f7;
@@ -32,7 +32,7 @@ export const CloseIcon = styled.img`
   height: 12px;
   position: absolute;
   top: 8.5px;
-  left: 89px;
+  left: calc(100% - 18px);
   cursor: pointer;
   pointer-events: auto;
 `;
