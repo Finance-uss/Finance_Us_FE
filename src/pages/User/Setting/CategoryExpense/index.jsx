@@ -123,7 +123,7 @@ const FixedHeaderWrapper = styled.div`
 
 const TopBarWrapper = styled.div`
     position: absolute;
-    top: 88px;
+    width: calc(100% - 40px);
     padding: 0 20px; 
 `;
 

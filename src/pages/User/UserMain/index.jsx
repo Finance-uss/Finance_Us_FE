@@ -28,23 +28,23 @@ const UserMain = () => {
     return (
         <UserMainContainer>
             <HeaderWrapper>
-                <SearchHeader />
                 <PageTitle>마이 페이지</PageTitle>
+                <SearchHeader />
             </HeaderWrapper>
-            <UserProfile />
-            <SettingOptionWrapper top="209px">
+            <ContentContainer>
+                <UserProfileWrapper>
+                    <UserProfile />
+                </UserProfileWrapper>
                 <SettingOption title="가계부 분류 설정" options={categoryOptions} />
-            </SettingOptionWrapper>
-            <SettingOptionWrapper top="309px">
                 <SettingOption title="목표 금액 설정" options={targetOptions} />
-            </SettingOptionWrapper>
-            <SettingOptionWrapper top="409px">
                 <SettingOption title="커뮤니티" options={communityOptions} multiRow />
-            </SettingOptionWrapper>
-            <SettingPanelWrapper top="550px">
-                <SettingPanel />
-            </SettingPanelWrapper>
-            <BottomBar />
+                <SettingPanelWrapper>
+                    <SettingPanel />
+                </SettingPanelWrapper>
+            </ContentContainer>
+            <BottomBarWrapper>
+                <BottomBar />
+            </BottomBarWrapper>
         </UserMainContainer>
     );
 };
@@ -53,18 +53,26 @@ export default UserMain;
 
 const UserMainContainer = styled.div`
     display: flex;
-    flex-direction: column; 
-    width: 100%;
-    justify-content: center; 
+    flex-direction: column;
     align-items: center;
-    margin: 20px auto;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-sizing: border-box;
 `;
 
 const HeaderWrapper = styled.div`
-    position: fixed;
-    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    padding: 20px 0;
+    padding: 20px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    margin-bottom: 20px;
+    box-sizing: border-box;
 `;
 
 const PageTitle = styled.div`
@@ -81,20 +89,34 @@ const PageTitle = styled.div`
     margin: 0;
 `;
 
-const SettingOptionWrapper = styled.div`
-    position: absolute;
-    top: ${(props) => props.top}; /* 각 요소의 고정 위치 설정 */
-    left: 50%;
-    transform: translateX(-50%);
+const ContentContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: calc(100% - 40px);
+    padding-top: 20px;
+    align-items: center;
+    margin-top: 20px;
+`;
+
+const UserProfileWrapper = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px; /* 내부 요소 간 간격 */
+    margin-bottom: 20px; /* 아래 옵션과의 간격 */
+`;
+
+const BottomBarWrapper = styled.div`
+    position: sticky;
+    bottom: 0;
     width: 100%;
+    z-index: 10;
 `;
 
 const SettingPanelWrapper = styled.div`
-    position: absolute;
-    top: ${(props) => props.top}; /* SettingsPanel의 top 값을 설정 */
-    left: 50%;
-    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
     width: 100%;
-    height: auto; /* 높이를 유동적으로 설정 */
-    overflow: visible; /* 내부 요소가 잘리지 않도록 */
+    align-items: center;
 `;
