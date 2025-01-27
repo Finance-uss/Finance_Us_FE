@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { Container, Title, Input, LinkContainer, ButtonContainer } from "../../styles/Login/style";
 import SubmitButton from '../../components/common/SubmitButton';
 import { useNavigate } from "react-router-dom"; 
+
+const URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
     const navigate = useNavigate(); 
@@ -19,19 +22,26 @@ const Login = () => {
         }
     }, [email, password]); 
 
-    const handleLogin = () => {
-        console.log("로그인 시도:", { email, password });
-        
-        // 예시: 존재하는 계정 리스트
-        const existingAccounts = ["user1@example.com", "user2@example.com", "user3@example.com"]; // 실제 계정 리스트로 대체 필요
+    const handleLogin = async () => {
 
         if (email && password) {
-            // 입력한 이메일이 존재하는지 확인
-            if (existingAccounts.includes(email)) {
-                navigate("/finance"); // 존재하면 페이지 이동
-            } else {
-                setErrorMessage("계정이 존재하지 않습니다."); // 계정이 없으면 에러 메시지 설정
+            try {
+                const response = await axios.post(`${URL}/api/auth/login`, {
+                    email,
+                    password,
+                });
+                // 입력한 이메일이 존재하는지 확인
+                if (response.data.isSuccess) {
+                    localStorage.setItem("token", response.data.result.token); // 토큰 저장
+                    navigate("/finance"); // 존재하면 페이지 이동
+                } else {
+                    setErrorMessage("계정이 존재하지 않습니다."); // 계정이 없으면 에러 메시지 설정
+                }
+            } catch (error) {
+                console.error(error);
+                setErrorMessage("로그인에 실패했습니다."); // 서버 에러 시 에러 메시지 설정
             }
+
         }
     };
 
