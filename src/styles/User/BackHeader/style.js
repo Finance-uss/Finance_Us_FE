@@ -20,7 +20,7 @@ export const BackButton = styled.button`
     align-items: center;
     justify-content: center;
     position: absolute;
-    left: 20px;
+    left: 0;
     cursor: pointer;
 
     img {

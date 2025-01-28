@@ -11,8 +11,13 @@ export const PanelContainer = styled.div`
 `;
 
 export const SectionTitle = styled.p`
+    font-family: Pretendard;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
+    line-height: 18px;
+    text-align: left;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
     margin-top: 4px;
     margin-bottom: 20px;
     padding: 0;

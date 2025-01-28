@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 export const HighlightContainer = styled.div`
-    width: 353px;
+    width: 100%;
     height: 100px;
     display: flex;
     flex-direction: column;
@@ -12,6 +12,7 @@ export const HighlightContainer = styled.div`
     background: var(--sub-color3, #F7F7F7);
     box-shadow: 0px 0px 3px 0px #00000040;
     margin-bottom: 20px;
+    position: relative;
 `;
 
 export const Label = styled.span`
@@ -64,4 +65,17 @@ export const ColorIndicator = styled.div`
     border-radius: 50%;
     background: #FFD700;
     cursor: pointer;
+`;
+
+export const PopupContainer = styled.div`
+    position: absolute;
+    top: calc(100% + 20px); /* Content 바로 아래 20px */
+    left: 0;
+    width: 230px;
+    height: 363px;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    z-index: 100;
+    padding: 16px;
 `;

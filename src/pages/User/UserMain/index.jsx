@@ -92,7 +92,6 @@ const PageTitle = styled.div`
 const ContentContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 20px;
     width: calc(100% - 40px);
     padding-top: 20px;
     align-items: center;
@@ -105,6 +104,7 @@ const UserProfileWrapper = styled.div`
     align-items: center;
     gap: 10px; /* 내부 요소 간 간격 */
     margin-bottom: 20px; /* 아래 옵션과의 간격 */
+    margin-top: 10px;
 `;
 
 const BottomBarWrapper = styled.div`
