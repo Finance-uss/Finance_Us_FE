@@ -17,6 +17,7 @@ export const Button = styled.button`
     line-height: normal;
     cursor: pointer; 
     flex: 1;
+    type: button;
 
     &:hover {
         background-color: #142755; /* 마우스 오버 시 조금 더 밝은 파란색 */

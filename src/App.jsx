@@ -52,7 +52,7 @@ function App() {
       <Router>
         <Routes>
           {/* 온보딩 페이지 */}
-          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/" element={<Onboarding />} />
           {/* 로그인 페이지 */}
           <Route path="/login" element={<Login />} />
           <Route path="/findMail" element={<FindMail />} />

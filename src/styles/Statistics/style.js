@@ -7,13 +7,14 @@ export const Container = styled.div`
     flex-direction: column;
     width: calc(100% - 40px);
     height: auto;
-    padding: 44px 20px 24px 20px; // top right bottom left;
+    padding: 44px 20px 60px 20px; // top right bottom left;
 `;
 
 export const IconContainer = styled.div`
   display: flex;
   justify-content: flex-end; 
-  margin-bottom: 20px; 
+  margin-bottom: 10px;
+  
 `;
 
 export const TopSection = styled.div`
@@ -25,7 +26,7 @@ export const TopSection = styled.div`
 `;
 
 export const TotalProgressContainer = styled.div`
-  margin-bottom: 40px;
+  margin-bottom: 20px;
 `;
 
 export const ProgressBar = styled.div`
@@ -72,14 +73,24 @@ export const CategoryLabel = styled.span`
 export const Separator = styled.div`
   width: 100%;
   height: 1px;
-  background-color: #d4d4d4;
+  background-color: #D7D8D9;
   margin: 10px 0; // 위아래 여백
 `;
 
 export const Title = styled.h3`
-  margin: 20px 0; // 제목 위아래 여백
+  margin: 20px 0;
   font-size: 22px;
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+`;
+export const HistoryContainer = styled.div`
+  margin-top: 20px;
+  padding: 10px;
+`;
+
+export const HistoryItem = styled.div`
+  margin: 5px 0;
+  font-size: 14px;
+  color: #5C5C5C;
 `;

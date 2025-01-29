@@ -1,37 +1,24 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDate } from '../../../contexts/DateContext'; // DateContext 경로 수정 필요
-import {Container,IconContainer,Icon,TopSection,TotalProgressContainer,ProgressBar,Amount,CategoryProgressContainer,CategoryBar,CategoryLabel,Title,Separator,} from '../../../styles/Statistics/style';
+import { useDate } from '../../../contexts/DateContext'; 
+import { Container, IconContainer, Icon, TopSection, HistoryContainer, HistoryItem, Title, Separator, Amount } from '../../../styles/Statistics/style';
 import TopBar from '../../../components/common/TopBar';
 import FinanceButton from '../../../components/common/FinanceButton';
 import NavBar from '../../../components/common/NavBar';
+import NavBar2 from '../../../components/common/NavBar2'; 
 import SearchIcon from '../../../assets/icons/common/Search.svg';
 import BellIcon from '../../../assets/icons/common/Bell.svg';
 import DonutChart from '../../../components/Chart/DonutChart';
 import BarChart from '../../../components/Chart/BarChart';
+import Category from '../../../components/Stat/Category'; 
+import BottomBar from '../../../components/common/BottomBar';
 
 const StatMain = () => {
   const navigate = useNavigate();
-  const { selectedDate } = useDate(); // DateContext 사용
+  const { selectedDate } = useDate(); 
   const today = new Date();
   
-  // 시작 및 종료 날짜 상태 정의
-  const [startDate, setStartDate] = useState({
-    year: selectedDate.year,
-    month: selectedDate.month,
-  });
-  
-  const [endDate, setEndDate] = useState({
-    year: selectedDate.year,
-    month: selectedDate.month,
-  });
-
-  const [activeButton, setActiveButton] = useState('expense');
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [goalAmount, setGoalAmount] = useState(1600000);
-  const [progressPercentage, setProgressPercentage] = useState(0);
-  const [selectedTab, setSelectedTab] = useState(0);
-  
+  // 지출 및 수익 데이터 정의
   const expenseData = {
     식비: { goal: 600000, spent: 360000 },
     카페: { goal: 200000, spent: 120000 },
@@ -44,7 +31,12 @@ const StatMain = () => {
     기타: { goal: 300000, earned: 200000 },
   };
 
-  const categoryData = activeButton === 'expense' ? expenseData : incomeData;
+  const [activeButton, setActiveButton] = useState('expense');
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [goalAmount, setGoalAmount] = useState(1600000);
+  const [progressPercentage, setProgressPercentage] = useState(0);
+  const [selectedTab, setSelectedTab] = useState(0);
+  const [categoryData, setCategoryData] = useState(expenseData); 
 
   useEffect(() => {
     const total = Object.values(categoryData).reduce((sum, category) => {
@@ -56,35 +48,34 @@ const StatMain = () => {
 
   const handleFinanceButtonClick = (buttonType) => {
     setActiveButton(buttonType);
+    setCategoryData(buttonType === 'expense' ? expenseData : incomeData); 
   };
 
   const handleTabClick = (index) => {
     setSelectedTab(index);
   };
 
-  // 선택한 기간에 맞는 월별 데이터 생성
-  const getFilteredMonthlyData = () => {
-    const filteredData = Array(12).fill(0);
-    const startMonth = startDate.month - 1; // 0-indexed
-    const endMonth = endDate.month - 1; // 0-indexed
-
-    Object.values(categoryData).forEach(category => {
-      for (let month = startMonth; month <= endMonth; month++) {
-        filteredData[month] += activeButton === 'expense' ? (category.spent || 0) : (category.earned || 0);
-      }
-    });
-
-    return filteredData;
+  const handleDateChange = (year, month) => {
+    // 선택된 년도와 월을 반영
+    selectedDate.year = year;
+    selectedDate.month = month;
+    // 카테고리 데이터 업데이트
+    setCategoryData(activeButton === 'expense' ? expenseData : incomeData);
   };
 
-  // X축 라벨 생성
-  const getFilteredLabels = () => {
-    const labels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-    return labels.slice(startDate.month - 1, endDate.month); // 선택된 기간에 맞춰 라벨 반환
+  // 지출 및 수익 내역 예시 (여기서 실제 데이터로 대체할 수 있음)
+  const historyData = {
+    expense: [
+      { date: '2024-01-01', title: '식사', amount: 100000 },
+      { date: '2024-01-15', title: '카페', amount: 850000 },
+      { date: '2024-01-17', title: '쇼핑', amount: 40000 },
+    ],
+    income: [
+      { date: '2024-01-21', title: '급여', amount: 500000 },
+      { date: '2024-01-23', title: '투자', amount: 100000 },
+      { date: '2024-01-25', title: '기타', amount: 30000 },
+    ],
   };
-
-  const filteredMonthlyData = getFilteredMonthlyData();
-  const filteredLabels = getFilteredLabels();
 
   return (
     <Container>
@@ -104,49 +95,78 @@ const StatMain = () => {
           setActiveButton={handleFinanceButtonClick} 
         />
       </TopSection>
-      <NavBar 
-        startDate={startDate} 
-        setStartDate={setStartDate} 
-        endDate={endDate} 
-        setEndDate={setEndDate}
-        marginTop="16px"
-        modalTop="200px"
-      />
 
-      {/* 카테고리 뷰일 때 도넛 차트 표시 */}
-      {selectedTab === 0 && <DonutChart categoryData={categoryData} activeButton={activeButton} />}
-
-      {/* 기간 뷰일 때 바 차트 표시 */}
-      {selectedTab === 1 && (
-        <BarChart categoryData={filteredMonthlyData} labels={filteredLabels} />
+      {selectedTab === 0 && (
+        <NavBar 
+          marginTop="20px" 
+          modalTop="230px" 
+          
+          onDateChange={handleDateChange} 
+        />
       )}
 
-      <TotalProgressContainer>
-        <Title>
-          {startDate.year}년 {startDate.month}월 ~ {endDate.year}년 {endDate.month}월 목표 총 {activeButton === 'expense' ? '지출' : '수익'} 현황
-        </Title>
-        <ProgressBar $percentage={progressPercentage} />
-        <Amount>
-          <span>{totalAmount.toLocaleString()}원</span> <span>{goalAmount.toLocaleString()}원</span>
-        </Amount>
-      </TotalProgressContainer>
-      <Separator />
+      {selectedTab === 1 && (
+        <NavBar2 
+          startDate={selectedDate} 
+          marginTop="16px" 
+          onDateChange={handleDateChange} 
+        />
+      )}
 
-      {/* 카테고리별 수입 현황 */}
-      <CategoryProgressContainer>
-        <Title style={{ marginTop: '20px' }}>
-          {startDate.year}년 {startDate.month}월 ~ {endDate.year}년 {endDate.month}월 카테고리 별 목표 {activeButton === 'expense' ? '지출' : '수익'} 현황
-        </Title>
-        {Object.entries(categoryData).map(([category, data]) => (
-          <CategoryBar key={category}>
-            <CategoryLabel>{category}</CategoryLabel>
-            <ProgressBar $percentage={activeButton === 'expense' ? (data.spent / data.goal) * 100 : (data.earned / data.goal) * 100} />
-            <Amount>
-              <span>{Math.min(activeButton === 'expense' ? data.spent : data.earned, data.goal).toLocaleString()}원</span> <span>{data.goal.toLocaleString()}원</span>
-            </Amount>
-          </CategoryBar>
-        ))}
-      </CategoryProgressContainer>
+      {selectedTab === 0 && <DonutChart categoryData={categoryData} activeButton={activeButton} />}
+
+      {selectedTab === 1 && (
+        <BarChart 
+          categoryData={categoryData} 
+          startDate={selectedDate} 
+          endDate={selectedDate} 
+          goalAmount={goalAmount} 
+          totalAmount={totalAmount} 
+        />
+      )}
+
+      {/* 기간 화면의 내역 표시 */}
+      {selectedTab === 1 && (
+        <HistoryContainer>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <div style={{ fontSize: '16px', fontWeight: '600', marginTop: '10px'}}>{selectedDate.month}월 내역</div>
+            <Amount style={{ fontSize: '16px', fontWeight: '600' }}>{totalAmount.toLocaleString()}원</Amount>
+
+          </div>
+          <Separator />
+          {activeButton === 'expense' ? (
+            historyData.expense.map((item, index) => (
+              <HistoryItem key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px'}}>
+                <span style={{ flex: '0 0 20%', textAlign: 'left' }}>{item.date.split('-')[2]}일</span> {/* 날짜 표시 */}
+                <span style={{ flex: '1', textAlign: 'center' }}>{item.title}</span> {/* 제목 표시 */}
+                <span style={{ flex: '0 0 20%', textAlign: 'right' }}>{item.amount.toLocaleString()}원</span> {/* 금액 표시 */}
+              </HistoryItem>
+            ))
+          ) : (
+            historyData.income.map((item, index) => (
+              <HistoryItem key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px'}}>
+                <span style={{ flex: '0 0 20%', textAlign: 'left' }}>{item.date.split('-')[2]}일</span> {/* 날짜 표시 */}
+                <span style={{ flex: '1', textAlign: 'center' }}>{item.title}</span> {/* 제목 표시 */}
+                <span style={{ flex: '0 0 20%', textAlign: 'right' }}>{item.amount.toLocaleString()}원</span> {/* 금액 표시 */}
+              </HistoryItem>
+            ))
+          )}
+
+        </HistoryContainer>
+      )}
+
+      {/* 카테고리 화면일 때의 카테고리 컴포넌트 */}
+      {selectedTab === 0 && (
+        <Category 
+          selectedDate={selectedDate} 
+          activeButton={activeButton} 
+          categoryData={categoryData} 
+          totalAmount={totalAmount} 
+          goalAmount={goalAmount} 
+          progressPercentage={progressPercentage} 
+        />
+      )}
+      <BottomBar/>
     </Container>
   );
 };

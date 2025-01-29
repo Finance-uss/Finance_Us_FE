@@ -5,13 +5,36 @@ import { ChartContainer, ChartWrapper } from '../../../styles/Chart/BarChart/sty
 
 Chart.register(...registerables);
 
-const BarChart = ({ categoryData, labels }) => {
+const BarChart = ({ categoryData, startDate, endDate, goalAmount, totalAmount }) => {
+  // X축 라벨 생성
+  const getFilteredLabels = () => {
+    const labels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
+    return labels.slice(startDate.month - 1, endDate.month); 
+  };
+
+  const getFilteredMonthlyData = () => {
+    const filteredData = Array(12).fill(0);
+    const startMonth = startDate.month - 1; 
+    const endMonth = endDate.month - 1; 
+
+    Object.values(categoryData).forEach(category => {
+      for (let month = startMonth; month <= endMonth; month++) {
+        filteredData[month] += category.spent || category.earned || 0; 
+      }
+    });
+
+    return filteredData;
+  };
+
+  const filteredMonthlyData = getFilteredMonthlyData();
+  const filteredLabels = getFilteredLabels();
+
   const barChartData = {
-    labels: labels, // 동적으로 설정된 라벨
+    labels: filteredLabels, 
     datasets: [
       {
         label: '지출',
-        data: categoryData,
+        data: filteredMonthlyData,
         backgroundColor: '#142755',
         borderColor: '#0A1E3F',
         borderWidth: 1,
@@ -32,9 +55,8 @@ const BarChart = ({ categoryData, labels }) => {
         ticks: {
           display: true,
           font: {
-            size: 14,
-            family: 'Arial, sans-serif',
-            color: '#333',
+            size: 16,
+            color: '#b4b4b4',
           },
         },
         grid: {
