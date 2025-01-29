@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputContainer, StyledInput, StyledButton } from '../../../styles/User/InputWithButton/style';
+import { InputContainer, StyledInput, StyledButton, StyledInputWrapper } from '../../../styles/User/InputWithButton/style';
 
 
 const InputWithButton = ({
@@ -10,21 +10,25 @@ const InputWithButton = ({
     value,
     onChange,
     isButtonActive = false,
+    isError = false,
 }) => {
     return (
         <InputContainer>
-            <StyledInput
-                type={type} // 입력 타입
-                placeholder={placeholder} // 플레이스홀더
-                value={value}
-                onChange={onChange}
-            />
-            <StyledButton
-                onClick={onButtonClick}
-                disabled={!isButtonActive} // 활성화 여부 설정
-            >
-                {buttonText}
-            </StyledButton>
+            <StyledInputWrapper isError={isError}>
+                <StyledInput
+                    type={type}
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange}
+                    isError={isError}
+                />
+                <StyledButton
+                    onClick={onButtonClick}
+                    disabled={!isButtonActive}
+                >
+                    {buttonText}
+                </StyledButton>
+            </StyledInputWrapper>
         </InputContainer>
     );
 };

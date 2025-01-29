@@ -1,20 +1,25 @@
 import React from 'react';
-import { InputContainer, StyledInput } from '../../../styles/User/SimpleInput/style';
+import { InputContainer, StyledInputWrapper, StyledInput } from '../../../styles/User/SimpleInput/style';
 
 const SimpleInput = ({
-    type = 'text', // 기본 타입은 'text'
+    type = 'text',
     placeholder,
     value,
     onChange,
+    isError = false, 
+    errorMessage = '', 
 }) => {
     return (
         <InputContainer>
-            <StyledInput
-                type={type} // 입력 타입 동적 설정 (e.g., text, password, email)
-                placeholder={placeholder} // 플레이스홀더
-                value={value}
-                onChange={onChange}
-            />
+            <StyledInputWrapper isError={isError}>
+                <StyledInput
+                    type={type}
+                    placeholder={placeholder}
+                    value={value}
+                    onChange={onChange}
+                    isError={isError} 
+                />
+            </StyledInputWrapper>
         </InputContainer>
     );
 };
