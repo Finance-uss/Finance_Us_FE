@@ -3,81 +3,38 @@ import styled from "styled-components";
 
 export const PageContainer = styled.div`
   width: 100%;
-  max-width: 400px;
-  margin: 0 auto;
   background-color: #ffffff;
-  padding-bottom: 6 0px;
 `;
 
 export const PostConatiner = styled.div`
+  padding:16px;
   border-radius:10px;
   box-shadow: 0px 0px 2px 0px #00000040;
   box-sizing: border-box;
+  position:relative;
 `;
 export const Header = styled.div`
-  padding: 16px;
-  border-bottom: 1px solid #e0e0e0;
+  margin-bottom:16px;
+
 `;
 
-export const Title = styled.h1`
+export const TitleContainer = styled.div`
+  widht:100%;
+  margin-bottom:6px;
+`;
+
+export const Title = styled.span`
   font-size: 18px;
-  font-weight: bold;
+  font-weight: 500;
   margin: 0;
   color: #000000;
 `;
 
-export const AuthorInfo = styled.div`
+export const Info = styled.div`
   display: flex;
   justify-content: space-between;
-  margin-top: 8px;
   font-size: 12px;
-  color: #757575;
-`;
-
-export const PostContent = styled.div`
-  padding: 16px;
-`;
-
-export const PostText = styled.p`
-  font-size: 16px;
-  color: #000000;
-  line-height: 1.5;
-  margin-bottom: 16px;
-`;
-
-export const PostImage = styled.img`
-  width: 100%;
-  height:213px;
-  object-fit: cover;
-//   height: auto;
-  border-radius: 8px;
-  margin-top: 8px;
-`;
-
-export const Stats = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 16px;
-  border-top: 1px solid #e0e0e0;
-  border-bottom: 1px solid #e0e0e0;
-`;
-
-export const Stat = styled.div`
-  display: flex;
-  align-items: center;
-  margin-right: 20px;
-`;
-
-export const StatIcon = styled.img`
-  width: 14px;
-  height: 14px;
-  margin-right: 5px;
-`;
-
-export const StatText = styled.span`
-  font-size: 14px;
-  color: #b4b4b4;
+  align-items:center;
 `;
 
 export const UserIcon = styled.img`
@@ -85,12 +42,81 @@ export const UserIcon = styled.img`
   width:24px;
   height:24px;
 `;
+
 export const User = styled.div`
-    font-size: 14px;
+    font-size: 16px;
+    margin-left:7.1px;
 `;
+
 export const Date = styled.div`
     font-size: 12px;
+    color:#b4b4b4;
 `;
+
+export const Profile = styled.div`
+  display:flex;
+  align-items:center;
+`;
+
+export const PostContent = styled.div`
+  
+`;
+
+export const PostText = styled.div`
+  font-size: 16px;
+  font-weight:500;
+  color: #000000;
+  line-height: 20px;
+  margin-bottom:16px;
+`;
+
+export const PostImage = styled.img`
+  width: 100%;
+  // height:213px;
+  object-fit: cover;
+  height: auto;
+  margin-bottom:16px;
+`;
+
+export const Stats = styled.div`
+  display: flex;
+  width:100%;
+    justify-content:space-between;
+
+  // justify-content: flex-start;
+  align-items: center;
+`;
+export const StateContainer = styled.div`
+  display:flex;
+  justify-content:space-between;
+`;
+export const Stat = styled.div`
+  display: flex;
+  align-items: center;
+  margin-right: 15.6px;
+`;
+export const MoreIcon = styled.img`
+  width: 2.7px;
+  height: 13px;
+  float:right;
+`;
+export const StatIcon = styled.img`
+  width: 13px;
+  height: 13px;
+`;
+export const BookMark = styled.img`
+  width:23px;
+  height:23px;
+  position:absolute;
+  bottom: 16px; 
+  right: 16px;
+`;
+export const StatText = styled.span`
+  font-size: 14px;
+  color: #b4b4b4;
+`;
+
+
 
 export const Menu = styled.div`
   position: absolute;
@@ -105,7 +131,5 @@ export const Menu = styled.div`
 export const MenuItem = styled.div`
   padding: 8px 16px;
   cursor: pointer;
-  &:hover {
-    background-color: #f2f2f2;
-  }
+  color:#5C5C5C;
 `;

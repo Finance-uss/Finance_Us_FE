@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
     flex-direction: column;
     gap: 16px; 
     margin-bottom: 20px;
-    width: 353px;
+    width: 100%;
 `;
 
 export const CategoryLabelWrapper = styled.div`
@@ -61,5 +61,4 @@ export const RemoveButton = styled.button`
 export const AmountInputWrapper = styled.div`
     display: flex;
     align-items: center;
-    width: 353px;
 `;

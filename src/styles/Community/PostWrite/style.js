@@ -1,21 +1,23 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    padding:20px;
+    flex-direction: column;
+    width: calc(100% - 40px);
+    // height: auto;
+    padding: 44px 20px 24px 20px; // top right bottom left
+    gap: 20px;
 `;
 
 export const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
-    padding: 10px;
-    // font-family: 'Pretendard', sans-serif;  
     position: relative;
+    margin-top:20px;
 `;
 
 export const Title = styled.input`
     width: 100%;
     font-size: 16px;
-
     border: 0px solid #b4b4b4;
     border-radius: 4px;
     outline: none;

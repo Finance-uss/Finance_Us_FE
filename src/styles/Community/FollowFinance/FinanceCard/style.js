@@ -1,11 +1,9 @@
 import styled from 'styled-components';
 
 export const Container = styled.div`
-    // max-width: 353px;
     width:100%;
     max-height: 297.6px;
-    margin-top:20px;
-
+    margin-bottom:20px;
 `;
 
 export const TitleWrapper = styled.div`

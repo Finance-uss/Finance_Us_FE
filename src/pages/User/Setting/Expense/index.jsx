@@ -127,7 +127,9 @@ const HeaderWrapper = styled.div`
 const ContentWrapper = styled.div`
   flex: 1;
   padding: 20px;
-  margin-top: 60px;
+  margin-top: 80px;
+  padding-bottom: 100px;
+  overflow-y: auto;
 `;
 
 const SectionTitle = styled.h2`

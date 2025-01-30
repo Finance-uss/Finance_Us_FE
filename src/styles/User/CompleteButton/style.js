@@ -2,10 +2,10 @@ import styled from 'styled-components';
 
 export const CompleteButton = styled.button`
     position: fixed;
-    top: 767px; 
+    bottom: 20px; 
     left: 50%;
     transform: translateX(-50%);
-    width: 353px;
+    width: calc(100% - 40px);
     height: 45.34px;
     background-color: #142755; 
     color: #FFFFFF; 

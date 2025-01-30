@@ -6,7 +6,7 @@ import CameraIconSrc from '../../../assets/icons/common/Camera.svg';
 import CateSelect from '../../../components/Community/Category/CateSelect';
 
 
-const Community = () => {
+const PostWrite = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(null);
@@ -31,7 +31,7 @@ const Community = () => {
         <S.Container>
             <BeforeHeader text="게시글 작성" />
             <S.Wrapper>
-                <CateSelect onCategoryChange={handleCategoryChange} />
+                <CateSelect onCategoryChange={handleCategoryChange} isAuth={true}/>
                 <S.Title
                     placeholder="제목"
                     value={title}
@@ -52,4 +52,4 @@ const Community = () => {
     );
 };
 
-export default Community;
+export default PostWrite;
