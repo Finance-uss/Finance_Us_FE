@@ -9,20 +9,18 @@ const CalendarSetPage = () => {
     const navigate = useNavigate();
 
     const [isHighlightEnabled, setIsHighlightEnabled] = useState(true);
-    const [currentColor, setCurrentColor] = useState('#FFD700');
-    const [activePicker, setActivePicker] = useState(null);
+    const [colors, setColors] = useState({ 지출: 'rgba(255, 215, 0, 1)', 수입: 'rgba(131, 150, 195, 1)' });
 
     const handleBackClick = () => {
         navigate('/user');
     };
 
-    const handleColorIndicatorClick = () => {
-        setActivePicker((prev) => (prev === label ? null : label));
-    };
-
-    const handleColorChange = (color) => {
-        setCurrentColor(color); // 선택한 색상을 업데이트
-        setActivePicker(null); // 색상을 선택하면 팝업을 닫음
+    // ✅ 색상 변경
+    const handleColorChange = (color, label) => {
+        setColors((prevColors) => ({
+            ...prevColors,
+            [label]: color, // 해당 Highlight 색상 업데이트
+        }));
     };
 
     return (
@@ -45,23 +43,21 @@ const CalendarSetPage = () => {
                 </ToggleWrapper>
             </Section>
 
-            <HighlightWrapper>
-                {/* 지출 금액 설정 */}
-                <AmountHighlight 
-                    label="지출" 
-                    isActive={activePicker === '지출'}
-                    onColorIndicatorClick={() => handleColorIndicatorClick('지출')}
-                    onColorChange={handleColorChange}
-                />
-
-                {/* 수입 금액 설정 */}
-                <AmountHighlight
-                    label="수입"
-                    isActive={activePicker === '수입'}
-                    onColorIndicatorClick={() => handleColorIndicatorClick('수입')}
-                    onColorChage={handleColorChange}
-                />
-            </HighlightWrapper>
+            {/* ✅ 토글이 켜져 있을 때만 HighlightWrapper 렌더링 */}
+            {isHighlightEnabled && (
+                <HighlightWrapper>
+                    <AmountHighlight
+                        label="지출"
+                        selectedColor={colors.지출}
+                        onColorChange={(color) => handleColorChange(color, '지출')}
+                    />
+                    <AmountHighlight
+                        label="수입"
+                        selectedColor={colors.수입}
+                        onColorChange={(color) => handleColorChange(color, '수입')}
+                    />
+                </HighlightWrapper>
+            )}
         </PageContainer>
     );
 };
@@ -73,19 +69,13 @@ const PageContainer = styled.div`
     flex-direction: column;
     padding: 20px;
     background-color: white;
+    position: relative;
 `;
 
 const Section = styled.div`
     position: relative;
     padding-top: 40px;
     padding-bottom: 40px;
-
-    & > div {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 8px;
-    }
 `;
 
 const HighlightWrapper = styled.div`

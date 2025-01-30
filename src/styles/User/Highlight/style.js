@@ -55,27 +55,56 @@ export const IndicatorText = styled.span`
     text-decoration-skip-ink: none;
 `;
 
-export const ColorIndicatorWrapper = styled.div`
-    position: relative; /* ColorPick 위치를 설정하기 위한 기준 */
-`;
-
-export const ColorIndicator = styled.div`
+export const ColorIndicator = styled.label`
     width: 24px;
     height: 24px;
     border-radius: 50%;
-    background: #FFD700;
+    background: ${({ color }) => color};
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
 `;
 
-export const PopupContainer = styled.div`
-    position: absolute;
-    top: calc(100% + 20px); /* Content 바로 아래 20px */
-    left: 0;
-    width: 230px;
-    height: 363px;
+export const ColorPickerContainer = styled.div`
+    position: absolute; 
+    top: 100%;
+    left: 50%;
+    transform: translate(-50%, 20px);
     background: white;
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
     z-index: 100;
     padding: 16px;
+    width: 230px;
+    max-height: 363px;
+    padding-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    * {
+        font-family: Pretendard, sans-serif !important;
+        color: #000 !important;
+    }
+`;
+
+export const CloseButton = styled.button`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    svg {
+        width: 24px;
+        height: 24px;
+        fill: #aaa;
+        transition: fill 0.2s ease-in-out;
+    }
 `;
