@@ -14,9 +14,6 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
         <Title>
           {selectedDate.month}월 목표 총 {activeButton === 'expense' ? '지출' : '수익'} 현황
         </Title>
-        <div style={{ position: 'absolute', left: `${progressPercentage}%`, transform: 'translateX(-10%)', marginTop: '-17px', fontSize: '12px', color: '#818C99'}}>
-          {Math.round(progressPercentage)}%
-        </div>
         <ProgressBar style={{ backgroundColor: '#E9ECF1' }}>
           <div 
             style={{ 

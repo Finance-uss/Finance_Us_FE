@@ -1,39 +1,34 @@
-import React, { useEffect } from "react";
-import * as S from "../../../../../../styles/common/NavBar2/DateRangeSelector/YearMonthRangeModal/YearSelector/style.js"; // 스타일 경로
+import React from "react";
+import * as S from "../../../../../../styles/common/NavBar/DateSelector/YearMonthModal/YearSelector/style.js";
 import { useDate } from "../../../../../../contexts/DateContext.jsx";
 import { useScrollSelector } from "../../../../../../hooks/useScrollSelector.js";
 
-const YearSelector = () => {
+const YearSelector = ({ onYearChange }) => {
     const START_YEAR = 2000;
     const END_YEAR = 2050;
     const itemCount = END_YEAR - START_YEAR + 1;
     const itemHeight = 34;
 
-    const { selectedDate, setSelectedDate } = useDate();
+    const { selectedDate } = useDate();
+    const currentYearIndex = selectedDate.year - START_YEAR + 1; // 현재 선택된 년도의 인덱스
+
     const { ref, selected } = useScrollSelector(
-        selectedDate.year - START_YEAR, 
+        currentYearIndex,
         itemCount,
         itemHeight,
         (yearIndex) => {
-            const newYear = START_YEAR + yearIndex;
-            setSelectedDate((prev) => ({ ...prev, year: newYear })); 
+            const selectedYear = START_YEAR + yearIndex - 1;
+            onYearChange(selectedYear); // 부모 컴포넌트에 선택된 년도 전달
         }
     );
 
-    // 컴포넌트가 마운트될 때 현재 년도를 기본값으로 설정
-    useEffect(() => {
-        const currentYear = 2025;
-        setSelectedDate((prev) => ({ ...prev, year: currentYear }));
-    }, [setSelectedDate]);
-
-    // 연도 배열 생성 (2000부터 2050까지)
-    const years = Array.from({ length: itemCount }, (_, i) => START_YEAR + i);
+    const years = ["", "", ...Array.from({ length: itemCount }, (_, i) => START_YEAR + i), "", ""];
 
     return (
         <S.List ref={ref}>
             {years.map((year, index) => (
-                <S.ListItem key={index} $isSelected={year === selected + START_YEAR}>
-                    {year}년
+                <S.ListItem key={index} $isSelected={year === selected + START_YEAR - 1}>
+                    {year !== "" ? `${year}년` : ""}
                 </S.ListItem>
             ))}
         </S.List>

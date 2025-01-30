@@ -1,36 +1,29 @@
-import React, { useEffect } from "react";
-import * as S from "../../../../../../styles/common/NavBar2/DateRangeSelector/YearMonthRangeModal/MonthSelector/style.js"; // 스타일 경로
+import React from "react";
+import * as S from "../../../../../../styles/common/NavBar/DateSelector/YearMonthModal/MonthSelector/style.js";
 import { useDate } from "../../../../../../contexts/DateContext.jsx";
 import { useScrollSelector } from "../../../../../../hooks/useScrollSelector.js";
 
-const MonthSelector = () => {
-    const itemCount = 12; // 1월부터 12월까지
+const MonthSelector = ({ onMonthChange, selectedMonth }) => {
+    const itemCount = 12;
     const itemHeight = 34;
 
-    const { selectedDate, setSelectedDate } = useDate();
+    const { selectedDate } = useDate();
     const { ref, selected } = useScrollSelector(
-        selectedDate.month - 1, 
+        selectedDate.month,
         itemCount,
         itemHeight,
-        (monthIndex) => {
-            const newMonth = monthIndex + 1; 
-            setSelectedDate((prev) => ({ ...prev, month: newMonth })); 
+        (month) => {
+            onMonthChange(month);  // 부모 컴포넌트에 월 변경 알림
         }
     );
 
-    useEffect(() => {
-        const currentMonth = new Date().getMonth() + 1;
-        setSelectedDate((prev) => ({ ...prev, month: currentMonth }));
-    }, [setSelectedDate]);
-
-    // 월 배열 생성 (1부터 12까지)
-    const months = Array.from({ length: itemCount }, (_, i) => i + 1);
+    const months = ["", "", ...Array.from({ length: 12 }, (_, i) => i + 1), "", ""];
 
     return (
         <S.List ref={ref}>
             {months.map((month, index) => (
-                <S.ListItem key={index} $isSelected={month === selected + 1}>
-                    {month}월
+                <S.ListItem key={index} $isSelected={month === selectedMonth}>
+                    {month !== "" ? `${month}월` : ""}
                 </S.ListItem>
             ))}
         </S.List>
