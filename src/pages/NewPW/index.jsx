@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import { 
     Container, 
     Title, 
@@ -10,23 +11,25 @@ import {
     ButtonWrapper, 
     StyledButton 
 } from '../../styles/NewPW/style'; 
+import { useAuth } from '../../contexts/AuthContext';
 import SubmitButton from '../../components/common/SubmitButton'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const URL = import.meta.env.VITE_API_URL;
+
 const NewPW = () => {
     const navigate = useNavigate(); 
-    const [newPassword, setNewPassword] = useState(''); 
+    const { formData, setFormField } = useAuth();
     const [confirmPassword, setConfirmPassword] = useState(''); 
     const [isPasswordValid, setIsPasswordValid] = useState(false); 
     const [isPasswordInputFocused, setIsPasswordInputFocused] = useState(false); 
     const [isPopupVisible, setIsPopupVisible] = useState(false); 
 
     const handleNewPasswordChange = (e) => {
-        const password = e.target.value;
-        setNewPassword(password);
+        setFormField("password", e.target.value);
 
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;
-        const valid = passwordRegex.test(password);
+        const valid = passwordRegex.test(e.target.value);
         setIsPasswordValid(valid);
     };
 
@@ -34,15 +37,30 @@ const NewPW = () => {
         setConfirmPassword(e.target.value);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         
-      
-        if (!newPassword || !isPasswordValid || newPassword !== confirmPassword) {
+        if (!formData.password || !isPasswordValid || formData.password !== confirmPassword) {
             return; 
         }
 
-        setIsPopupVisible(true);
+        try {
+            const response = await axios.patch(`${URL}/api/user/resetPassword`, {
+                Authrization: formData.email,
+                password: formData.password
+            });
+
+            if(response.data.isSuccess) {
+                setIsPopupVisible(true);        
+            }
+            else{
+                console.log(response.data.message);
+            }
+        } catch (error) {
+            console.log(error);
+        }
+
+        
     };
 
     const handleBackToLogin = () => {
@@ -60,7 +78,7 @@ const NewPW = () => {
                 <Input
                     type="text"
                     placeholder="새로운 비밀번호"
-                    value={newPassword}
+                    value={formData.password}
                     onChange={handleNewPasswordChange}
                     onFocus={() => setIsPasswordInputFocused(true)}
                     onBlur={() => setIsPasswordInputFocused(false)}
@@ -69,7 +87,7 @@ const NewPW = () => {
             </InputContainer>
             {isPasswordInputFocused && (
                 <>
-                    {newPassword && !isPasswordValid ? (
+                    {formData.password && !isPasswordValid ? (
                         <p style={{ color: 'red' }}>
                             비밀번호는 영어 대/소문자, 숫자 중 2종류 이상을 조합한 8자~12자 이내여야 합니다.
                         </p>
@@ -89,7 +107,7 @@ const NewPW = () => {
                     required
                 />
             </InputContainer>
-            {confirmPassword && newPassword !== confirmPassword && (
+            {confirmPassword && formData.password !== confirmPassword && (
                 <p style={{ color: 'red' }}>
                     비밀번호가 일치하지 않습니다.
                 </p>
@@ -98,8 +116,8 @@ const NewPW = () => {
                 <SubmitButton 
                     text="비밀번호 변경하기" 
                     onClick={handleSubmit} 
-                    disabled={!isPasswordValid || !newPassword || !confirmPassword} 
-                    customOpacity={isPasswordValid && newPassword && confirmPassword ? 1 : 0.4}
+                    disabled={!isPasswordValid || !formData.password || !confirmPassword} 
+                    customOpacity={isPasswordValid && formData.password && confirmPassword ? 1 : 0.4}
                 />
             </ButtonWrapper>
 
