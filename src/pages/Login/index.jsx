@@ -22,6 +22,22 @@ const Login = () => {
         }
     }, [email, password]); 
 
+    const FindMail = async () => {
+        try {
+            const response = await axios.get(`${URL}/api/user/mailCheck`, {
+                params: { email },
+            });
+            if(response.data.isSuccess) {
+                setErrorMessage("계정이 존재하지 않습니다."); // 계정이 없으면 에러 메시지 설정
+            }
+            else{
+                setErrorMessage("비밀번호가 일치하지 않습니다."); // 비밀번호가 일치하지 않으면 에러 메시지 설정
+            }
+        } catch (error) {
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.")
+        }
+    };
+
     const handleLogin = async () => {
 
         if (email && password) {
@@ -35,11 +51,10 @@ const Login = () => {
                     localStorage.setItem("token", response.data.result.token); // 토큰 저장
                     navigate("/finance"); // 존재하면 페이지 이동
                 } else {
-                    setErrorMessage("계정이 존재하지 않습니다."); // 계정이 없으면 에러 메시지 설정
+                    FindMail();
                 }
             } catch (error) {
-                console.error(error);
-                setErrorMessage("로그인에 실패했습니다."); // 서버 에러 시 에러 메시지 설정
+                FindMail();
             }
 
         }
