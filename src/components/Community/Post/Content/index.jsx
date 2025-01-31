@@ -6,11 +6,12 @@ import commentIcon from "../../../../assets/icons/common/Community/comment.svg";
 import moreIcon from "../../../../assets/icons/common/Community/more.svg";
 import examIcon from "../../../../assets/icons/common/Community/exam.png";
 import bookmarkIcon from "../../../../assets/icons/common/bookmark.svg";
+import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
 import CustomDate from "../CustomDate";
 import MenuBar from "../MenuBar";
 import { useNavigate } from "react-router-dom";
 
-const Content = ({ title, userName, createdAt, image, content, likeCount, commentCount, currentUser,category, postId, onLikeCount,onCommentCount,isOwner }) => {
+const Content = ({ title, userName, createdAt, image, content, likeCount, commentCount, currentUser,category, postId, onLikeCount,onCommentCount,isOwner,isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -47,6 +48,7 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
             <S.Profile>
               <S.UserIcon src={examIcon} alt="유저 아이콘" />
               <S.User>{userName}</S.User>
+              {isAuth && <S.CheckIcon src={checkIcon} alt="인증된 사용자" />}
             </S.Profile>
             <S.Date>{createdAt}</S.Date>
           </S.Info>

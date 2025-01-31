@@ -5,7 +5,8 @@ export const ButtonWrapper = styled.div`
   justify-content: flex-start; 
   align-items: center;
   width:100%;
-  margin: 20px auto;
+  margin-top:30px;
+  margin-bottom:10px;
   box-sizing: border-box;
   gap: 10px;
 `;
