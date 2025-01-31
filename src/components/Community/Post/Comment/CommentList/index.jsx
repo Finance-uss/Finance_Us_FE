@@ -1,113 +1,138 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import CommentInput from '../CommentInput';
 import * as S from "../../../../../styles/Community/PostDetail/Comment/style";
 import CustomDate from '../../CustomDate';
 import Comment from './Comment';
 import Reply from './Reply';
 import userDefaultImg from '../../../../../assets/icons/common/Community/commentProfile.svg'; 
+import axios from 'axios';
 
 const CommentList = () => {
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      userName: '원데이식스밀',
-      commentDate: <CustomDate />,
-      comment: '너도? 나도 ㅋㅋㅋㅋㅋㅋㅋㅋ 내 힘들다 ',
-      likesCount: 5,
-      isLiked: false, 
-      userImage: '',
-      replies: [],
-    },
-    {
-      id: 2,
-      userName: '김동글',
-      commentDate: <CustomDate />,
-      comment: '댓글쓰기!!',
-      likesCount: 3,
-      isLiked: false,
-      userImage: '',
-      replies: [],
-    },
-  ]);
+  const [comments, setComments] = useState([]);
 
   const [replyTo, setReplyTo] = useState(null); 
+  const postId = 1;
 
-  const handleAddComment = (newComment) => {
-    if (replyTo) {
-      const commentId = replyTo.commentId;
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await axios.get(`/api/comment/${postId}`);
+      } catch (error) {
+        console.error('댓글 목록 가져오기 실패:', error);
+      }
+    };
 
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.id === commentId
-            ? {
-                ...comment,
-                replies: [
-                  ...comment.replies,
-                  {
-                    id: `${commentId}.${comment.replies.length + 1}`,
-                    userName: '답글동글동글',
-                    commentDate: <CustomDate />,
-                    comment: newComment,
-                    likesCount: 0,
-                    isLiked: false, 
-                  },
-                ],
-              }
-            : comment
-        )
-      );
-    } else {
-      setComments((prevComments) => [
-        ...prevComments,
-        {
-          id: `${prevComments.length + 1}`,
-          userName: '새로운동글동글',
-          commentDate: <CustomDate />,
-          comment: newComment,
-          likesCount: 0,
-          isLiked: false,
-          userImage: '',
-          replies: [],
-        },
-      ]);
+    fetchComments();
+  }, [postId]);
+
+  const handleAddComment = async (newComment) => {
+    try {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/comment/${postId}`, { content: newComment });
+
+      if (response.data.isSuccess) {
+        setComments((prevComments) => [
+          ...prevComments,
+          {
+            id: response.data.result.commentId, 
+            userName: '김동글',
+            commentDate: <CustomDate />, 
+            comment: newComment,
+            likesCount: 0,
+            isLiked: false,
+            userImage: '',
+            replies: [],
+          },
+        ]);
+      } else {
+        console.error('댓글 추가 실패:', response.data.message);
+      }
+    } catch (error) {
+      console.error('댓글 생성 실패:', error);
     }
-
-    setReplyTo(null);
+    setReplyTo(null); 
   };
+
 
   const handleReplyClick = (commentId, userName) => {
     setReplyTo({ commentId, userName });
   };
 
-  const handleLike = (commentId, isReply, replyId) => {
-    setComments((prevComments) =>
-      prevComments.map((comment) => {
-        if (comment.id === commentId) {
-          if (isReply) {
-            return {
-              ...comment,
-              replies: comment.replies.map((reply) =>
-                reply.id === replyId
-                  ? {
-                      ...reply,
-                      isLiked: !reply.isLiked,
-                      likesCount: reply.isLiked ? reply.likesCount - 1 : reply.likesCount + 1,
-                    }
-                  : reply
-              ),
-            };
-          } else {
-            return {
-              ...comment,
-              isLiked: !comment.isLiked,
-              likesCount: comment.isLiked ? comment.likesCount - 1 : comment.likesCount + 1,
-            };
-          }
-        }
-        return comment;
-      })
-    );
+  const handleAddReply = async (newReply) => {
+    try {
+      // 답글 등록
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/comment/${replyTo.commentId}`, { content: newReply });
+
+      if (response.data.isSuccess) {
+        setComments((prevComments) =>
+          prevComments.map((comment) => {
+            if (comment.id === replyTo.commentId) {
+              return {
+                ...comment,
+                replies: [
+                  ...comment.replies,
+                  {
+                    id: response.data.result.commentId, 
+                    userName: '김동글',
+                    commentDate: <CustomDate />,
+                    comment: newReply,
+                    likesCount: 0,
+                    isLiked: false,
+                    userImage: '',
+                  },
+                ],
+              };
+            }
+            return comment;
+          })
+        );
+      } else {
+        console.error('답글 추가 실패:', response.data.message);
+      }
+    } catch (error) {
+      console.error('답글 생성 실패:', error);
+    }
+    setReplyTo(null); 
   };
+
+  const handleLike = async (commentId, isReply, replyId) => {
+    try {
+      const url = `${import.meta.env.VITE_API_URL}/api/comment/like/${commentId}`; 
+
+      const response = await axios.post(url); 
+
+      setComments((prevComments) =>
+        prevComments.map((comment) => {
+          if (comment.id === commentId) {
+            if (isReply) {
+              return {
+                ...comment,
+                replies: comment.replies.map((reply) =>
+                  reply.id === replyId
+                    ? {
+                        ...reply,
+                        isLiked: response.data.isLiked,
+                        likesCount: response.data.likesCount,
+                      }
+                    : reply
+                ),
+              };
+            } else {
+              return {
+                ...comment,
+                isLiked: response.data.isLiked,
+                likesCount: response.data.likesCount,
+              };
+            }
+          }
+          return comment;
+        })
+      );
+    } catch (error) {
+      console.error('좋아요 처리 실패:', error);
+    }
+  };
+
+
 
   return (
     <>
@@ -133,12 +158,10 @@ const CommentList = () => {
           )}
         </S.CommentListContainer>
       ))}
-      <S.CommentListContainer>
         <CommentInput
-          onSubmit={handleAddComment}
+          onSubmit={replyTo ? handleAddReply : handleAddComment}
           replyTo={replyTo?.userName || null}
         />
-      </S.CommentListContainer>
     </>
   );
 };

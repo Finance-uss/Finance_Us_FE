@@ -19,7 +19,7 @@ const PostDetail = () => {
     content: "나 진짜 미쳐버리겠다!!",
     likeCount: likeCount,
     commentCount: commentCount,
-    currentUser: false,
+    currentUser: true,
     category: "자유",
     postId: 1,
     isAuth: true

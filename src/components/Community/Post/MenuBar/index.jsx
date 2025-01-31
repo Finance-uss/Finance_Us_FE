@@ -3,8 +3,6 @@ import * as S from '../../../../styles/Community/MenuBar/style';
 import closeIcon from '../../../../assets/icons/common/X.svg';
 
 const MenuBar = ({ isOpen, closeModal, isOwner, onEdit, onDelete, onReport, postId, commentId }) => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
-
   if (!isOpen) return null;
 
   const handleClick = (e) => {
@@ -21,11 +19,6 @@ const MenuBar = ({ isOpen, closeModal, isOwner, onEdit, onDelete, onReport, post
     <S.ModalOverlay onClick={closeModal}>
       <S.ModalContent
         onClick={handleClick}
-        style={{
-          position: 'absolute',
-          left: `${position.x}px`,
-          top: `${position.y}px`,
-        }}
       >
         <S.Menu>
           {isOwner ? (

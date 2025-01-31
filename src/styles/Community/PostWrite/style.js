@@ -4,7 +4,7 @@ export const Container = styled.div`
     flex-direction: column;
     width: calc(100% - 40px);
     // height: auto;
-    padding: 44px 20px 24px 20px; // top right bottom left
+    padding: 44px 20px 100px 20px; // top right bottom left
     gap: 20px;
 `;
 
@@ -32,15 +32,15 @@ export const Title = styled.input`
 
 export const Content = styled.textarea`
     width: 100%;
+    height:460px;
     font-size: 16px;
     border: 0px solid #b4b4b4;
     font-weight:500;
     border-radius: 4px;
     outline: none;
     resize: none;
-    height: 460px;
     font-family: 'Pretendard', sans-serif; 
-
+    
     ::placeholder {
         font-weight:500;
         font-family: 'Pretendard', sans-serif; 
@@ -59,8 +59,18 @@ export const Line = styled.div`
 export const CameraButton = styled.img`
     width: 32px;
     height: 32px;
-    position: relative;
     top: 100%;
-    left: 18px;
-    transform: translateY(-20%);
+    margin-bottom:16px;
+`;
+export const ImagePreview = styled.img`
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    margin-bottom:16px;
+`;
+export const Footer = styled.div`
+    position: fixed;
+    bottom: 0;
+    width: calc(100% - 40px);
+    margin-bottom:20px;
 `;

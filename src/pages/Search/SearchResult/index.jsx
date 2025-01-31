@@ -1,5 +1,5 @@
 import React,{ useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import TopBar from '../../../components/common/TopBar'; 
 import Preview from '../../../components/Community/Search/Preview';
 import SearchProfile from '../../../components/Community/Search/SearchProfile';
@@ -7,9 +7,14 @@ import SearchBar from '../../../components/Community/SearchBar/index';
 import {Container, Wrapper} from '../../../styles/Community/RecentSearch/style';
 
 const SearchResult = () => {
-    const [searchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const query = searchParams.get("query")||""; 
   const [selectedTab, setSelectedTab] = useState(0);
+  const navigate = useNavigate();
+  const onPostClick = (postId) => {
+    navigate(`/community/postdetail/${postId}`);
+};
+
   const posts = [
     {
       id: 1,
@@ -59,7 +64,7 @@ const SearchResult = () => {
               <Wrapper>
               {selectedTab === 0 ? (
                   resultPost.length > 0 ? (
-                     <Preview posts={resultPost} />
+                     <Preview posts={resultPost} onPostClick={onPostClick}/>
                 ) : (
                 <p>검색 결과가 없습니다.</p>
                 )
