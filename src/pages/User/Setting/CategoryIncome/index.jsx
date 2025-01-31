@@ -96,42 +96,42 @@ const CategoryIncomePage = () => {
 export default CategoryIncomePage;
 
 const CategoryPageContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  overflow-x: hidden;
-  overflow-y: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: hidden;
 `;
 
 const FixedHeaderWrapper = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 10;
-  background-color: white;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    background-color: white;
 `;
 
 const TopBarWrapper = styled.div`
-  position: absolute;
-  top: 88px;
-  padding: 0 20px;
+    position: absolute;
+    width: calc(100% - 40px);
+    padding: 0 20px; 
 `;
 
 const ContentWrapper = styled.div`
-  margin-top: 156px;
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  padding: 0 20px;
-  flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding-bottom: 120px;
+    margin-top: 156px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    padding: 0 20px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-bottom: 120px;
 `;
 
 const PlusCateButtonWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  margin-top: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
 `;

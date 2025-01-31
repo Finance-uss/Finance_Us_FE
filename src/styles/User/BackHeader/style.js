@@ -1,12 +1,13 @@
 import styled from 'styled-components';
 
 export const HeaderContainer = styled.div`
-    width: 353px;
+    width: calc(100% - 40px);
     height: 24px;
     padding: 44px 20px 0;
     display: flex;
     align-items: center;
     position: relative; 
+    background-color: white;
 `;
 
 export const BackButton = styled.button`

@@ -2,12 +2,9 @@ import styled from 'styled-components';
 
 export const SettingContainer = styled.div`
     width: 100%;
-    max-width: 1000px;
     height: auto;
     display: flex;
     flex-direction: column;
-    padding: 0 20px;
-    margin: 0 auto;
 `;
 
 export const Title = styled.p`
@@ -25,7 +22,7 @@ export const ButtonGroup = styled.div.attrs((props) => ({
     display: flex;
     flex-wrap: ${(props) => (props.multiRow ? 'wrap' : 'nowrap')}; /* 다줄 처리 */
     justify-content: center;
-    gap: 20px;
+    gap: 15px;
     width: 100%;
 
     /* 다줄 레이아웃일 경우 버튼 정렬 */
@@ -38,7 +35,8 @@ export const ButtonGroup = styled.div.attrs((props) => ({
 `;
 
 export const Button = styled.button`
-    width: 185px; /* 나중에 수정 */
+    flex: 1 0 calc(50% - 7.5px); /* 부모 컨테이너의 50% 너비 */
+    max-width: calc(50% - 7.5px); /* 최대 너비 설정 */
     height: 32px;
     border-radius: 5px;
     background-color: #f7f7f7;

@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
-//   width: 353px;
   width:100%;
-  max-width: 353px;
+  // max-width: 353px;
   height: 146px;
   border-radius: 10px;
   overflow: hidden;
@@ -13,22 +12,22 @@ export const CardContainer = styled.div`
   margin: 10px auto;
   display: flex;
   align-items: center;
+  justify-content: space-between;
 `;
 
 export const Content = styled.div`
   display: flex;
   width:212px;
   height:116px;
-  justify-content: space-between;
   align-items: center;
-  padding: 20px;
+  padding: 13px 0 17px 14px;
 `;
 
 export const TextWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 65%; 
+  width: auto; 
 `;
 
 export const Category = styled.div`

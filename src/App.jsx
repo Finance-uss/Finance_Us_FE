@@ -75,8 +75,10 @@ function App() {
             <Route index element={<CommunityMain />} />
             <Route path="followfinance/:name" element={<FollowFinance />} />
             <Route path="postwrite" element={<PostWrite />} />
-            <Route path="postdetail" element={<PostDetail />} />
+            <Route path="postdetail/:postId" element={<PostDetail/>}/>
           </Route>
+          {/* 게시글 수정 */}
+          <Route path="/update/:postId" element={<PostWrite />} />          
           
           {/* 검색 페이지 */}
           <Route>

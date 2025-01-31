@@ -14,7 +14,6 @@ const Budget = ({ name, percentage }) => {
         <S.BarText percentage={percentage}>{percentage}%</S.BarText>
         <S.Fill percentage={percentage} />
       </S.Bar>
-      <S.Line/>
     </S.Container>
   );
 };

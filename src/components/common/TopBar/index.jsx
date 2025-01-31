@@ -26,6 +26,8 @@ const TopBar = ({ leftText, rightText, onTabClick, selectedTab }) => {
         <LeftTopButton onClick={() => handleTabClick(0)}>
           <TopText $isSelected={activeTab === 0}>{leftText}</TopText>
           {activeTab === 0 && <LeftTopUnderline src={underline} alt="underline" />}
+
+
         </LeftTopButton>
   
         {/* 오른쪽 버튼 */}
