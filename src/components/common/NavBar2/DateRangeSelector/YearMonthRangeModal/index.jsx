@@ -1,68 +1,67 @@
-import React, { useEffect, useState } from "react";
-import * as S from "../../../../../styles/common/NavBar/DateSelector/YearMonthModal/style.js";
+import React, { useEffect, useState, useRef } from "react";
+import * as S from "../../../../../styles/common/NavBar2/DateRangeSelector/YearMonthRangeModal/style.js"; // style.js 경로 수정
 import YearSelector from "./YearSelector/index.jsx";
 import MonthSelector from "./MonthSelector/index.jsx";
-import { useDate } from "../../../../../contexts/DateContext.jsx";
 
-const YearMonthRangeModal = ({ modalTop }) => {
-    const { selectedDate, setSelectedDate } = useDate();
-
+const YearMonthRangeModal = ({ 
+    modalTop, 
+    onClose, 
+    startYear, 
+    startMonth, 
+    endYear, 
+    endMonth, 
+    setStartYear, 
+    setStartMonth, 
+    setEndYear, 
+    setEndMonth 
+}) => {
     const [curModalTop, setCurModalTop] = useState(modalTop);
-    const [isStartSelected, setIsStartSelected] = useState(true); // 시작/종료 선택 상태
-
-    // 상태 초기화
-    const [startYear, setStartYear] = useState(selectedDate.startYear);
-    const [startMonth, setStartMonth] = useState(selectedDate.startMonth);
-    const [endYear, setEndYear] = useState(selectedDate.endYear);
-    const [endMonth, setEndMonth] = useState(selectedDate.endMonth);
+    const [isStartSelected, setIsStartSelected] = useState(true);
+    const isStartSelectedRef = useRef(isStartSelected);
 
     useEffect(() => {
-        const scrollY = window.scrollY;
-        setCurModalTop(scrollY + modalTop);
+        setTimeout(() => {
+            setCurModalTop(window.scrollY + modalTop);
+        }, 0);
     }, [modalTop]);
 
+    useEffect(() => {
+        isStartSelectedRef.current = isStartSelected;
+    }, [isStartSelected]);
+
     const handleYearChange = (year) => {
-        if (isStartSelected) {
+        if (isStartSelectedRef.current) {
             setStartYear(year);
-            setSelectedDate((prev) => ({ ...prev, startYear: year }));  // 자동 반영
         } else {
             setEndYear(year);
-            setSelectedDate((prev) => ({ ...prev, endYear: year }));  // 자동 반영
         }
     };
 
     const handleMonthChange = (month) => {
-        if (isStartSelected) {
+        if (isStartSelectedRef.current) {
             setStartMonth(month);
-            setSelectedDate((prev) => ({ ...prev, startMonth: month }));  // 자동 반영
         } else {
             setEndMonth(month);
-            setSelectedDate((prev) => ({ ...prev, endMonth: month }));  // 자동 반영
         }
-    };
-
-    const toggleSelection = () => {
-        setIsStartSelected((prev) => !prev);
-    };
-
-    const handleSave = () => {
-        // 최종 저장 기능 (필요시 추가)
-        console.log("저장된 값:", { startYear, startMonth, endYear, endMonth });
     };
 
     return (
         <S.ModalWrapper $modalTop={curModalTop}>
             <S.ModalContent>
-                <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-                    <h5>
-                        <button onClick={toggleSelection} style={{ marginRight: '10px', cursor: 'pointer' }}>
-                            시작: {startYear}년 {startMonth}월
-                        </button>
-                        <button onClick={toggleSelection} style={{ cursor: 'pointer' }}>
-                            종료: {endYear || startYear}년 {endMonth || startMonth}월
-                        </button>
-                    </h5>
-                </div>
+                <S.ButtonContainer>
+                    <S.Button 
+                        onClick={() => setIsStartSelected(true)} 
+                        isSelected={isStartSelected}
+                    >
+                        시작: {startYear}년 {startMonth}월
+                    </S.Button>
+                    <S.Button 
+                        onClick={() => setIsStartSelected(false)} 
+                        isSelected={!isStartSelected}
+                    >
+                        종료: {endYear}년 {endMonth}월
+                    </S.Button>
+                </S.ButtonContainer>
                 <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                     <YearSelector 
                         onYearChange={handleYearChange} 
@@ -73,6 +72,7 @@ const YearMonthRangeModal = ({ modalTop }) => {
                         selectedMonth={isStartSelected ? startMonth : endMonth} 
                     />
                 </div>
+                <S.ViewButton onClick={onClose}>보기</S.ViewButton>
             </S.ModalContent>
         </S.ModalWrapper>
     );

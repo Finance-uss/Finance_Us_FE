@@ -15,9 +15,9 @@ import BottomBar from '../../../components/common/BottomBar';
 
 const StatMain = () => {
   const navigate = useNavigate();
-  const { selectedDate } = useDate(); 
+  const { selectedDate } = useDate(); // selectedDate는 DateContext에서 가져온다.
   const today = new Date();
-  
+
   // 지출 및 수익 데이터 정의
   const expenseData = {
     식비: { goal: 600000, spent: 360000 },
@@ -36,7 +36,7 @@ const StatMain = () => {
   const [goalAmount, setGoalAmount] = useState(1600000);
   const [progressPercentage, setProgressPercentage] = useState(0);
   const [selectedTab, setSelectedTab] = useState(0);
-  const [categoryData, setCategoryData] = useState(expenseData); 
+  const [categoryData, setCategoryData] = useState(expenseData);
 
   useEffect(() => {
     const total = Object.values(categoryData).reduce((sum, category) => {
@@ -48,7 +48,7 @@ const StatMain = () => {
 
   const handleFinanceButtonClick = (buttonType) => {
     setActiveButton(buttonType);
-    setCategoryData(buttonType === 'expense' ? expenseData : incomeData); 
+    setCategoryData(buttonType === 'expense' ? expenseData : incomeData);
   };
 
   const handleTabClick = (index) => {
@@ -56,7 +56,7 @@ const StatMain = () => {
   };
 
   const handleDateChange = (year, month) => {
-    // 선택된 년도와 월을 반영
+    // selectedDate에 선택된 날짜 반영
     selectedDate.year = year;
     selectedDate.month = month;
     // 카테고리 데이터 업데이트
@@ -99,8 +99,7 @@ const StatMain = () => {
       {selectedTab === 0 && (
         <NavBar 
           marginTop="20px" 
-          modalTop="230px" 
-          
+          modalTop="25px" 
           onDateChange={handleDateChange} 
         />
       )}
@@ -128,30 +127,28 @@ const StatMain = () => {
       {/* 기간 화면의 내역 표시 */}
       {selectedTab === 1 && (
         <HistoryContainer>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <div style={{ fontSize: '16px', fontWeight: '600', marginTop: '10px'}}>{selectedDate.month}월 내역</div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={{ fontSize: '16px', fontWeight: '600', marginTop: '10px' }}>{selectedDate.month}월 내역</div>
             <Amount style={{ fontSize: '16px', fontWeight: '600' }}>{totalAmount.toLocaleString()}원</Amount>
-
           </div>
           <Separator />
           {activeButton === 'expense' ? (
             historyData.expense.map((item, index) => (
-              <HistoryItem key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px'}}>
-                <span style={{ flex: '0 0 20%', textAlign: 'left' }}>{item.date.split('-')[2]}일</span> {/* 날짜 표시 */}
-                <span style={{ flex: '1', textAlign: 'center' }}>{item.title}</span> {/* 제목 표시 */}
-                <span style={{ flex: '0 0 20%', textAlign: 'right' }}>{item.amount.toLocaleString()}원</span> {/* 금액 표시 */}
+              <HistoryItem key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <span style={{ flex: '0 0 20%', textAlign: 'left' }}>{item.date.split('-')[2]}일</span>
+                <span style={{ flex: '1', textAlign: 'center' }}>{item.title}</span>
+                <span style={{ flex: '0 0 20%', textAlign: 'right' }}>{item.amount.toLocaleString()}원</span>
               </HistoryItem>
             ))
           ) : (
             historyData.income.map((item, index) => (
-              <HistoryItem key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px'}}>
-                <span style={{ flex: '0 0 20%', textAlign: 'left' }}>{item.date.split('-')[2]}일</span> {/* 날짜 표시 */}
-                <span style={{ flex: '1', textAlign: 'center' }}>{item.title}</span> {/* 제목 표시 */}
-                <span style={{ flex: '0 0 20%', textAlign: 'right' }}>{item.amount.toLocaleString()}원</span> {/* 금액 표시 */}
+              <HistoryItem key={index} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+                <span style={{ flex: '0 0 20%', textAlign: 'left' }}>{item.date.split('-')[2]}일</span>
+                <span style={{ flex: '1', textAlign: 'center' }}>{item.title}</span>
+                <span style={{ flex: '0 0 20%', textAlign: 'right' }}>{item.amount.toLocaleString()}원</span>
               </HistoryItem>
             ))
           )}
-
         </HistoryContainer>
       )}
 
@@ -166,7 +163,8 @@ const StatMain = () => {
           progressPercentage={progressPercentage} 
         />
       )}
-      <BottomBar/>
+
+      <BottomBar />
     </Container>
   );
 };

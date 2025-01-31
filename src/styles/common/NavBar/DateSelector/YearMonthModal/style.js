@@ -3,7 +3,7 @@ import styled from "styled-components";
 export const ModalWrapper = styled.div`
     display: flex;
     justify-content: center;
-    position: fixed;
+    position: absolute;
     width: 100%; 
     height: calc(100% - 75px);
     top: ${(props) => props.$modalTop || "75px"};
@@ -16,7 +16,7 @@ export const ModalContent = styled.div`
     background: #F7F7F7;
     justify-content: center;
     align-items: center;
-    width: calc(100% - 40px);
+    width: calc(100% - 0px);
     height: 207px;
     top: 10px;
     border-radius: 8px;

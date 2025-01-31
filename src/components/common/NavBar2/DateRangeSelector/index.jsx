@@ -8,24 +8,17 @@ import { useModal } from "../../../../hooks/useModal.js";
 const DateRangeSelector = () => {
     const { selectedDate, setSelectedDate } = useDate();
     const { isOpen, toggleModal } = useModal();
-    
-    // 상태 변수만 선언 (기본값은 각 Selector에서 설정)
-    const [startYear, setStartYear] = useState(selectedDate.startYear);
-    const [startMonth, setStartMonth] = useState(selectedDate.startMonth);
-    const [endYear, setEndYear] = useState(selectedDate.endYear);
-    const [endMonth, setEndMonth] = useState(selectedDate.endMonth);
+
+    const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1;
+
+    const [startYear, setStartYear] = useState(selectedDate.startYear || currentYear);
+    const [startMonth, setStartMonth] = useState(selectedDate.startMonth || currentMonth);
+    const [endYear, setEndYear] = useState(selectedDate.endYear || currentYear);
+    const [endMonth, setEndMonth] = useState(selectedDate.endMonth || currentMonth);
 
     const handleOpenModal = () => {
         toggleModal();
-    };
-
-    const handleDateChange = () => {
-        setSelectedDate({
-            startYear,
-            startMonth,
-            endYear,
-            endMonth,
-        });
     };
 
     return (
@@ -42,6 +35,8 @@ const DateRangeSelector = () => {
             </S.DateSelectContainer>
             {isOpen && (
                 <YearMonthRangeModal 
+                    modalTop={0} // 적절한 값으로 설정
+                    onClose={toggleModal}
                     startYear={startYear}
                     startMonth={startMonth}
                     endYear={endYear}
@@ -50,8 +45,6 @@ const DateRangeSelector = () => {
                     setStartMonth={setStartMonth}
                     setEndYear={setEndYear}
                     setEndMonth={setEndMonth}
-                    toggleModal={toggleModal}
-                    handleDateChange={handleDateChange} 
                 />
             )}
         </>

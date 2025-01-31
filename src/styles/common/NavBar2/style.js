@@ -6,7 +6,7 @@ export const NavBarWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    height: 24px; /* ✅ 높이 지정 */
+    height: 32px; /* ✅ 높이 지정 */
     z-index: 1000;
     margin-top: ${(props) => props.$marginTop || "0px"};
 `;
