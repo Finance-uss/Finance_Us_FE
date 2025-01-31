@@ -1,22 +1,40 @@
 import React, { useState } from 'react';
 import { PanelContainer, SectionTitle, Item } from '../../../styles/User/SettingPanel/style';
 import Toggle from '../Toggle/index';
+import ConfirmModal from '../ConfirmModal';
 import { useNavigate } from 'react-router-dom';
 
 const SettingPanel = () => {
     const navigate = useNavigate();
     const [isNotificationOn, setIsNotificationOn] = useState(false);
     const [isAccountPublic, setIsAccountPublic] = useState(false);
+    const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [isCompleted, setIsCompleted] = useState(false);
 
     const handleToggle = (setter, messageOn, messageOff) => (newValue) => {
         setter(newValue); // 상태 업데이트
         setTimeout(() => {
             alert(newValue ? messageOn : messageOff); // 상태 변경 후 알림 표시
-        }, 200); // 모션이 끝난 후 실행
+        }, 200); 
     };
 
     const handleNavigation = (path) => () => {
         navigate(path);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('authToken'); // 예제: 토큰 삭제
+        navigate('/onboarding'); // 온보딩 화면으로 이동
+    };
+
+    const handleDeleteAccount = () => {
+        // ✅ API 없이 바로 탈퇴 완료 모달 띄우기 (테스트용)
+        localStorage.removeItem('authToken'); // 토큰 삭제
+        setIsCompleted(true); // 탈퇴 완료 모달 띄우기
+    };
+
+    const handleCloseModal = () => {
+        navigate('/onboarding'); // 온보딩 화면으로 이동
     };
 
     return (
@@ -41,8 +59,28 @@ const SettingPanel = () => {
 
             {/* 계정 정보 섹션 */}
             <SectionTitle>계정 정보</SectionTitle>
-            <Item onClick={handleNavigation('logout')}>로그아웃</Item>
-            <Item onClick={handleNavigation('delete-account')}>회원 탈퇴</Item>
+            <Item onClick={handleLogout}>로그아웃</Item>
+            <Item onClick={() => setDeleteModalOpen(true)}>회원 탈퇴</Item>
+
+            {/* 회원 탈퇴 확인 모달 */}
+            {isDeleteModalOpen && (
+                <ConfirmModal
+                    message="회원 탈퇴하시겠습니까?"
+                    confirmText="탈퇴하기"
+                    cancelText="취소"
+                    onConfirm={handleDeleteAccount}
+                    onCancel={() => setDeleteModalOpen(false)}
+                />
+            )}
+
+            {/* 회원 탈퇴 완료 모달 */}
+            {isCompleted && (
+                <ConfirmModal
+                    message="탈퇴하였습니다."
+                    confirmText="닫기"
+                    onConfirm={handleCloseModal}
+                />
+            )}
         </PanelContainer>
     );
 };
