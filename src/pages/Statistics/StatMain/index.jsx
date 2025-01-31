@@ -83,7 +83,7 @@ const StatMain = () => {
         <Icon src={SearchIcon} alt="검색 아이콘" onClick={() => navigate('/search')} />
         <Icon src={BellIcon} alt="알림 아이콘" onClick={() => navigate('/alarm')} />
       </IconContainer>
-      <TopSection>
+      <TopSection style={{gap: '20px'}}>
         <TopBar 
           leftText="카테고리" 
           rightText="기간" 

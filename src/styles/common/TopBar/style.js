@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-
 // 전체 컨테이너
 export const TopContainer = styled.div`
     display: flex;
@@ -33,7 +32,7 @@ export const RightTopButton = styled(TopButton)`
 
 export const TopText = styled.span`
     font-size: 16px;
-    color: ${({ $isSelected }) => ($isSelected ? '#142755' : '#818C99')}; // isSelected를 $isSelected로 변경
+    color: ${(props) => (props.$isSelected ? '#142755' : '#818C99')};
     text-align: center;
     margin: 0;
 `;
