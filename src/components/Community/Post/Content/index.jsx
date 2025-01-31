@@ -11,7 +11,7 @@ import CustomDate from "../CustomDate";
 import MenuBar from "../MenuBar";
 import { useNavigate } from "react-router-dom";
 
-const Content = ({ title, userName, createdAt, image, content, likeCount, commentCount, currentUser,category, postId, onLikeCount,onCommentCount,isOwner,isAuth }) => {
+const Content = ({ title, userName, createdAt, image, content, likeCount, commentCount, currentUser,category, postId, onLikeCount,onCommentCount,isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -32,8 +32,6 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
     const newLikeCount = isLiked ? likeCount - 1 : likeCount + 1;  
     setIsLiked(!isLiked);  
     onLikeCount(newLikeCount);
-
-  const isOwner = currentUser; 
   };
 
   return (
@@ -48,7 +46,7 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
             <S.Profile>
               <S.UserIcon src={examIcon} alt="유저 아이콘" />
               <S.User>{userName}</S.User>
-              {isAuth && <S.CheckIcon src={checkIcon} alt="인증된 사용자" />}
+              {isAuth && <S.CheckIcon src={authIcon} alt="인증된 사용자" />}
             </S.Profile>
             <S.Date>{createdAt}</S.Date>
           </S.Info>
