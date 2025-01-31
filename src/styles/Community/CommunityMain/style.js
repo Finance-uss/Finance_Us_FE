@@ -4,6 +4,8 @@ export const ProfileList = styled.div`
   display: flex;
   flex-direction: row; 
   justify-content: flex-start; 
+  width: 100%;
+  gap:31px;
 `;
 export const Container = styled.div`
     display: flex;

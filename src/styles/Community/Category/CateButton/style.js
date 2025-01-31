@@ -8,7 +8,7 @@ export const ButtonWrapper = styled.div`
   margin-top:30px;
   margin-bottom:10px;
   box-sizing: border-box;
-  gap: 10px;
+  gap: 15px;
 `;
 
 export const Button = styled.button`
@@ -23,6 +23,5 @@ export const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-
   white-space: nowrap;
 `;
