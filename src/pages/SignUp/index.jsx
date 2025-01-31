@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { useAuth } from '../../contexts/AuthContext';
 import { 
     Container, 
     Title, 
@@ -12,9 +14,11 @@ import {
 import SubmitButton from '../../components/common/SubmitButton'; 
 import { useNavigate } from 'react-router-dom'; 
 
+const URL = import.meta.env.VITE_API_URL;
+
 const SignUp = () => {
     const navigate = useNavigate(); 
-    const [email, setEmail] = useState(''); 
+    const { formData, setFormField } = useAuth();    
     const [authCode, setAuthCode] = useState(''); 
     const [isCodeValid, setIsCodeValid] = useState(false); // 인증번호 유효성 상태
     const [emailMessage, setEmailMessage] = useState(''); // 이메일 전송 메시지 상태
@@ -24,7 +28,7 @@ const SignUp = () => {
     const [isResend, setIsResend] = useState(false); // 인증 버튼 상태
 
     const handleEmailChange = (e) => {
-        setEmail(e.target.value); 
+        setFormField('email', e.target.value);
         setEmailMessage(''); 
         setIsEmailValid(false); 
     };
@@ -37,7 +41,7 @@ const SignUp = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         if (isCodeValid) {
-            console.log("이메일:", email, "인증번호:", authCode);
+            console.log("이메일:", formData.email, "인증번호:", authCode);
         }
     };
 
@@ -47,13 +51,29 @@ const SignUp = () => {
         }
     };
 
-    const validateAuthCode = () => {
-        if (authCode === "1234") {
-            setIsCodeValid(true); 
-            setAuthCodeMessage(''); 
-        } else {
-            setIsCodeValid(false); 
-            setAuthCodeMessage('인증번호가 일치하지 않습니다.');
+    const validateAuthCode =  async () => {
+        try {
+            console.log("email: " + formData.email + " authcode: " + authCode);
+
+            const response = await axios.get(`${URL}/api/auth/numberCheck`, { 
+                params: {
+                    email: formData.email, 
+                    number: authCode
+                }
+            });
+
+            if (response.data.isSuccess) {
+                setIsCodeValid(true);
+                setAuthCodeMessage('');
+            } else {
+                setIsCodeValid(false);
+                setAuthCodeMessage('인증번호가 일치하지 않습니다.');
+            }
+        }
+        catch (error) {
+            console.error('인증번호 확인 에러:', error);
+            setAuthCodeMessage('서버 에러가 발생했습니다. 나중에 다시 시도해주세요.');
+            setIsCodeValid(false);
         }
     };
 
@@ -62,12 +82,25 @@ const SignUp = () => {
         return emailRegex.test(email);
     };
 
-    const handleVerifyEmail = () => {
-        if (isValidEmail(email)) {
-            setEmailMessage("이메일이 전송되었습니다. 이메일을 확인해주세요.");
-            setIsEmailValid(true); 
-            setTimer(180); 
-            setIsResend(true);
+    const handleVerifyEmail = async () => {
+        if (isValidEmail(formData.email)) {
+            try {
+                console.log('이메일 인증 요청:', formData.email);
+                const response = await axios.post(`${URL}/api/auth/mailSend`, formData.email, { headers: { 'Content-Type': 'text/plain' } }); // 요청 보낼 경로와 데이터
+                if (response.data.isSuccess) {
+                    setEmailMessage("이메일이 전송되었습니다. 이메일을 확인해주세요.");
+                    setIsEmailValid(true);
+                    setTimer(180); 
+                    setIsResend(true);
+                } else {
+                    setEmailMessage(response.data.message);
+                    setIsEmailValid(false);
+                }
+            } catch (error) {
+                console.error('이메일 인증 요청 에러:', error);
+                setEmailMessage("서버 에러가 발생했습니다. 나중에 다시 시도해주세요.");
+                setIsEmailValid(false);
+            }
         } else {
             setEmailMessage("올바르지 않은 이메일 형식입니다.");
             setIsEmailValid(false); 
@@ -101,7 +134,7 @@ const SignUp = () => {
                     <Input
                         type="email"
                         placeholder="이메일 주소"
-                        value={email}
+                        value={formData.email}
                         onChange={handleEmailChange}
                         required
                         style={{
@@ -113,8 +146,8 @@ const SignUp = () => {
                         type="button" 
                         onClick={handleVerifyEmail}
                         style={{ 
-                            backgroundColor: isValidEmail(email) ? '#142755' : '#cccccc', 
-                            cursor: isValidEmail(email) ? 'pointer' : 'not-allowed'
+                            backgroundColor: isValidEmail(formData.email) ? '#142755' : '#cccccc', 
+                            cursor: isValidEmail(formData.email) ? 'pointer' : 'not-allowed'
                         }}
                     >
                         {isResend ? '재전송' : '인증'}

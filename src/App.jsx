@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route  } from "react-router-dom";
+import { AuthProvider } from './contexts/AuthContext';
 import "normalize.css"
 import "./index.css";
 
@@ -47,7 +48,7 @@ function App() {
   const [count, setCount] = useState(0);
 
   return (
-    <>
+    <AuthProvider>
       <Router>
         <Routes>
           {/* 온보딩 페이지 */}
@@ -114,7 +115,7 @@ function App() {
 
         </Routes>
     </Router>
-    </>
+    </AuthProvider>
   )
 }
 
