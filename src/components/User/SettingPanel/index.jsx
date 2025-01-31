@@ -28,13 +28,22 @@ const SettingPanel = () => {
     };
 
     const handleDeleteAccount = () => {
-        // ✅ API 없이 바로 탈퇴 완료 모달 띄우기 (테스트용)
+        // API 없이 바로 탈퇴 완료 모달 띄우기 (테스트용)
         localStorage.removeItem('authToken'); // 토큰 삭제
         setIsCompleted(true); // 탈퇴 완료 모달 띄우기
     };
 
     const handleCloseModal = () => {
         navigate('/onboarding'); // 온보딩 화면으로 이동
+    };
+
+    const handleOutNavigation = (path) => {
+        // 외부 페이지 이동 처리
+        if (path.startsWith('http')) {
+            window.open(path, '_blank'); // 새 창에서 열기
+        } else {
+            navigate(path);
+        }
     };
 
     return (
@@ -59,6 +68,9 @@ const SettingPanel = () => {
 
             {/* 계정 정보 섹션 */}
             <SectionTitle>계정 정보</SectionTitle>
+            <Item onClick={() => handleOutNavigation('https://www.notion.so/1888467e978880fcbad7ce9eb1a77627?pvs=4')}>
+                인증 뱃지 신청하기
+            </Item>
             <Item onClick={handleLogout}>로그아웃</Item>
             <Item onClick={() => setDeleteModalOpen(true)}>회원 탈퇴</Item>
 

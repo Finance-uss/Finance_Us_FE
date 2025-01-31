@@ -6,7 +6,7 @@ export const PanelContainer = styled.div`
     width: 100%;
     padding: 20px;
     padding-top: 16px;
-    padding-bottom: 80px;
+    padding-bottom: 60px;
     overflow: auto;
 `;
 

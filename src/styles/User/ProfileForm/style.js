@@ -41,3 +41,18 @@ export const Input = styled.input`
     border: none;
     box-sizing: border-box;
 `;
+
+export const Select = styled.select`
+    width: 100%;
+    height: 32px;
+    padding: 8px;
+    font-size: 16px; 
+    border-radius: 4px;
+    border: none;
+    background: var(--sub-color3, #F7F7F7);
+    box-shadow: 0px 0px 2px 0px #00000040;
+    appearance: none; /* 기본 화살표 숨김 */
+    cursor: pointer;
+    overflow-y: auto;
+    max-height: 150px;
+`;
