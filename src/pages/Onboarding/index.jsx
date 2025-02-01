@@ -34,7 +34,6 @@ const styles = {
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
         padding: '20px',
     },
     image: {
@@ -42,7 +41,7 @@ const styles = {
         height: 'auto',
         marginBottom: '20px',
         marginLeft: '16px',
-        marginTop: '202px',
+        marginTop: '200px',
     },
     subtitle: {
         width: '181px',
@@ -55,7 +54,7 @@ const styles = {
         flexDirection: 'column',
         width: '100%',
         gap: '15px',
-        margin: '230px 16px 150px 16px',
+        margin: '300px 16px 15px 16px',
     },
 };
 

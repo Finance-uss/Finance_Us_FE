@@ -155,7 +155,7 @@ const SignUp = () => {
                 </InputContainer>
                 {emailMessage && (
                     <p style={{ 
-                        color: isEmailValid ? '#142755' : 'red' 
+                        color: isEmailValid ? '#142755' : 'red' , marginTop: '0px', fontSize: '14px'
                     }}>
                         {emailMessage}
                     </p>
@@ -185,7 +185,7 @@ const SignUp = () => {
                 </InputContainer>
                 {authCodeMessage && (
                     <p style={{ 
-                        color: 'red'}}>
+                        color: 'red', marginTop: '0px', fontSize: '14px'}}>
                         {authCodeMessage}
                     </p>
                 )}

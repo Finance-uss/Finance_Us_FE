@@ -3,18 +3,21 @@ import styled from 'styled-components';
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
-    padding: 20px;
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 44px 20px 24px 20px;
 `;
 
 export const Title = styled.h1`
     font-size: 22px;
     font-weight: 700;
     line-height: 16px;
-    margin: 125px 250px 40px 0px;
+    margin: 125px 0 40px 0; /* 수평 마진 제거 */
     letter-spacing: 0.2px;
 `;
+
 
 export const Form = styled.form`
     display: flex;
@@ -39,6 +42,9 @@ export const Input = styled.input`
     &:focus {
         border-bottom: 1px solid #142755;
     }
+    &::placeholder {
+        color: #b4b4b4; /* placeholder 색상 설정 */
+    } 
 `;
 
 export const VerifyButton = styled.button`

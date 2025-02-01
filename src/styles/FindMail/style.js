@@ -4,9 +4,9 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
-    box-sizing: border-box; 
-    padding: 26px;
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 44px 20px 24px 20px;
 `;
 
 export const Title = styled.h1`
@@ -30,6 +30,7 @@ export const Input = styled.input`
     &:focus {
         outline: none; 
     }
+    
 `;
 
 export const LinkContainer = styled.div`

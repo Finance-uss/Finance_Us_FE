@@ -6,11 +6,12 @@ export const AuthProvider = ({ children }) => {
     const { formData, handleChange, setFormField } = useForm({
         email : "",
         username : "",
-        password : "",
+        password: "",
         jobCategory : "",
         ageGroup : "",
         one_liner : ""
     });
+    
 
     return (
         <AuthContext.Provider 
