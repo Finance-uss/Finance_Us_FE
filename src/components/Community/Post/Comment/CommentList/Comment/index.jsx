@@ -5,7 +5,7 @@ import likeIcon from '../../../../../../assets/icons/common/Community/heart.svg'
 import likeFill from '../../../../../../assets/icons/common/Community/heartFill.svg';
 import moreIcon from '../../../../../../assets/icons/common/Community/more.svg';
 import userDefaultImg from '../../../../../../assets/icons/common/Community/commentProfile.svg';
-import MenuBar from '../../../MenuBar';
+import CommentMenuBar from '../../../MenuBar/CommentMenubar';
 
 const Comment = ({ comment, onReplyClick, onLike }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,7 +47,7 @@ const Comment = ({ comment, onReplyClick, onLike }) => {
         </S.Active>
       </S.Header>
       {isMenuOpen && (
-        <MenuBar
+        <CommentMenuBar
           isOpen={isMenuOpen}
           closeModal={closeMenu}
           isOwner={comment.isOwner}

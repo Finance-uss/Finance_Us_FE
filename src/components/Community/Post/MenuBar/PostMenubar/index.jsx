@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import * as S from '../../../../styles/Community/MenuBar/style';
-import closeIcon from '../../../../assets/icons/common/X.svg';
+import * as S from '../../../../../styles/Community/MenuBar/style';
+import closeIcon from '../../../../../assets/icons/common/X.svg';
 
-const MenuBar = ({ isOpen, closeModal, isOwner, onEdit, onDelete, onReport, postId, commentId }) => {
+const PostMenuBar = ({ isOpen, closeModal, isOwner, onEdit, onDelete, onReport, postId}) => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });  
   if (!isOpen) return null;
 
   const handleClick = (e) => {
@@ -10,10 +11,9 @@ const MenuBar = ({ isOpen, closeModal, isOwner, onEdit, onDelete, onReport, post
     setPosition({ x: e.clientX, y: e.clientY });
   };
 
-  const type = postId ? "게시글" : commentId ? "댓글" : "";
-  const editText = `${type} 수정`;
-  const deleteText = `${type} 삭제`;
-  const reportText = `${type} 신고`;
+  const editText = `게시글 수정`;
+  const deleteText = `게시글 삭제`;
+  const reportText = `게시글 신고`;
 
   return (
     <S.ModalOverlay onClick={closeModal}>
@@ -36,4 +36,4 @@ const MenuBar = ({ isOpen, closeModal, isOwner, onEdit, onDelete, onReport, post
   );
 };
 
-export default MenuBar;
+export default PostMenuBar;

@@ -13,18 +13,6 @@ const CommentList = () => {
   const [replyTo, setReplyTo] = useState(null); 
   const postId = 1;
 
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await axios.get(`/api/comment/${postId}`);
-      } catch (error) {
-        console.error('댓글 목록 가져오기 실패:', error);
-      }
-    };
-
-    fetchComments();
-  }, [postId]);
-
   const handleAddComment = async (newComment) => {
     try {
       const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/comment/${postId}`, { content: newComment });

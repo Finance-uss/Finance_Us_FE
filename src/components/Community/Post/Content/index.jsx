@@ -8,7 +8,7 @@ import examIcon from "../../../../assets/icons/common/Community/exam.png";
 import bookmarkIcon from "../../../../assets/icons/common/bookmark.svg";
 import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
 import CustomDate from "../CustomDate";
-import MenuBar from "../MenuBar";
+import PostMenuBar from "../MenuBar/PostMenubar";
 import { useNavigate } from "react-router-dom";
 
 const Content = ({ title, userName, createdAt, image, content, likeCount, commentCount, currentUser,category, postId, onLikeCount,onCommentCount,isAuth }) => {
@@ -74,7 +74,7 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
       </S.PostConatiner>
 
       {isMenuOpen && (
-        <MenuBar
+        <PostMenuBar
     isOpen={isMenuOpen}
     closeModal={closeMenu}
     isOwner={currentUser}
