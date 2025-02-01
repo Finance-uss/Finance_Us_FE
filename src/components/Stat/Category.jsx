@@ -19,7 +19,7 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
             style={{ 
               height: '100%', 
               width: `${progressPercentage}%`, 
-              backgroundColor: 'pink', 
+              backgroundColor: '#ED1B87', 
               borderRadius: '2px' 
             }} 
           />

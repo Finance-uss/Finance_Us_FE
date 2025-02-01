@@ -72,7 +72,7 @@ const YearMonthRangeModal = ({
                         selectedMonth={isStartSelected ? startMonth : endMonth} 
                     />
                 </div>
-                <S.ViewButton onClick={onClose}>보기</S.ViewButton>
+                <S.ViewButton onClick={onClose}>확인</S.ViewButton>
             </S.ModalContent>
         </S.ModalWrapper>
     );

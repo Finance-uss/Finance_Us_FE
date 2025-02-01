@@ -66,14 +66,14 @@ const StatMain = () => {
   // 지출 및 수익 내역 예시 (여기서 실제 데이터로 대체할 수 있음)
   const historyData = {
     expense: [
-      { date: '2024-01-01', title: '식사', amount: 100000 },
-      { date: '2024-01-15', title: '카페', amount: 850000 },
-      { date: '2024-01-17', title: '쇼핑', amount: 40000 },
+      { date: '2024-02-01', title: '식사', amount: 100000 },
+      { date: '2024-02-15', title: '카페', amount: 850000 },
+      { date: '2024-02-17', title: '쇼핑', amount: 40000 },
     ],
     income: [
-      { date: '2024-01-21', title: '급여', amount: 500000 },
-      { date: '2024-01-23', title: '투자', amount: 100000 },
-      { date: '2024-01-25', title: '기타', amount: 30000 },
+      { date: '2024-02-21', title: '급여', amount: 500000 },
+      { date: '2024-02-23', title: '투자', amount: 100000 },
+      { date: '2024-02-25', title: '기타', amount: 30000 },
     ],
   };
 

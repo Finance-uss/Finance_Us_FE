@@ -6,7 +6,6 @@ import { ChartContainer, ChartWrapper } from '../../../styles/Chart/BarChart/sty
 Chart.register(...registerables);
 
 const BarChart = ({ categoryData, startDate, endDate, goalAmount, totalAmount }) => {
-  // X축 라벨 생성
   const getFilteredLabels = () => {
     const labels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
     return labels.slice(startDate.month - 1, endDate.month); 
@@ -36,9 +35,9 @@ const BarChart = ({ categoryData, startDate, endDate, goalAmount, totalAmount })
         label: '지출',
         data: filteredMonthlyData,
         backgroundColor: '#142755',
-        borderColor: '#0A1E3F',
         borderWidth: 1,
         borderRadius: 5,
+        barThickness: 20, // 바의 두께 설정
       },
     ],
   };
