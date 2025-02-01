@@ -5,7 +5,7 @@ import useComment from '../../../../../hooks/useComment';
 
 const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport }) => {
   if (!isOpen) return null;
-  const isOwner = true;
+  // const isOwner = true;
   const { updateComment, deleteComment } = useComment();  
   const [editContent, setEditContent] = useState('');
 
