@@ -2,6 +2,16 @@ import axios from 'axios';
 
 const API_URL = import.meta.env.VITE_API_URL;
 
+export const getPost = async (postId) => {
+    try {
+        const response = await axios.get(`${API_URL}/api/post/${postId}`);
+        return response.data;
+    } catch (error) {
+        console.error('게시글 조회 실패:', error);
+        throw error;
+    }
+};
+
 export const createPost = async (postData) => {
     try {
       const response = await axios.post(`${API_URL}/api/post`, postData, {

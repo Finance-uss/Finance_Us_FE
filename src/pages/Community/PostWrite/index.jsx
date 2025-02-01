@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as S from '../../../styles/Community/PostWrite/style';
 import BeforeHeader from '../../../components/common/BeforeHeader';
 import SubmitButton from '../../../components/common/SubmitButton';
@@ -27,7 +28,7 @@ const PostWrite = () => {
         setSelectedCategory(category);
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (!title || !content || !selectedCategory) {
           alert('모든 필드를 입력해주세요.');
           return;
@@ -72,7 +73,17 @@ const PostWrite = () => {
           category,  
           imageUrl: '',  
         };
-        createPost(postData);
+
+        try {
+            const response = await createPost(postData);
+            if (response.isSuccess) {
+                navigate(`/postdetail/${response.result.postId}`);
+            } else {
+                alert('게시글 생성 실패: ' + response.message);
+            }
+        } catch (error) {
+            alert('오류 발생: ' + error.message);
+        }
       };
       
 
