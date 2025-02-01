@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
         email : "",
         username : "",
         password: "",
+        token: "",
         jobCategory : "",
         ageGroup : "",
         one_liner : ""

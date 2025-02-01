@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 import { 
     Container, 
     Title, 
@@ -10,10 +10,10 @@ import {
     ButtonContainer, 
     ButtonWrapper, 
     StyledButton 
-} from '../../styles/NewPW/style'; 
-import { useAuth } from '../../contexts/AuthContext';
-import SubmitButton from '../../components/common/SubmitButton'; 
-import { useNavigate } from 'react-router-dom'; 
+} from "../../styles/NewPW/style"; 
+import { useAuth } from "../../contexts/AuthContext";
+import SubmitButton from "../../components/common/SubmitButton"; 
+import { useNavigate } from "react-router-dom"; 
 
 const URL = import.meta.env.VITE_API_URL;
 
@@ -26,10 +26,11 @@ const NewPW = () => {
     const [isPopupVisible, setIsPopupVisible] = useState(false); 
 
     const handleNewPasswordChange = (e) => {
-        setFormField("password", e.target.value);
+        const password = e.target.value;
+        setFormField("password", password);
 
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;
-        const valid = passwordRegex.test(e.target.value);
+        const valid = passwordRegex.test(password);
         setIsPasswordValid(valid);
     };
 
@@ -39,28 +40,34 @@ const NewPW = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+
+        // 비밀번호 유효성 검사
         if (!formData.password || !isPasswordValid || formData.password !== confirmPassword) {
+            console.log("비밀번호 유효성 검사 실패");
             return; 
         }
 
+        console.log("전송할 비밀번호:", formData.password); // 비밀번호 로그 추가
+        console.log("Token:", formData.token); // 토큰 로그 추가
+
         try {
             const response = await axios.patch(`${URL}/api/user/resetPassword`, {
-                Authrization: formData.email,
-                password: formData.password
+                password: formData.password // 비밀번호를 요청 본문에 포함
+            }, {
+                headers: {
+                    'type': 'application/json',
+                    'Authorization': `Bearer ${formData.token}` // 인증 헤더 추가
+                }
             });
 
-            if(response.data.isSuccess) {
+            if (response.data.isSuccess) {
                 setIsPopupVisible(true);        
-            }
-            else{
+            } else {
                 console.log(response.data.message);
             }
         } catch (error) {
-            console.log(error);
+            console.log("요청 에러:", error.response ? error.response.data : error.message); // 에러 로그 추가
         }
-
-        
     };
 
     const handleBackToLogin = () => {
