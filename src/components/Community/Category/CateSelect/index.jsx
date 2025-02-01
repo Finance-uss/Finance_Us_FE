@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RadioGroup, RadioButton } from '../../../../styles/Community/Category/CateSelect/style';
 
-const CateSelct = ({ isAuth }) => {
+const CateSelct = ({ isAuth, onCategoryChange }) => {
   const [selected, setSelected] = useState('');
 
   const baseCategory = ['자유', '정보', '낭비했어요', '절약했어요'];
@@ -14,6 +14,7 @@ const CateSelct = ({ isAuth }) => {
 
   const handleChange = (value) => {
     setSelected(value);
+    onCategoryChange(value);
   };
 
   return (
