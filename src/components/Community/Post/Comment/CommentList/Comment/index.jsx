@@ -6,6 +6,7 @@ import likeFill from '../../../../../../assets/icons/common/Community/heartFill.
 import moreIcon from '../../../../../../assets/icons/common/Community/more.svg';
 import userDefaultImg from '../../../../../../assets/icons/common/Community/commentProfile.svg';
 import CommentMenuBar from '../../../MenuBar/CommentMenubar';
+import { formatDate } from '../../../../../../utils/dateUtils';
 
 const Comment = ({ comment, onReplyClick, onLike }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -27,7 +28,7 @@ const Comment = ({ comment, onReplyClick, onLike }) => {
           />
           <S.UserWrapper>
             <S.UserName>{comment.userName}</S.UserName>
-            <S.CommentDate>{comment.commentDate}</S.CommentDate>
+            <S.CommentDate>{formatDate(comment.updatedAt || comment.createdAt)}</S.CommentDate>
           </S.UserWrapper>
         </S.User>
         <S.Active>

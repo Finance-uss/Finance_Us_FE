@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import CommentInput from '../CommentInput';
 import * as S from "../../../../../styles/Community/PostDetail/Comment/style";
-import CustomDate from '../../CustomDate';
 import Comment from './Comment';
 import Reply from './Reply';
-import userDefaultImg from '../../../../../assets/icons/common/Community/commentProfile.svg'; 
-import axios from 'axios';
+import axiosInstance from '../../../../../api/axiosInstance';
 
 const CommentList = () => {
   const [comments, setComments] = useState([]);
@@ -15,15 +13,18 @@ const CommentList = () => {
 
   const handleAddComment = async (newComment) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/comment/${postId}`, { content: newComment });
-
+      const response = await axiosInstance.post(`${import.meta.env.VITE_API_URL}/api/comment/${postId}`, { content: newComment });
+  
       if (response.data.isSuccess) {
+        const { commentId, createdAt, updatedAt } = response.data.result;
+  
         setComments((prevComments) => [
           ...prevComments,
           {
-            id: response.data.result.commentId, 
+            id: commentId,
             userName: '김동글',
-            commentDate: <CustomDate />, 
+            createdAt, 
+            updatedAt, 
             comment: newComment,
             likesCount: 0,
             isLiked: false,
@@ -37,7 +38,7 @@ const CommentList = () => {
     } catch (error) {
       console.error('댓글 생성 실패:', error);
     }
-    setReplyTo(null); 
+    setReplyTo(null);
   };
 
 
@@ -48,7 +49,7 @@ const CommentList = () => {
   const handleAddReply = async (newReply) => {
     try {
       // 답글 등록
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/comment/${replyTo.commentId}`, { content: newReply });
+      const response = await axiosInstance.post(`${import.meta.env.VITE_API_URL}/api/comment/${replyTo.commentId}`, { content: newReply });
 
       if (response.data.isSuccess) {
         setComments((prevComments) =>
@@ -86,7 +87,7 @@ const CommentList = () => {
     try {
       const url = `${import.meta.env.VITE_API_URL}/api/comment/like/${commentId}`; 
 
-      const response = await axios.post(url); 
+      const response = await axiosInstance.post(url); 
 
       setComments((prevComments) =>
         prevComments.map((comment) => {
