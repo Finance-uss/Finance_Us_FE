@@ -55,7 +55,7 @@ const NewPW = () => {
                 password: formData.password // 비밀번호를 요청 본문에 포함
             }, {
                 headers: {
-                    'type': 'application/json',
+                    'Content-Type': 'application/json', // Content-Type 헤더 추가
                     'Authorization': `Bearer ${formData.token}` // 인증 헤더 추가
                 }
             });

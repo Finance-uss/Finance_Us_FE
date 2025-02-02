@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios"; // axios 추가
 import { Container, Title, Input, LinkContainer } from "../../styles/FindMail/style";
 import SubmitButton from '../../components/common/SubmitButton';
 import { useNavigate } from "react-router-dom"; 
+
+const URL = import.meta.env.VITE_API_URL; // API URL 가져오기
 
 const FindMail = () => {
     const navigate = useNavigate(); 
@@ -9,11 +12,7 @@ const FindMail = () => {
     const [email, setEmail] = useState(""); 
     const [buttonOpacity, setButtonOpacity] = useState(0.4); 
     const [errorMessage, setErrorMessage] = useState(""); 
-
-    const registeredUsers = [
-        { nickname: "user", email: "user@example.com" },
-        { nickname: "anotherUser", email: "another@example.com" }
-    ];
+    const [authorization, setAuthorization] = useState(""); // Authorization 상태 추가
 
     const handleNicknameChange = (e) => {
         setNickname(e.target.value);
@@ -25,15 +24,27 @@ const FindMail = () => {
         setButtonOpacity(nickname ? 1 : 0.4);
     }, [nickname]);
 
-    const handleEmailFind = () => {
-        const user = registeredUsers.find(user => user.nickname === nickname);
+    const handleEmailFind = async () => {
+        try {
+            // API 요청
+            const response = await axios.patch(`${URL}/api/user/resetMail`, {
+                headers: {
+                    'Authorization': `Bearer ${authorization}`, // Authorization 헤더 추가
+                },
+                params: {
+                    email: formData.email // 닉네임으로 이메일 찾기
+                }
+            });
 
-        if (user) {
-            setEmail(user.email); 
-            setErrorMessage(""); 
-        } else {
-            setErrorMessage("가입되지 않은 닉네임입니다."); 
-            setEmail(""); 
+            if (response.data.isSuccess) {
+                setEmail(response.data.result.email); // 이메일 설정
+                setErrorMessage(""); 
+            } else {
+                setErrorMessage("가입되지 않은 닉네임입니다."); 
+                setEmail(""); 
+            }
+        } catch (error) {
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요."); // 에러 처리
         }
     };
 
