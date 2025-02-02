@@ -33,8 +33,6 @@ import CalendarSetPage from './pages/User/Panel/Calendar'; // 캘린더 관리
 import ChangeProfilePage from './pages/User/Panel/Profile'; // 프로필 변경
 import ChangeEmailPage from './pages/User/Panel/Email'; // 이메일 변경
 import ChangePasswordPage from './pages/User/Panel/Password'; // 비밀번호 변경
-import LogoutPage from './pages/User/Panel/Logout'; // 로그아웃
-import DeleteAccountPage from './pages/User/Panel/Delete'; // 회원 탈퇴
 import Finance from './pages/Finance'; // 가계부
 import FinanceMain from './pages/Finance/FinanceMain';
 import Report from './pages/Finance/Report';
@@ -109,8 +107,6 @@ function App() {
               <Route path="profile-edit" element={<ChangeProfilePage />} />
               <Route path="email-edit" element={<ChangeEmailPage />} />
               <Route path="password-edit" element={<ChangePasswordPage />} />
-              <Route path="logout" element={<LogoutPage />} />
-              <Route path="delete-account" element={<DeleteAccountPage />} />
           </Route>
 
           {/* 알림 페이지 */}

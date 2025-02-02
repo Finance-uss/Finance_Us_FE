@@ -71,14 +71,16 @@ const CategoryExpensePage = () => {
     return (
         <CategoryPageContainer>
             <FixedHeaderWrapper>
-                <BackHeader title="카테고리 설정" onBackClick={handleBackClick} />
+                <BackHeaderWrapper>
+                    <BackHeader title="카테고리 설정" onBackClick={handleBackClick} />
+                </BackHeaderWrapper>
                 <TopBarWrapper>
-                <TopBar
-                    leftText="지출"
-                    rightText="수익"
-                    onTabClick={handleTabClick}
-                    selectedTab={selectedTab} 
-                />
+                    <TopBar
+                        leftText="지출"
+                        rightText="수익"
+                        onTabClick={handleTabClick}
+                        selectedTab={selectedTab} 
+                    />
                 </TopBarWrapper>
             </FixedHeaderWrapper>
             <ContentWrapper>
@@ -114,11 +116,13 @@ const CategoryPageContainer = styled.div`
 
 const FixedHeaderWrapper = styled.div`
     position: fixed;
-    top: 0;
-    left: 0;
     width: 100%;
     z-index: 10; 
     background-color: white; 
+`;
+
+const BackHeaderWrapper = styled.div`
+    padding: 0 20px;
 `;
 
 const TopBarWrapper = styled.div`

@@ -6,7 +6,6 @@ import UserPostCard from '../../../../components/User/UserPostCard';
 import PostImage2 from '../../../../assets/icons/common/User/PostImage2.svg';
 import PostImage3 from '../../../../assets/icons/common/User/PostImage3.svg';
 import PostImage4 from '../../../../assets/icons/common/User/PostImage4.svg';
-import ScrapIconImage from '../../../../assets/icons/common/User/Scrapped.svg';
 
 // 더미 데이터
 const initialPosts = [
@@ -53,24 +52,22 @@ const ScrappedPosts = () => {
     
     return (
         <ScrappedPostsContainer>
-            <BackHeader title="스크랩 한 글" onBackClick={handleBackClick} />
+            <BackHeaderWrapper>
+                <BackHeader title="스크랩 한 글" onBackClick={handleBackClick} />
+            </BackHeaderWrapper>
             <ContentWrapper>
                 {posts.map((post) => (
-                <ScrappedPostWrapper key={post.id}>
-                    <ScrapIcon
-                    src={ScrapIconImage} 
-                    alt="스크랩 아이콘"
-                    onClick={() => handleUnscrap(post.id)} // 스크랩 취소 처리
-                    />
                     <UserPostCard
-                    category={post.category}
-                    title={post.title}
-                    preview={post.preview}
-                    postImage={post.postImage}
-                    likes={post.likes}
-                    comments={post.comments}
+                        key={post.id}
+                        category={post.category}
+                        title={post.title}
+                        preview={post.preview}
+                        postImage={post.postImage}
+                        likes={post.likes}
+                        comments={post.comments}
+                        isScrapped={true} 
+                        onScrapClick={() => handleUnscrap(post.id)} 
                     />
-                </ScrappedPostWrapper>
                 ))}
             </ContentWrapper>
         </ScrappedPostsContainer>
@@ -98,16 +95,6 @@ const ContentWrapper = styled.div`
     padding-bottom: 80px; 
 `;
 
-const ScrappedPostWrapper = styled.div`
-    position: relative;
-`;
-
-const ScrapIcon = styled.img`
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    width: 18px;
-    height: 18px;
-    cursor: pointer;
-    z-index: 1;
+const BackHeaderWrapper = styled.div`
+    padding: 0 20px;
 `;
