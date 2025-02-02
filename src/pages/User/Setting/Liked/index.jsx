@@ -46,7 +46,9 @@ const LikedPosts = () => {
 
     return (
         <LikedPostsContainer>
-            <BackHeader title="좋아요 한 글" onBackClick={handleBackClick} />
+            <BackHeaderWrapper>
+                <BackHeader title="좋아요 한 글" onBackClick={handleBackClick} />
+            </BackHeaderWrapper>
             <ContentWrapper>
                 {posts.map((post) => (
                     <UserPostCard
@@ -83,4 +85,8 @@ const ContentWrapper = styled.div`
     flex: 1;
     overflow-y: auto;
     padding-bottom: 80px; 
+`;
+
+const BackHeaderWrapper = styled.div`
+    padding: 0 20px;
 `;

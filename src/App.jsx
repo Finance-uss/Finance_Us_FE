@@ -15,7 +15,8 @@ import FindPW from "./pages/FindPW";  // 비밀번호 찾기
 import SignUp from './pages/SignUp'; // 회원가입
 import SetPW from './pages/SetPW'; // 비번설정 페이지 추가
 import NewPW from './pages/NewPW'; // 새로운 비번 바꾸기 페이지지
-import Statistics from './pages/Statistics'; // 통계
+import StatMain from './pages/Statistics/StatMain'; // 통계
+import Statistics from './pages/Statistics';
 import ProfileSetting from './pages/ProfileSetting'; // 프로필 설정
 import User from './pages/User'; // 마이페이지
 import UserMain from './pages/User/UserMain'; // 마이페이지 메인
@@ -32,8 +33,6 @@ import CalendarSetPage from './pages/User/Panel/Calendar'; // 캘린더 관리
 import ChangeProfilePage from './pages/User/Panel/Profile'; // 프로필 변경
 import ChangeEmailPage from './pages/User/Panel/Email'; // 이메일 변경
 import ChangePasswordPage from './pages/User/Panel/Password'; // 비밀번호 변경
-import LogoutPage from './pages/User/Panel/Logout'; // 로그아웃
-import DeleteAccountPage from './pages/User/Panel/Delete'; // 회원 탈퇴
 import Finance from './pages/Finance'; // 가계부
 import FinanceMain from './pages/Finance/FinanceMain';
 import Report from './pages/Finance/Report';
@@ -52,7 +51,7 @@ function App() {
       <Router>
         <Routes>
           {/* 온보딩 페이지 */}
-          <Route path="/onboarding" element={<Onboarding />} />
+          <Route path="/" element={<Onboarding />} />
           {/* 로그인 페이지 */}
           <Route path="/login" element={<Login />} />
           <Route path="/findMail" element={<FindMail />} />
@@ -88,7 +87,10 @@ function App() {
           
           
           {/* 통계 페이지 */}
-          <Route path="/statistics" element={<Statistics />} />
+          <Route path="/statistics" element={<Statistics />}>
+            <Route index element={<StatMain />} />
+          </Route>
+
           {/* 마이페이지 */}
           <Route path="/user" element={<User />}>
               <Route index element={<UserMain />} />
@@ -105,8 +107,6 @@ function App() {
               <Route path="profile-edit" element={<ChangeProfilePage />} />
               <Route path="email-edit" element={<ChangeEmailPage />} />
               <Route path="password-edit" element={<ChangePasswordPage />} />
-              <Route path="logout" element={<LogoutPage />} />
-              <Route path="delete-account" element={<DeleteAccountPage />} />
           </Route>
 
           {/* 알림 페이지 */}

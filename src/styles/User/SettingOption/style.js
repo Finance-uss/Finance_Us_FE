@@ -8,12 +8,13 @@ export const SettingContainer = styled.div`
 `;
 
 export const Title = styled.p`
+    font-family: Pretendard;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
     line-height: 18px;
-    margin-bottom: 20px;
     text-align: left;
-    width: 100%;
+    text-underline-position: from-font;
+    text-decoration-skip-ink: none;
 `;
 
 export const ButtonGroup = styled.div.attrs((props) => ({

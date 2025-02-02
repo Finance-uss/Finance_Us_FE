@@ -30,19 +30,21 @@ const Onboarding = () => {
 
 const styles = {
     container: {
+        position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        width: '100%',
+        height: 'auto',
         justifyContent: 'center',
-        backgroundColor: '#fff',
-        padding: '20px',
+        boxSizing: 'border-box',
+        padding: '44px 5px 24px 20px',
     },
     image: {
         width: '380px',
         height: 'auto',
         marginBottom: '20px',
         marginLeft: '16px',
-        marginTop: '202px',
+        marginTop: '158px',
     },
     subtitle: {
         width: '181px',
@@ -55,7 +57,7 @@ const styles = {
         flexDirection: 'column',
         width: '100%',
         gap: '15px',
-        margin: '230px 16px 150px 16px',
+        marginTop: '316px',
     },
 };
 

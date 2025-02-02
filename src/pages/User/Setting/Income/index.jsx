@@ -70,7 +70,9 @@ const IncomePage = () => {
     return (
         <PageContainer>
             <HeaderWrapper>
-                <BackHeader title="수익 목표 금액 설정" onBackClick={() => navigate('/user')} />
+                <BackHeaderWrapper>
+                  <BackHeader title="수익 목표 금액 설정" onBackClick={() => navigate('/user')} />
+                </BackHeaderWrapper>
             </HeaderWrapper>
             <ContentWrapper>
                 <SectionTitle>이번 달 총 수익 목표 금액</SectionTitle>
@@ -113,6 +115,10 @@ const HeaderWrapper = styled.div`
   position: fixed;
   top: 0;
   width: 100%;
+`;
+
+const BackHeaderWrapper = styled.div`
+  padding: 0 20px;
 `;
 
 const ContentWrapper = styled.div`

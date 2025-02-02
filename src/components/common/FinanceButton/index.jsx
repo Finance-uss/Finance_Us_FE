@@ -5,7 +5,7 @@ const FinanceButton = ({activeButton, setActiveButton}) => {
 
     return (
         <ButtonContainer>
-            <Button
+            <Button 
                 $active={activeButton === 'expense'} 
                 onClick={() => setActiveButton('expense')}
                 style={{ color: activeButton === 'expense' ? '#ffffff' : activeButton === 'income' ? '#818C99' : '#000000' }} // 지출 버튼 클릭 시 흰색, 수익 버튼 클릭 시 회색

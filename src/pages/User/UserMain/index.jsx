@@ -60,19 +60,20 @@ const UserMainContainer = styled.div`
     overflow-y: auto;
     overflow-x: hidden;
     box-sizing: border-box;
+    padding-top: 120px;
 `;
 
 const HeaderWrapper = styled.div`
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 80px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
-    padding: 20px 20px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    margin-bottom: 20px;
-    box-sizing: border-box;
+    background: #ffffff;
+    z-index: 100;
 `;
 
 const PageTitle = styled.div`
@@ -92,9 +93,8 @@ const PageTitle = styled.div`
 const ContentContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 20px;
     width: calc(100% - 40px);
-    padding-top: 20px;
+    padding: 20px;
     align-items: center;
     margin-top: 20px;
 `;
@@ -103,8 +103,8 @@ const UserProfileWrapper = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px; /* 내부 요소 간 간격 */
-    margin-bottom: 20px; /* 아래 옵션과의 간격 */
+    gap: 10px; 
+    margin-bottom: 20px;
 `;
 
 const BottomBarWrapper = styled.div`
