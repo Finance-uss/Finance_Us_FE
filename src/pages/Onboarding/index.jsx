@@ -30,9 +30,11 @@ const Onboarding = () => {
 
 const styles = {
     container: {
+        position: 'relative',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
+        width: '100%',
+        height: 'auto',
         justifyContent: 'center',
         padding: '20px',
     },
