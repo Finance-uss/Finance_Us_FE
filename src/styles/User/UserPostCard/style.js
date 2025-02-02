@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
+  position: relative;
   width: 353px;
   height: 146px;
   border-radius: 10px;
@@ -10,6 +11,16 @@ export const CardContainer = styled.div`
   margin: 0 auto;
   display: flex;
   align-items: center;
+`;
+
+export const ScrapIcon = styled.img`
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+  z-index: 2;
 `;
 
 export const Content = styled.div`

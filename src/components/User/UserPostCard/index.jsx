@@ -2,10 +2,14 @@ import React from "react";
 import * as S from "../../../styles/User/UserPostCard/style";
 import likeIcon from "../../../assets/icons/common/Community/heart.svg";
 import commentIcon from "../../../assets/icons/common/Community/comment.svg";
+import scrapIcon from "../../../assets/icons/common/User/Scrapped.svg";
 
-const UserPostCard = ({ category, title, preview, postImage, likes = 0, comments = 0, like = likeIcon, comment = commentIcon }) => {
+const UserPostCard = ({ category, title, preview, postImage, likes = 0, comments = 0, like = likeIcon, comment = commentIcon, isScrapped = false, onScrapClick }) => {
   return (
     <S.CardContainer>
+      {isScrapped && ( // isScrapped가 true일 때만 아이콘 표시
+        <S.ScrapIcon src={scrapIcon} alt="스크랩 아이콘" onClick={onScrapClick} />
+      )}
       <S.Content>
         <S.Category>{category}</S.Category>
         <S.Title>{title}</S.Title>
