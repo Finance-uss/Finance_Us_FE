@@ -11,6 +11,7 @@ const PostWrite = () => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const navigate = useNavigate();
 
     const handleTitleChange = (e) => {
         if (e.target.value.length <= 50) {
