@@ -10,17 +10,12 @@ const API_URL = import.meta.env.VITE_API_URL;
 const SearchHeader = () => {
     const navigate = useNavigate(); 
     const [isUnread, setIsUnread] = useState(false);
-    const userId = 2; // 실제 사용자 ID로 교체 필요..
-    const accessToken = localStorage.getItem("accessToken");
+    const userId = 1; // 실제 사용자 ID로 교체 필요..
 
     useEffect(() => {
         const checkUnreadAlarms = async () => {
             try {
-                const response = await axiosInstance.get(`${API_URL}/api/notifications/unread?userId=${userId}`, {
-                    headers: {
-                        "Authorization": `Bearer ${accessToken}`,
-                    },
-                });
+                const response = await axiosInstance.get(`${API_URL}/api/notifications/unread?userId=${userId}`);
                 if (response.data.isSuccess) {
                     setIsUnread(response.data.result.isUnread); 
                 }
@@ -30,7 +25,7 @@ const SearchHeader = () => {
         };
 
         checkUnreadAlarms();
-    }, [userId, accessToken]);
+    }, [userId]);
 
     const handleSearchClick = () => {
         navigate('/search'); // 검색 페이지로 이동

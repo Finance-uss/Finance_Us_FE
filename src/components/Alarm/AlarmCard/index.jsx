@@ -4,28 +4,28 @@ import { useNavigate } from "react-router-dom";
 
 const getCategory = (category, title, user) => {
   switch (category) {
-    case "댓글":
+    case "COMMENT":
       return (
         <>
           <S.TitleText>{title}</S.TitleText>
           <S.ContentText>해당 게시글에 댓글이 달렸습니다.</S.ContentText>
         </>
       );
-    case "답글":
+    case "REPLY":
       return (
         <>
           <S.TitleText>{title}</S.TitleText>
           <S.ContentText>해당 게시글에 답글이 달렸습니다.</S.ContentText>
         </>
       );
-    case "반응":
+    case "EMOJI":
       return (
         <>
           <S.TitleText>{title}</S.TitleText>
           <S.ContentText>해당 가계부에 느낌을 표시했습니다.</S.ContentText>
         </>
       );
-    case "팔로우":
+    case "FOLLOW":
       return (
         <>
           <S.ContentText>{user}님이 팔로우했습니다.</S.ContentText>
@@ -43,14 +43,14 @@ const AlarmCard = ({ alarm, markRead }) => {
   const handleClick = async () => {
     await markRead(id);
     switch (type) {
-      case "댓글":
-      case "답글":
+      case "COMMENT":
+      case "REPLY":
         navigate(`/community/postdetail/${resourceId}`); // 게시글 페이지로 이동
         break;
-      case "반응":
+      case "EMOJI":
         navigate(`/finance`); // 가계부 페이지로 이동
         break;
-      case "팔로우":
+      case "LIKE":
         navigate(`/community`); 
         break;
       default:

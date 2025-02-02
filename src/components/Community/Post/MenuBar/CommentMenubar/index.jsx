@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as S from '../../../../../styles/Community/MenuBar/style';
 import closeIcon from '../../../../../assets/icons/common/X.svg';
-import useComment from '../../../../../hooks/useComment';
+import useComment from '../../../../../api/useComment';
 
 const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport }) => {
   if (!isOpen) return null;
