@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom'; 
-import { IconContainer, Icon, PlusIcon, FloatingButtonWrapper, BackgroundOverlay } from '../../../../styles/common/FloatingButton/FinancePlusButton/style';
+import { IconContainer, Icon, FloatingButtonWrapper, BackgroundOverlay } from '../../../../styles/common/FloatingButton/FinancePlusButton/style';
 
 import plusIcon from "../../../../assets/icons/common/Plus.svg";
 import FinanceWrite from "../../../../assets/icons/common/FinanceWrite.svg";
@@ -17,7 +17,7 @@ const FloatingButton = () => {
       {showIcons && <BackgroundOverlay />}
 
       <FloatingButtonWrapper isPlus onClick={toggleIcons}>
-        <PlusIcon src={plusIcon} alt="플러스 아이콘" />
+        <Icon src={plusIcon} alt="플러스 아이콘" />
       </FloatingButtonWrapper>
       {showIcons && (
         <>

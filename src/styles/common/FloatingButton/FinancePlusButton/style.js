@@ -33,7 +33,7 @@ export const FloatingButtonWrapper = styled.div`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  transition: transform 0.3s;
+  transition: transform 0.3s ease;
   z-index: 2; 
 `;
 
@@ -42,8 +42,4 @@ export const Icon = styled.img`
   height: 25px; 
 `;
 
-export const PlusIcon = styled.img`
-  width:25px;
-  height:25px;
-  transition: transform 0.3s ease;
-`;
+
