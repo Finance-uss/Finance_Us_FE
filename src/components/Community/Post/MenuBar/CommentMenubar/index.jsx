@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import * as S from '../../../../../styles/Community/MenuBar/style';
 import closeIcon from '../../../../../assets/icons/common/X.svg';
-import useComment from '../../../../../api/useComment';
+import useComment from '../../../../../hooks/useComment';
 
 const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport }) => {
   if (!isOpen) return null;
-  // const isOwner = true;
-  const { updateComment, deleteComment } = useComment();  
+  const { handleEditComment, handleDeleteComment, comments, setComments } = useComment(); 
   const [editContent, setEditContent] = useState('');
 
   const handleClick = (e) => {
@@ -15,14 +14,16 @@ const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport }) =>
 
   const handleEdit = () => {
     if (editContent.trim()) {
-      updateComment(commentId, editContent); 
+      handleEditComment(commentId, content);
       closeModal();
     }
   };
 
-  const handleDelete = () => {
-    deleteComment(commentId);
-    closeModal();
+  const handleDelete = async () => {
+    console.log('삭제 댓글 ID:', commentId);
+    await handleDeleteComment(commentId); 
+    setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId)); 
+    closeModal(); 
   };
 
   return (
