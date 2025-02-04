@@ -1,8 +1,14 @@
-import React from 'react';
+import React from "react";
+import { Outlet } from "react-router-dom";
+import { DateProvider } from "../../contexts/DateContext";
+
 const Statistics = () => {
     return (
-        <h1>통계</h1>
+        <DateProvider>
+            <Outlet/>
+        </DateProvider>
     );
+    
 };
 
 export default Statistics;
