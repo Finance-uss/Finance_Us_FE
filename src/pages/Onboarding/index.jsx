@@ -56,7 +56,7 @@ const styles = {
         flexDirection: 'column',
         width: '100%',
         gap: '15px',
-        margin: '300px 16px 15px 16px',
+        margin: '300px 0px 15px 0px',
     },
 };
 

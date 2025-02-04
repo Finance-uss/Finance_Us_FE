@@ -30,7 +30,9 @@ export const Input = styled.input`
     &:focus {
         outline: none; 
     }
-    
+    &::placeholder {
+        color: #b4b4b4; /* placeholder 색상 설정 */
+    }
 `;
 
 export const LinkContainer = styled.div`

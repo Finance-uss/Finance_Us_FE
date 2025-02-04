@@ -27,11 +27,11 @@ const NewPW = () => {
 
     const handleNewPasswordChange = (e) => {
         const password = e.target.value;
-        setFormField("password", password);
+        setFormField("password", password);  // 폼 데이터 업데이트
 
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;
-        const valid = passwordRegex.test(password);
-        setIsPasswordValid(valid);
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;  // 비밀번호 유효성 검사
+        const valid = passwordRegex.test(password);  // 유효성 검사
+        setIsPasswordValid(valid);  // 유효성 상태 업데이트
     };
 
     const handleConfirmPasswordChange = (e) => {
@@ -40,36 +40,45 @@ const NewPW = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+    
         // 비밀번호 유효성 검사
         if (!formData.password || !isPasswordValid || formData.password !== confirmPassword) {
             console.log("비밀번호 유효성 검사 실패");
-            return; 
+            return;
         }
-
-        console.log("전송할 비밀번호:", formData.password); // 비밀번호 로그 추가
-        console.log("Token:", formData.token); // 토큰 로그 추가
-
+    
+        console.log("전송할 비밀번호:", formData.password); // 폼 데이터에서 비밀번호 확인
+        console.log("Token:", formData.token); // 폼 데이터에서 토큰 확인
+    
         try {
-            const response = await axios.patch(`${URL}/api/user/resetPassword`, {
-                password: formData.password // 비밀번호를 요청 본문에 포함
-            }, {
-                headers: {
-                    'Content-Type': 'application/json', // Content-Type 헤더 추가
-                    'Authorization': `Bearer ${formData.token}` // 인증 헤더 추가
+            // PATCH 요청에서 query 파라미터로 password를 전달
+            const response = await axios.patch(
+                `${URL}/api/user/resetPassword`, 
+                {}, // 본문은 빈 객체로 보내기
+                {
+                    headers: {
+                        'Content-Type': 'application/json',  // 요청의 Content-Type 헤더 설정
+                        'Authorization': `Bearer ${formData.token}`  // Authorization 헤더에 토큰 추가
+                    },
+                    params: {
+                        password: formData.password  // 비밀번호를 쿼리 파라미터로 전달
+                    }
                 }
-            });
-
+            );
+    
+            console.log("비밀번호 변경 성공:", response.data);
             if (response.data.isSuccess) {
-                setIsPopupVisible(true);        
+                setIsPopupVisible(true);
             } else {
                 console.log(response.data.message);
             }
         } catch (error) {
-            console.log("요청 에러:", error.response ? error.response.data : error.message); // 에러 로그 추가
+            console.error("비밀번호 변경 실패:", error.response ? error.response.data : error.message);
         }
     };
-
+    
+    
+    
     const handleBackToLogin = () => {
         navigate("/login"); 
     };
