@@ -44,7 +44,9 @@ const MyPosts = () => {
 
     return (
         <MyPostsContainer>
-            <BackHeader title="작성 글" onBackClick={handleBackClick} />
+            <BackHeaderWrapper>
+                <BackHeader title="작성 글" onBackClick={handleBackClick} />
+            </BackHeaderWrapper>
             <ContentWrapper>
                 {posts.map((post) => (
                     <UserPostCard
@@ -57,7 +59,7 @@ const MyPosts = () => {
                         comments={post.comments}
                     />
                 ))}
-                </ContentWrapper>
+            </ContentWrapper>
         </MyPostsContainer>
     );
 
@@ -81,4 +83,8 @@ const ContentWrapper = styled.div`
     flex: 1;
     overflow-y: auto;
     padding-bottom: 80px; 
+`;
+
+const BackHeaderWrapper = styled.div`
+    padding: 0 20px;
 `;

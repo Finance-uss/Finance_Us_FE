@@ -36,7 +36,9 @@ const CommentedPosts = () => {
 
     return (
         <CommentedPostsContainer>
-            <BackHeader title="댓글 단 글" onBackClick={handleBackClick} />
+            <BackHeaderWrapper>
+                <BackHeader title="댓글 단 글" onBackClick={handleBackClick} />
+            </BackHeaderWrapper>
             <ContentWrapper>
                 {posts.map((post) => (
                     <UserPostCard
@@ -73,4 +75,8 @@ const ContentWrapper = styled.div`
     flex: 1;
     overflow-y: auto;
     padding-bottom: 80px; 
+`;
+
+const BackHeaderWrapper = styled.div`
+    padding: 0 20px;
 `;

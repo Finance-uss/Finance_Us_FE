@@ -62,7 +62,9 @@ const CategoryIncomePage = () => {
     return (
         <CategoryPageContainer>
             <FixedHeaderWrapper>
-                <BackHeader title="카테고리 설정" onBackClick={handleBackClick} />
+                <BackHeaderWrapper>
+                    <BackHeader title="카테고리 설정" onBackClick={handleBackClick} />
+                </BackHeaderWrapper>
                 <TopBarWrapper>
                 <TopBar
                     leftText="지출"
@@ -110,6 +112,10 @@ const FixedHeaderWrapper = styled.div`
     width: 100%;
     z-index: 10;
     background-color: white;
+`;
+
+const BackHeaderWrapper = styled.div`
+    padding: 0 20px;
 `;
 
 const TopBarWrapper = styled.div`
