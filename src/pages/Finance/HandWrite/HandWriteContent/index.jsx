@@ -1,7 +1,11 @@
 import React from "react";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
+import { useAccount } from "../../../../hooks/useAccount.js";
+import { formatFormData } from "../../../../utils/accountUtils.js";
+
 import { Container } from "../../../../styles/Finance/style.js";
 import * as S from "../../../../styles/Finance/HandWrite/style.js";
+
 import BeforeHeader from "../../../../components/common/BeforeHeader/index.jsx";
 import FinanceButton from "../../../../components/common/FinanceButton/index.jsx";
 import SubmitButton from "../../../../components/common/SubmitButton/index.jsx";
@@ -14,10 +18,13 @@ import RatingModal from "../../../../components/Finance/HandWrite/RatingModal/in
 
 const HandWriteContent = () => {
     const { formData, setFormField } = useHandWrite();
+    const { handleRequest, loading, error } = useAccount();
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
+        const formattedData = formatFormData(formData);
+        console.log("작성 완료 데이터:", formattedData);
+        await handleRequest("POST", formattedData);
     };
 
     return (
