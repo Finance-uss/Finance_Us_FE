@@ -9,3 +9,10 @@ export const Container = styled.div`
     padding: 44px 20px 24px 20px; // top right bottom left
     gap: 20px;
 `;
+
+export const Today = styled.div`
+    font-weight: 600;
+    font-size: 20px;
+    line-height: 24px;
+    color: #000000;
+`;
