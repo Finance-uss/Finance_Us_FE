@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios"; // axios 추가
-import { Container, Title, Input, LinkContainer } from "../../styles/FindMail/style";
+import axios from "axios";
+import { Container, Title, Input, LinkContainer, Message } from "../../styles/FindMail/style"; // Message 임포트
 import SubmitButton from '../../components/common/SubmitButton';
 import { useNavigate } from "react-router-dom"; 
 
-const URL = import.meta.env.VITE_API_URL; // API URL 가져오기
+const URL = import.meta.env.VITE_API_URL;
 
 const FindMail = () => {
     const navigate = useNavigate(); 
@@ -12,8 +12,7 @@ const FindMail = () => {
     const [email, setEmail] = useState(""); 
     const [buttonOpacity, setButtonOpacity] = useState(0.4); 
     const [errorMessage, setErrorMessage] = useState(""); 
-    const [authorization, setAuthorization] = useState(""); // Authorization 상태 추가
-
+    const [authorization, setAuthorization] = useState("");
     const handleNicknameChange = (e) => {
         setNickname(e.target.value);
         setErrorMessage(""); 
@@ -26,25 +25,24 @@ const FindMail = () => {
 
     const handleEmailFind = async () => {
         try {
-            // API 요청
-            const response = await axios.patch(`${URL}/api/user/resetMail`, {
+            const response = await axios.get(`${URL}/api/user/findMail`, {
                 headers: {
-                    'Authorization': `Bearer ${authorization}`, // Authorization 헤더 추가
+                    'Authorization': `Bearer ${authorization}`, 
                 },
                 params: {
-                    email: formData.email // 닉네임으로 이메일 찾기
+                    name: nickname
                 }
             });
 
             if (response.data.isSuccess) {
-                setEmail(response.data.result.email); // 이메일 설정
+                setEmail(response.data.result.Email); 
                 setErrorMessage(""); 
             } else {
                 setErrorMessage("가입되지 않은 닉네임입니다."); 
                 setEmail(""); 
             }
         } catch (error) {
-            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요."); // 에러 처리
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요."); 
         }
     };
 
@@ -58,14 +56,10 @@ const FindMail = () => {
                 onChange={handleNicknameChange}
             />
             {errorMessage && ( 
-                <p style={{ color: "red", marginTop: "10px", marginBottom: "10px" }}>
-                    {errorMessage}
-                </p>
+                <Message $error>{errorMessage}</Message> 
             )}
             {email && ( 
-                <p style={{ color: "#142755", marginTop: "10px" }}>
-                    이메일은 {email}입니다.
-                </p>
+                <Message>{`이메일은 ${email}입니다.`}</Message> 
             )}
             
             <SubmitButton 

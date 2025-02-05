@@ -3,7 +3,7 @@ import axios from "axios";
 import { Container, Title, Input, LinkContainer, ButtonContainer } from "../../styles/Login/style";
 import SubmitButton from '../../components/common/SubmitButton';
 import { useNavigate } from "react-router-dom"; 
-import { useAuth } from "../../contexts/AuthContext"; // useAuth 가져오기
+import { useAuth } from "../../contexts/AuthContext"; 
 
 const URL = import.meta.env.VITE_API_URL;
 
@@ -48,8 +48,8 @@ const Login = () => {
                 });
                 if (response.data.isSuccess) {
                     const token = response.data.result.token;
-                    localStorage.setItem("token", token); // 토큰 저장
-                    setFormField("token", token); // formData에 토큰 저장
+                    localStorage.setItem("token", token); 
+                    setFormField("token", token); 
                     navigate("/finance");
                 } else {
                     FindMail();

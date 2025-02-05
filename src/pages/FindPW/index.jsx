@@ -66,23 +66,25 @@ const FindPW = () => {
     const handleVerifyEmail = async () => {
         if (isValidEmail(formData.email)) {
             try {
-                const response = await axios.post(`${URL}/api/auth/mailSend`, formData.email, { 
+                const responese = await axios.post(`${URL}/api/auth/mailSend`, formData.email, { 
                     headers: { 'Content-Type': 'text/plain' } 
                 });
-                if (response.data.isSuccess) {
+
+                if (responese.data.isSuccess) {
                     setEmailMessage("이메일이 전송되었습니다. 이메일을 확인해주세요.");
                     setTimer(180); 
-                    setIsResend(true); 
-                    setFormField('Authorization', ''); 
-                    setAuthCodeMessage(''); 
+                    setIsResend(true); // 인증 버튼을 재전송으로 변경
+                    setFormField('Authorization', ''); // 이메일 재전송 시 인증코드 초기화
+                    setAuthCodeMessage(''); // 인증 메시지 초기화
                 } else {
                     setEmailMessage("존재하지 않는 계정입니다.");
                 }
             } catch (error) {
                 setEmailMessage('서버 에러가 발생했습니다. 나중에 다시 시도해주세요.');
-            }
         }
-    };
+    }
+};
+
 
     useEffect(() => {
         let countdown;
