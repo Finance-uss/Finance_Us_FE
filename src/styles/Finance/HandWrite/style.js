@@ -179,12 +179,16 @@ export const ModalOverlay = styled.div`
     z-index: 1000;
 `;
 
-export const ModalLine = styled.img`
+export const ModalLine = styled.div`
     width: 40%;
     height: 5px;
+    background-color: #D9D9D9;
     color: #D9D9D9;
     border-radius: 100px;
+    border: none;
+
     cursor: pointer; /* ✅ 클릭 가능하도록 설정 */
+    
 `;
 
 export const ModalContent = styled.div`
@@ -194,12 +198,21 @@ export const ModalContent = styled.div`
     align-items: center;
     width: 100%;
     height: fit-content;
+    max-height: 481px;
     background: #fff;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    padding: 20px 0px;
+    padding-top: 20px;
     text-align: center;
-    
+    z-index: 1001;
+
+    overflow-y: auto; /* ✅ 내부 요소가 많아질 경우 세로 스크롤 가능 */
+    -ms-overflow-style: none;  /* ✅ IE, Edge에서 스크롤바 숨기기 */
+    scrollbar-width: none;  /* ✅ Firefox에서 스크롤바 숨기기 */
+
+    &::-webkit-scrollbar {
+        display: none; /* ✅ Chrome, Safari에서 스크롤바 숨기기 */
+    }
 `;
 
 export const ModalTitle = styled.h3`
@@ -216,7 +229,7 @@ export const MainCategory = styled.div`
     font-size: 18px;
     line-height: 18px;
     text-align: left;
-    margin: 0;
+    margin-bottom: 20px;
 `;
 
 export const CategoryContainer = styled.div`
@@ -225,8 +238,6 @@ export const CategoryContainer = styled.div`
     justify-content: space-between;
     align-items: center;
     width: 100%;
-    min-height: 66px;
-    height: 66px;
     padding: 20px 0;
     border-bottom: 2px solid #f0f0f0; /* ✅ 밑줄 추가 */
     
@@ -238,17 +249,21 @@ export const CategoryContainer = styled.div`
 export const SubCategoryContainer = styled.div`
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    flex-wrap: wrap;
     width: 90%;
+    row-gap: 20px;
 `;
 
 export const SubCategoryButton = styled.button`
     background-color: ${(props) => (props.$selected ? "#142755" : "#f0f0f0")};
     color: ${(props) => (props.$selected ? "white" : "#000")};
     border: none;
+    padding: 0px;
     width: 25%;
+    margin-right: 12.5%;
     height: 29px;
     border-radius: 5px;
+
     cursor: pointer;
     font-weight: 400;
     font-size: clamp(12px, 1vw, 16px);
@@ -260,6 +275,11 @@ export const SubCategoryButton = styled.button`
     white-space: nowrap; /* ✅ 줄바꿈 방지 */
     overflow: hidden; /* ✅ 넘치는 텍스트 숨김 */
     text-overflow: ellipsis; /* ✅ 너무 긴 경우 말줄임표 (...) 추가 */
+    box-shadow: 0px 0px 2px 0px rgba(0, 0, 0, 0.25);
+
+    &:nth-child(3n) {
+        margin-right: 0px; /* ✅ 3의 배수인 버튼의 margin-right을 제거 */
+    }
 `;
 
 export const ModalStar = styled.span`
