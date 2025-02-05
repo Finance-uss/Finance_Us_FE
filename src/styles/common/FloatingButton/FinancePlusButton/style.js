@@ -7,7 +7,7 @@ export const IconContainer = styled.div`
   display: flex;
   flex-direction: column-reverse; 
   gap: 10px; 
-  z-index: 100;
+  z-index: 9999;
   align-items: center; 
 `;
 
@@ -34,7 +34,7 @@ export const FloatingButtonWrapper = styled.div`
   align-items: center;
   cursor: pointer;
   transition: transform 0.3s ease;
-  z-index: 2; 
+  z-index: 10000; 
 `;
 
 export const Icon = styled.img`
