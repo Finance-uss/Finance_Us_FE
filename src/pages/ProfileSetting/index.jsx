@@ -54,7 +54,7 @@ const ProfileSetting = () => {
     };
 
     const checkNickname = async () => {
-        const nicknamePattern = /^[가-힣a-zA-Z]{1,10}$/; // 한글과 영어 1~10자
+        const nicknamePattern = /^[가-힣a-zA-Z]{1,10}$/;
         if (!nicknamePattern.test(formData.username)) {
             setNicknameError("한글 또는 영어 1~10자 이내여야 합니다.");
             setNicknameValid("");
@@ -97,17 +97,17 @@ const ProfileSetting = () => {
             try {
                 console.log("회원가입 시도:", formData);
 
-                // 요청 데이터 (비밀번호 포함)
+
                 const requestData = {
                     email: formData.email,
                     username: formData.username,
-                    password: formData.password, // 비밀번호 포함
+                    password: formData.password, 
                     jobCategory: jobCategoryMapping[formData.jobCategory] || formData.jobCategory, // 매핑된 직업 카테고리
                     ageGroup: ageGroupMapping[formData.ageGroup] || formData.ageGroup, // 매핑된 나이대
                     one_liner: formData.one_liner
                 };
 
-                console.log("전송할 데이터:", requestData); // 전송할 데이터 확인
+                console.log("전송할 데이터:", requestData); 
 
                 const response = await axios.post(`${URL}/api/auth/userSignup`, requestData, {
                     headers: {
@@ -118,8 +118,7 @@ const ProfileSetting = () => {
 
                 if (response.data.isSuccess) {
                     console.log("회원가입 성공");
-                    const { email, name, id, role } = response.data.result; // 필요한 데이터만 추출
-                    // 필요한 정보를 상태에 저장하거나 다음 단계로 이동
+                    const { email, name, id, role } = response.data.result; 
                     console.log("사용자 정보:", { email, name, id, role });
                     navigate("/finance");
                 } else {

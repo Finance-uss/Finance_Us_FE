@@ -54,6 +54,7 @@ const FindPW = () => {
             });
             if (response.data.isSuccess) {
                 setAuthCodeMessage(''); 
+                setFormField('token', response.data.token); 
                 navigate("/newPw"); 
             } else {
                 setAuthCodeMessage('인증번호가 일치하지 않습니다.');

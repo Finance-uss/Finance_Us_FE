@@ -5,15 +5,12 @@ import {
     Title, 
     InputContainer, 
     Input, 
-    PopupContainer, 
-    Overlay, 
-    ButtonContainer, 
-    ButtonWrapper, 
-    StyledButton 
+    ButtonWrapper 
 } from "../../styles/NewPW/style"; 
 import { useAuth } from "../../contexts/AuthContext";
 import SubmitButton from "../../components/common/SubmitButton"; 
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
+import PasswordChangePopup from "../../components/PW"; // 팝업 컴포넌트 import
 
 const URL = import.meta.env.VITE_API_URL;
 
@@ -47,38 +44,35 @@ const NewPW = () => {
             return;
         }
     
-        console.log("전송할 비밀번호:", formData.password); // 폼 데이터에서 비밀번호 확인
-        console.log("Token:", formData.token); // 폼 데이터에서 토큰 확인
-    
         try {
-            // PATCH 요청에서 query 파라미터로 password를 전달
-            const response = await axios.patch(
-                `${URL}/api/user/resetPassword`, 
-                {}, // 본문은 빈 객체로 보내기
+            const response = await axios.patch(`${URL}/api/user/resetPassword`, {},
                 {
-                    headers: {
-                        'Content-Type': 'application/json',  // 요청의 Content-Type 헤더 설정
-                        'Authorization': `Bearer ${formData.token}`  // Authorization 헤더에 토큰 추가
-                    },
                     params: {
-                        password: formData.password  // 비밀번호를 쿼리 파라미터로 전달
+                        email: formData.email, // 이메일
+                        password: formData.password // 비밀번호
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': '*/*'
                     }
                 }
             );
     
-            console.log("비밀번호 변경 성공:", response.data);
+            // 응답 처리
+            console.log("비밀번호 변경 응답:", response.data);
             if (response.data.isSuccess) {
-                setIsPopupVisible(true);
+                // 성공적인 응답 처리
+                console.log("메시지:", response.data.message); // "성공입니다." 메시지 출력
+                console.log("변경된 필드:", response.data.result.updatedField); // "password" 출력
+                setIsPopupVisible(true); // 성공 팝업 표시
             } else {
-                console.log(response.data.message);
+                console.log(response.data.message); // 실패 메시지 출력
             }
         } catch (error) {
             console.error("비밀번호 변경 실패:", error.response ? error.response.data : error.message);
         }
     };
-    
-    
-    
+
     const handleBackToLogin = () => {
         navigate("/login"); 
     };
@@ -138,16 +132,7 @@ const NewPW = () => {
             </ButtonWrapper>
 
             {isPopupVisible && (
-                <>
-                    <Overlay onClick={closePopup} />
-                    <PopupContainer>
-                        <p>비밀번호 설정을 완료하였습니다.</p>
-                        <ButtonContainer>
-                            <StyledButton onClick={closePopup}>닫기</StyledButton>
-                            <StyledButton onClick={handleBackToLogin}>로그인하기</StyledButton>
-                        </ButtonContainer>
-                    </PopupContainer>
-                </>
+                <PasswordChangePopup onClose={closePopup} onLogin={handleBackToLogin} />
             )}
         </Container>
     );
