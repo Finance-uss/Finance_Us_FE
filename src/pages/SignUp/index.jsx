@@ -20,12 +20,12 @@ const SignUp = () => {
     const navigate = useNavigate(); 
     const { formData, setFormField } = useAuth();    
     const [authCode, setAuthCode] = useState(''); 
-    const [isCodeValid, setIsCodeValid] = useState(false); // 인증번호 유효성 상태
-    const [emailMessage, setEmailMessage] = useState(''); // 이메일 전송 메시지 상태
-    const [authCodeMessage, setAuthCodeMessage] = useState(''); // 인증번호 불일치 메시지 상태
-    const [timer, setTimer] = useState(0); // 타이머 상태
-    const [isEmailValid, setIsEmailValid] = useState(false); // 이메일 유효성 상태
-    const [isResend, setIsResend] = useState(false); // 인증 버튼 상태
+    const [isCodeValid, setIsCodeValid] = useState(false); 
+    const [emailMessage, setEmailMessage] = useState(''); 
+    const [authCodeMessage, setAuthCodeMessage] = useState('');
+    const [timer, setTimer] = useState(0);
+    const [isEmailValid, setIsEmailValid] = useState(false); 
+    const [isResend, setIsResend] = useState(false); 
 
     const handleEmailChange = (e) => {
         setFormField('email', e.target.value);

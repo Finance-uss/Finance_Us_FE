@@ -10,7 +10,7 @@ import {
 import { useAuth } from "../../contexts/AuthContext";
 import SubmitButton from "../../components/common/SubmitButton"; 
 import { useNavigate } from "react-router-dom";
-import PasswordChangePopup from "../../components/PW"; // 팝업 컴포넌트 import
+import PasswordChangePopup from "../../components/PW"; 
 
 const URL = import.meta.env.VITE_API_URL;
 
@@ -24,11 +24,11 @@ const NewPW = () => {
 
     const handleNewPasswordChange = (e) => {
         const password = e.target.value;
-        setFormField("password", password);  // 폼 데이터 업데이트
+        setFormField("password", password); 
 
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;  // 비밀번호 유효성 검사
-        const valid = passwordRegex.test(password);  // 유효성 검사
-        setIsPasswordValid(valid);  // 유효성 상태 업데이트
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;  
+        const valid = passwordRegex.test(password); 
+        setIsPasswordValid(valid);  
     };
 
     const handleConfirmPasswordChange = (e) => {
@@ -48,8 +48,8 @@ const NewPW = () => {
             const response = await axios.patch(`${URL}/api/user/resetPassword`, {},
                 {
                     params: {
-                        email: formData.email, // 이메일
-                        password: formData.password // 비밀번호
+                        email: formData.email, 
+                        password: formData.password 
                     },
                     headers: {
                         'Content-Type': 'application/json',
@@ -61,12 +61,11 @@ const NewPW = () => {
             // 응답 처리
             console.log("비밀번호 변경 응답:", response.data);
             if (response.data.isSuccess) {
-                // 성공적인 응답 처리
-                console.log("메시지:", response.data.message); // "성공입니다." 메시지 출력
-                console.log("변경된 필드:", response.data.result.updatedField); // "password" 출력
-                setIsPopupVisible(true); // 성공 팝업 표시
+                console.log("메시지:", response.data.message);
+                console.log("변경된 필드:", response.data.result.updatedField); 
+                setIsPopupVisible(true); 
             } else {
-                console.log(response.data.message); // 실패 메시지 출력
+                console.log(response.data.message); 
             }
         } catch (error) {
             console.error("비밀번호 변경 실패:", error.response ? error.response.data : error.message);

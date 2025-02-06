@@ -22,12 +22,11 @@ const SetPW = () => {
         const password = e.target.value;
         setFormField('password', password);
         
-        // 비밀번호 유효성 검사
         const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/; 
         
         if (password.length > 0) {
             setPasswordMessage('비밀번호 제한사항: 영어 대/소문자, 숫자 중 2종류 이상을 조합하여 8자리~12자리로 구성해야 합니다.');
-            setIsError(false); // 오류 상태 초기화
+            setIsError(false); 
         }
 
         if (passwordRegex.test(password)) {
@@ -49,11 +48,9 @@ const SetPW = () => {
             setIsError(true); 
             return; 
         }
-
-        // 비밀번호를 formData에 저장하고 다음 페이지로 이동
-        setFormField("password", formData.password); // 비밀번호를 formData에 저장
-        console.log("저장된 비밀번호:", formData.password); // 확인용 로그
-        navigate("/profileSetting"); // 프로필 입력 페이지로 이동
+        setFormField("password", formData.password); 
+        console.log("저장된 비밀번호:", formData.password);
+        navigate("/profileSetting"); 
     };
 
     return (
