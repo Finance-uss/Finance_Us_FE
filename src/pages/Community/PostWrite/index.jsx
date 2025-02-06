@@ -77,8 +77,8 @@ const PostWrite = () => {
 
         try {
             const response = await createPost(postData);
-            if (response.isSuccess) {
-                navigate(`/postdetail/${response.result.postId}`);
+            if (response?.isSuccess) {
+                navigate(`/community/postdetail/${response.result.postId}`);
             } else {
                 alert('게시글 생성 실패: ' + response.message);
             }
