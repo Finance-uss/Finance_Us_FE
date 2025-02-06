@@ -8,8 +8,6 @@ import examImg from "../../../assets/icons/common/Community/exam.png";
 import * as S from '../../../styles/Community/PostDetail/style';
 
 const PostDetail = () => {
-  const [likeCount, setLikeCount] = useState(10);
-  const [commentCount, setCommentCount] = useState(5);
 
   const post = {
     title: "멍청비용 또 늘었다",
@@ -17,20 +15,10 @@ const PostDetail = () => {
     createdAt: CustomDate(),
     image: examImg,
     content: "나 진짜 미쳐버리겠다!!",
-    likeCount: likeCount,
-    commentCount: commentCount,
     currentUser: true,
     category: "자유",
-    postId: 1,
+    postId: 4,
     isAuth: true
-  };
-
-  const handleLikeCount = (newLikeCount) => {
-    setLikeCount(newLikeCount);
-  };
-
-  const handleCommentCount = (newCount) => {
-    setCommentCount(newCount); 
   };
 
   return (
@@ -38,8 +26,8 @@ const PostDetail = () => {
       <S.Container>
         <BeforeHeader />
         <S.Wrapper>
-          <Content {...post} onLikeCount={handleLikeCount} />
-          <CommentList onCommentCount={handleCommentCount} /> 
+          <Content {...post} />
+          <CommentList /> 
         </S.Wrapper>
       </S.Container>
       <BottomBar />

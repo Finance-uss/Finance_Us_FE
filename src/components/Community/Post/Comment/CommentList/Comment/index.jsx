@@ -27,7 +27,7 @@ const Comment = ({ comment, onReplyClick, onLike }) => {
             alt="유저 프로필 사진"
           />
           <S.UserWrapper>
-            <S.UserName>{comment.userName}</S.UserName>
+            <S.UserName>{comment.commentId}</S.UserName>  {/*임시로 유저 ID불러옴..*/}
             <S.CommentDate>{formatDate(comment.updatedAt || comment.createdAt)}</S.CommentDate>
           </S.UserWrapper>
         </S.User>
@@ -58,7 +58,7 @@ const Comment = ({ comment, onReplyClick, onLike }) => {
           commentId={comment.id}
         />
       )}
-      <S.CommentText>{comment.comment}</S.CommentText>
+      <S.CommentText>{comment.content}</S.CommentText>
     </S.CommentListContainer>
   );
 };

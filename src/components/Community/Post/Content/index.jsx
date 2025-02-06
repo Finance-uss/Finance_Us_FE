@@ -7,13 +7,14 @@ import moreIcon from "../../../../assets/icons/common/Community/more.svg";
 import examIcon from "../../../../assets/icons/common/Community/exam.png";
 import bookmarkIcon from "../../../../assets/icons/common/bookmark.svg";
 import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
-import CustomDate from "../CustomDate";
 import PostMenuBar from "../MenuBar/PostMenubar";
 import { useNavigate } from "react-router-dom";
+import useComment from "../../../../hooks/useComment";
 
-const Content = ({ title, userName, createdAt, image, content, likeCount, commentCount, currentUser,category, postId, onLikeCount,onCommentCount,isAuth }) => {
+const Content = ({ title, userName, createdAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount,isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { commentCount } = useComment(postId);
 
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
@@ -60,7 +61,7 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
         <S.Stats>
           <S.StateContainer>
             <S.Stat>
-              <S.StatIcon src={isLiked ? likeFill : likeIcon}                 alt="좋아요 아이콘"
+              <S.StatIcon src={isLiked ? likeFill : likeIcon} alt="좋아요 아이콘"
                 onClick={handleLike} />
               <S.StatText>{likeCount}</S.StatText>
             </S.Stat>
