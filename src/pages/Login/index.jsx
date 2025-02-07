@@ -3,20 +3,22 @@ import axios from "axios";
 import { Container, Title, Input, LinkContainer, ButtonContainer } from "../../styles/Login/style";
 import SubmitButton from '../../components/common/SubmitButton';
 import { useNavigate } from "react-router-dom"; 
+import { useAuth } from "../../contexts/AuthContext"; 
 
 const URL = import.meta.env.VITE_API_URL;
 
 const Login = () => {
     const navigate = useNavigate(); 
+    const { setFormField } = useAuth(); // useAuth에서 setFormField 가져오기
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [buttonOpacity, setButtonOpacity] = useState(0.4); 
-    const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 추가
+    const [errorMessage, setErrorMessage] = useState("");
 
     useEffect(() => {
         if (email && password) {
             setButtonOpacity(1);
-            setErrorMessage(""); // 로그인 시도 시 에러 메시지 초기화
+            setErrorMessage("");
         } else {
             setButtonOpacity(0.4);
         }
@@ -27,11 +29,10 @@ const Login = () => {
             const response = await axios.get(`${URL}/api/user/mailCheck`, {
                 params: { email },
             });
-            if(response.data.isSuccess) {
-                setErrorMessage("계정이 존재하지 않습니다."); // 계정이 없으면 에러 메시지 설정
-            }
-            else{
-                setErrorMessage("비밀번호가 일치하지 않습니다."); // 비밀번호가 일치하지 않으면 에러 메시지 설정
+            if (response.data.isSuccess) {
+                setErrorMessage("계정이 존재하지 않습니다.");
+            } else {
+                setErrorMessage("비밀번호가 일치하지 않습니다.");
             }
         } catch (error) {
             setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.")
@@ -39,24 +40,23 @@ const Login = () => {
     };
 
     const handleLogin = async () => {
-
         if (email && password) {
             try {
                 const response = await axios.post(`${URL}/api/auth/login`, {
                     email,
                     password,
                 });
-                // 입력한 이메일이 존재하는지 확인
                 if (response.data.isSuccess) {
-                    localStorage.setItem("token", response.data.result.token); // 토큰 저장
-                    navigate("/finance"); // 존재하면 페이지 이동
+                    const token = response.data.result.token;
+                    localStorage.setItem("token", token); 
+                    setFormField("token", token); 
+                    navigate("/finance");
                 } else {
                     FindMail();
                 }
             } catch (error) {
                 FindMail();
             }
-
         }
     };
 
@@ -75,7 +75,7 @@ const Login = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
             />
-            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>} {/* 에러 메시지 표시 */}
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
             <ButtonContainer>
                 <SubmitButton text="로그인" onClick={handleLogin} customOpacity={buttonOpacity} />
             </ButtonContainer>

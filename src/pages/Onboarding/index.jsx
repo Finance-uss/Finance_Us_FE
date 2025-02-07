@@ -36,15 +36,14 @@ const styles = {
         width: '100%',
         height: 'auto',
         justifyContent: 'center',
-        boxSizing: 'border-box',
-        padding: '44px 5px 24px 20px',
+        padding: '20px',
     },
     image: {
         width: '380px',
         height: 'auto',
         marginBottom: '20px',
         marginLeft: '16px',
-        marginTop: '158px',
+        marginTop: '200px',
     },
     subtitle: {
         width: '181px',
@@ -57,7 +56,7 @@ const styles = {
         flexDirection: 'column',
         width: '100%',
         gap: '15px',
-        marginTop: '316px',
+        margin: '300px 0px 15px 0px',
     },
 };
 
