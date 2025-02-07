@@ -8,7 +8,7 @@ import userDefaultImg from '../../../../../../assets/icons/common/Community/comm
 import CommentMenuBar from '../../../MenuBar/CommentMenubar';
 import { formatDate } from '../../../../../../utils/dateUtils';
 
-const Comment = ({ comment, onReplyClick, onLike }) => {
+const Comment = ({ comment, onReplyClick, onLike, index }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openMenu = () => setIsMenuOpen(true);
@@ -56,6 +56,7 @@ const Comment = ({ comment, onReplyClick, onLike }) => {
           onDelete={handleDelete}
           onReport={handleReport}
           commentId={comment.id}
+          index={index}
         />
       )}
       <S.CommentText>{comment.content}</S.CommentText>

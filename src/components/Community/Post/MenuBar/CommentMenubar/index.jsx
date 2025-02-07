@@ -3,7 +3,7 @@ import * as S from '../../../../../styles/Community/MenuBar/style';
 import closeIcon from '../../../../../assets/icons/common/X.svg';
 import useComment from '../../../../../hooks/useComment';
 
-const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport }) => {
+const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport, index }) => {
   if (!isOpen) return null;
   const { handleEditComment, handleDeleteComment, comments, setComments } = useComment(); 
   const [editContent, setEditContent] = useState('');
@@ -25,9 +25,9 @@ const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport }) =>
     setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId)); 
     closeModal(); 
   };
-
+  const topPosition = `${300 + index * 50}px`;
   return (
-    <S.ModalOverlay onClick={closeModal}>
+    <S.ModalOverlay onClick={closeModal} top={topPosition}>
       <S.ModalContent onClick={handleClick}>
         <S.Menu>
           {isOwner ? (

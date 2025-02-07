@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 export const ModalOverlay = styled.div`
   position: absolute;
-  top:140px;
-  right:20px;
+  top:${(props) => props.top || '130px'};
+  right: 20px;
   z-index: 1000;
   display: flex;
   float:right;
