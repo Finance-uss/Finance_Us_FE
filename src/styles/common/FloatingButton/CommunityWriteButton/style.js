@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const IconContainer = styled.div`
   position: fixed;
-  bottom: 70px; 
+  bottom: 77px; 
   right: 20px; 
   display: flex;
   gap: 10px; 
