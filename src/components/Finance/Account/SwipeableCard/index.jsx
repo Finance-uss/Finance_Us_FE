@@ -1,27 +1,45 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useSwipe } from '../../../../hooks/useSwipe';
+import useApi from '../../../../hooks/useApi';
 import DeleteConfirmModal from '../DeleteConfirmModal';
 
-const SwipeableCard = ({ children, onSwipeEnd }) => {
+
+const SwipeableCard = ({ children, onSwipeEnd, onClick, itemId, boxShadow, borderRadius, paddingLeft }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
-    const { translateX, isSwiping, handlers } = useSwipe(onSwipeEnd);
-
+    const { request, loading } = useApi();
+    const { translateX, isSwiping, handlers } = useSwipe(onSwipeEnd, onClick);
     // 실제 삭제를 처리하는 함수
-    const handleDelete = () => {
-        console.log('삭제');
-        setIsDeleteModalOpen(false);
+    const handleDelete = async () => {
+        try {
+            await request({
+                method: "DELETE",
+                url: `/api/account/${itemId}`,
+            });
+
+            console.log('삭제 성공');
+            setIsDeleteModalOpen(false);
+            onSwipeEnd && onSwipeEnd(); // UI 업데이트를 위한 콜백 호출
+        } catch (error) {
+            console.error("삭제 중 오류 발생", error);
+        }
     };
 
     return (
-        <Wrapper>
-            <DeleteArea onClick={() => setIsDeleteModalOpen(true)}>
+        <Wrapper 
+            $boxShadow={boxShadow}
+            $borderRadius={borderRadius}
+        >
+            <DeleteArea 
+                onClick={() => setIsDeleteModalOpen(true)}
+                $borderRadius={borderRadius}
+            >
                 삭제
             </DeleteArea>
             <CardContent 
                 $translateX={translateX} 
-                $isSwiping={isSwiping} 
+                $isSwiping={isSwiping}
+                $paddingLeft={paddingLeft}
                 {...handlers}
             >
                 {children}
@@ -43,18 +61,19 @@ export default SwipeableCard;
 const Wrapper = styled.div`
     position: relative;
     background-color: #F7F7F7;
-    border-radius: 5px;
+    border-radius: ${({ $borderRadius }) => $borderRadius || '0px'};
     height: 90px;
     overflow: hidden;
+    box-shadow: ${({ $boxShadow }) => $boxShadow || 'none'};
 `;
 
 const DeleteArea = styled.div`
     position: absolute;
-    top: 0;
+    top: 1px;
     right: 1px;
     bottom: 1px;
     width: 62px;
-    border-radius: 0 5px 5px 0;
+    border-radius: ${({ $borderRadius = '0px' }) => `0px ${$borderRadius} ${$borderRadius} 0px`};
     background-color: #F17357;
     color: #fff;
     display: flex;
@@ -67,9 +86,9 @@ const CardContent = styled.div`
     display: flex;
     align-items: center;
     background-color: #F7F7F7;
-    width: calc(100% - 32px);
+    width: calc(100% - 16px - ${({ $paddingLeft = '16px' }) => $paddingLeft});
     height: 50px;
-    padding: 20px 16px;
+    padding: 20px 16px 20px ${({ $paddingLeft = '16px' }) => $paddingLeft};
     transform: translateX(${props => props.$translateX}px);
     transition: ${props => (props.$isSwiping ? 'none' : 'transform 0.3s ease')};
 `;

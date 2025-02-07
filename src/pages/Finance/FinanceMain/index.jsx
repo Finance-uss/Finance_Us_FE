@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
+import axiosInstance from '../../../api/axiosInstance';
 import { useDate } from '../../../contexts/DateContext';
 import { useAccountData } from '../../../hooks/useAccountData';
 
@@ -14,43 +16,53 @@ import Bell from '../../../assets/icons/common/Bell.svg';
 
 const FinanceMain = () => {
     const { selectedDate } = useDate();
-    const { accountData, loading, error } = useAccountData(selectedDate, `/api/calendar/${selectedDate.year}/${selectedDate.month}/${selectedDate.day}`);
-    
-    const accounts = [
-        {
-            accountId: 1,
-            score: 5,
-            title: '식비',
-            amount: 10000,
-            subName: '맛있는 점심',
-            imageUrl: '',
-        },
-    ];
+    const [monthData, setMonthData] = useState(null);
+    const { accountData, loading, error } = useAccountData(
+        selectedDate, 
+        `/api/calendar/${selectedDate.year}/${selectedDate.month}/${selectedDate.day}`
+    );
 
-    // {accountData && accountData.map((account) => (
-    //     <AccountDetail
-    //         key={account.id}
-    //         score={account.score}
-    //         title={account.title}
-    //         amount={account.amount}
-    //         subName={account.subName}
-    //         imageUrl={account.imageUrl}
-    //     />
-    // ))}
+    useEffect(() => {
+        selectedDate.day = null;
+    }, []);
 
-    
+    useEffect(() => {
+        const postRequest = async () => {
+            try {
+                const response = await axiosInstance.get(
+                    `/api/calendar/${selectedDate.year}/${selectedDate.month}`
+                );
+                setMonthData(response.data.result);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        postRequest();
+    }, [selectedDate]);
 
+    useEffect(() => {
+        selectedDate.day = null;
+    }, [selectedDate.month, selectedDate.year]);
+
+    if(!monthData) {
+        return null;
+    }
     return (
         <Container>
             <NavBar icon={Bell} modalTop="75px"/>
-            <Satisfaction />
-            <Calendar header={`지출 0원 수익 0원`} />
+            <Satisfaction score={monthData.totalScore}/>
+            <Calendar header={`지출 ${monthData.totalExpense.toLocaleString()}원 수익 ${monthData.totalIncome.toLocaleString()}원`} />
             <FinancePlusButton />
-            <Today>{selectedDate.day}일</Today>
-            <AccountList activities={accounts} />
+            {selectedDate.day && <Today>{selectedDate.day}일</Today>}
+            <AccountList activities={accountData} />
+            <BottomMargin />
             <BottomBar />
         </Container>
     );
 };
 
 export default FinanceMain;
+
+const BottomMargin = styled.div`
+    height: 77px;
+`;

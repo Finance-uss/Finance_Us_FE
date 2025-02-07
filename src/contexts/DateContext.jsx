@@ -7,7 +7,7 @@ export const DateProvider = ({ children }) => {
     const [selectedDate, setSelectedDate] = useState({
         year: today.getFullYear(),
         month: today.getMonth() + 1,
-        day: today.getDate()
+        day: null
     });
 
     return (
