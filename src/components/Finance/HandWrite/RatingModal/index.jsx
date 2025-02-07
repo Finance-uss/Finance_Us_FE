@@ -11,6 +11,7 @@ const RatingModal = () => {
     return (
         <S.ModalOverlay onClick={modals.ratingModal.closeModal}>
             <S.ModalContent onClick={(e) => e.stopPropagation()}>
+                <S.ModalLine onClick={modals.ratingModal.closeModal} />
                 <S.ModalTitle>만족도 설정</S.ModalTitle>
                 <S.StarContainer>
                     {[1, 2, 3, 4, 5].map((num) => (

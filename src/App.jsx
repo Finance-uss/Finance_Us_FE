@@ -37,6 +37,7 @@ import Finance from './pages/Finance'; // 가계부
 import FinanceMain from './pages/Finance/FinanceMain';
 import Report from './pages/Finance/Report';
 import HandWrite from './pages/Finance/HandWrite';
+import AccountDetail from './pages/Finance/AccountDetail';
 import NotFound from './pages/NotFound';
 import PostWrite from './pages/Community/PostWrite'; // 글쓰기 페이지
 import PostDetail from './pages/Community/PostDetail'; // 글 상세 페이지
@@ -67,6 +68,7 @@ function App() {
             <Route index element={<FinanceMain />} />
             <Route path="report" element={<Report />} />
             <Route path="handwrite" element={<HandWrite />} />
+            <Route path="account/:accountId" element={<AccountDetail />} />
           </Route>
 
           {/* 커뮤니티 페이지 */}

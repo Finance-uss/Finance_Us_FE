@@ -4,9 +4,11 @@ export const Section = styled.div`
     display: flex;
     flex-direction: column;
     background: #F7F7F7;
-    width: calc(100% - 32px);
+    width: calc(100% - 16px);
     height: auto;
-    padding: 16px;
+    padding-left: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
     border-radius: 5px;
     gap: 20px;
     box-shadow: 0px 0px 3px 0px #00000040;
@@ -69,6 +71,8 @@ export const Price = styled.div`
 `;
 
 export const MoreButton = styled.button`
+    padding-left: 0px;
+    padding-right: 16px;
     font-weight: 500;
     font-size: 16px;
     line-height: 16px;

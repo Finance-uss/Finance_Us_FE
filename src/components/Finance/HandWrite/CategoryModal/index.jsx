@@ -1,31 +1,40 @@
-import React from "react";
-import * as S from "../../../../styles/Finance/HandWrite/style.js";
+import React, { useEffect } from "react";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
+import useApi from "../../../../hooks/useApi.js";
+import * as S from "../../../../styles/Finance/HandWrite/style.js";
 
-const categoryData = [
-    { main: "식비", sub: ["식당", "카페", "배달 음식"] },
-    { main: "교통비", sub: ["버스", "지하철", "택시"] },
-    { main: "쇼핑", sub: ["의류", "전자기기", "생활용품"] },
-];
-
-const CategoryModal = () => {
+const CategoryModal = ({type}) => {
     const { formData, setFormField, modals } = useHandWrite();
+
+    const { data, loading, error, request } = useApi();
+
+    useEffect(() => {
+        if(modals.categoryModal.isOpen) {
+            request({ 
+                method: "GET", 
+                url: "/api/mypage/category",
+                params: { type },
+            });
+        }
+    }, [modals.categoryModal.isOpen, request]);
+
     if (!modals.categoryModal.isOpen) return null;
 
     return (
         <S.ModalOverlay onClick={modals.categoryModal.closeModal}>
             <S.ModalContent onClick={(e) => e.stopPropagation()}>
-                {categoryData.map((mainCategory) => (
-                    <S.CategoryContainer key={mainCategory.main}>
-                        <S.MainCategory>{mainCategory.main}</S.MainCategory>
+                <S.ModalLine onClick={modals.categoryModal.closeModal}/>
+                {data && data.result.map((mainCategory) => (
+                    <S.CategoryContainer key={mainCategory.id}>
+                        <S.MainCategory>{mainCategory.name}</S.MainCategory>
                         <S.SubCategoryContainer>
-                            {mainCategory.sub.map((subCategory) => (
+                            {mainCategory.subCategories.map((subCategory) => (
                                 <S.SubCategoryButton
-                                    key={subCategory}
-                                    onClick={() => setFormField("subName", subCategory)}
-                                    $selected={formData.subName === subCategory}
+                                    key={subCategory.id}
+                                    onClick={() => setFormField("subName", subCategory.name)}
+                                    $selected={formData.subName === subCategory.name}
                                 >
-                                    {subCategory}
+                                    {subCategory.name}
                                 </S.SubCategoryButton>
                             ))}
                         </S.SubCategoryContainer>
