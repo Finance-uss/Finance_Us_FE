@@ -3,16 +3,19 @@ import styled from 'styled-components';
 export const Container = styled.div`
     display: flex;
     flex-direction: column;
-    align-items: flex-start; 
+    align-items: flex-start;
     justify-content: center;
-    padding: 10px;
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 44px 20px 24px 20px;
 `;
 
 export const Title = styled.h1`
     font-size: 22px;
     font-weight: 700;
-    margin-top: 125px; 
-    align-self: flex-start; 
+    line-height: 16px;
+    margin: 125px 250px 40px 0px;
+    letter-spacing: 0.2px;
 `;
 
 export const Form = styled.form`
@@ -21,20 +24,23 @@ export const Form = styled.form`
     width: 100%;
 `;
 
+
 export const Input = styled.input`
-    padding: 10px;
+    flex: 1; /* 입력 필드가 가능한 한 넓게 차지 */
+    padding: 5px;
     border: none;
-    border-bottom: 1px solid #d4d4d4; 
-    margin-bottom: 10px; 
-    outline: none; 
-    
+    border-bottom: 1px solid #d9d9d9;
+    outline: none;
     &:focus {
-        border-color: #142755; 
+        border-bottom: 1px solid #142755;
     }
+    &::placeholder {
+        color: #b4b4b4; /* placeholder 색상 설정 */
+    } 
 `;
 
 export const ButtonContainer = styled.div`
-    margin-top: 20px; 
+    margin-top: 35px; 
 `;
 
 export const Message = styled.p`

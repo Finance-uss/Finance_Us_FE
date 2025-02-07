@@ -5,7 +5,10 @@ export const PageContainer = styled.div`
   width: 100%;
   background-color: #ffffff;
 `;
-
+export const CheckIcon = styled.img`
+  width:19.5px;
+  height:19.5px;
+`;
 export const PostConatiner = styled.div`
   padding:16px;
   border-radius:10px;

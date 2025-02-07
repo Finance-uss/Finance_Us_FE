@@ -1,19 +1,16 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
+import axios from "axios";
 import { 
     Container, 
     Title, 
     InputContainer, 
     Input, 
-    PopupContainer, 
-    Overlay, 
-    ButtonContainer, 
-    ButtonWrapper, 
-    StyledButton 
-} from '../../styles/NewPW/style'; 
-import { useAuth } from '../../contexts/AuthContext';
-import SubmitButton from '../../components/common/SubmitButton'; 
-import { useNavigate } from 'react-router-dom'; 
+    ButtonWrapper 
+} from "../../styles/NewPW/style"; 
+import { useAuth } from "../../contexts/AuthContext";
+import SubmitButton from "../../components/common/SubmitButton"; 
+import { useNavigate } from "react-router-dom";
+import PasswordChangePopup from "../../components/PW"; 
 
 const URL = import.meta.env.VITE_API_URL;
 
@@ -26,11 +23,12 @@ const NewPW = () => {
     const [isPopupVisible, setIsPopupVisible] = useState(false); 
 
     const handleNewPasswordChange = (e) => {
-        setFormField("password", e.target.value);
+        const password = e.target.value;
+        setFormField("password", password); 
 
-        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;
-        const valid = passwordRegex.test(e.target.value);
-        setIsPasswordValid(valid);
+        const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)[A-Za-z\d]{8,12}$/;  
+        const valid = passwordRegex.test(password); 
+        setIsPasswordValid(valid);  
     };
 
     const handleConfirmPasswordChange = (e) => {
@@ -39,28 +37,39 @@ const NewPW = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
+    
+        // 비밀번호 유효성 검사
         if (!formData.password || !isPasswordValid || formData.password !== confirmPassword) {
-            return; 
+            console.log("비밀번호 유효성 검사 실패");
+            return;
         }
-
+    
         try {
-            const response = await axios.patch(`${URL}/api/user/resetPassword`, {
-                Authrization: formData.email,
-                password: formData.password
-            });
-
-            if(response.data.isSuccess) {
-                setIsPopupVisible(true);        
-            }
-            else{
-                console.log(response.data.message);
+            const response = await axios.patch(`${URL}/api/user/resetPassword`, {},
+                {
+                    params: {
+                        email: formData.email, 
+                        password: formData.password 
+                    },
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': '*/*'
+                    }
+                }
+            );
+    
+            // 응답 처리
+            console.log("비밀번호 변경 응답:", response.data);
+            if (response.data.isSuccess) {
+                console.log("메시지:", response.data.message);
+                console.log("변경된 필드:", response.data.result.updatedField); 
+                setIsPopupVisible(true); 
+            } else {
+                console.log(response.data.message); 
             }
         } catch (error) {
-            console.log(error);
+            console.error("비밀번호 변경 실패:", error.response ? error.response.data : error.message);
         }
-
-        
     };
 
     const handleBackToLogin = () => {
@@ -122,16 +131,7 @@ const NewPW = () => {
             </ButtonWrapper>
 
             {isPopupVisible && (
-                <>
-                    <Overlay onClick={closePopup} />
-                    <PopupContainer>
-                        <p>비밀번호 설정을 완료하였습니다.</p>
-                        <ButtonContainer>
-                            <StyledButton onClick={closePopup}>닫기</StyledButton>
-                            <StyledButton onClick={handleBackToLogin}>로그인하기</StyledButton>
-                        </ButtonContainer>
-                    </PopupContainer>
-                </>
+                <PasswordChangePopup onClose={closePopup} onLogin={handleBackToLogin} />
             )}
         </Container>
     );

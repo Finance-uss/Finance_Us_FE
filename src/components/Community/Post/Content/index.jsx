@@ -6,13 +6,15 @@ import commentIcon from "../../../../assets/icons/common/Community/comment.svg";
 import moreIcon from "../../../../assets/icons/common/Community/more.svg";
 import examIcon from "../../../../assets/icons/common/Community/exam.png";
 import bookmarkIcon from "../../../../assets/icons/common/bookmark.svg";
-import CustomDate from "../CustomDate";
-import MenuBar from "../MenuBar";
+import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
+import PostMenuBar from "../MenuBar/PostMenubar";
 import { useNavigate } from "react-router-dom";
+import useComment from "../../../../hooks/useComment";
 
-const Content = ({ title, userName, createdAt, image, content, likeCount, commentCount, currentUser,category, postId, onLikeCount,onCommentCount,isOwner }) => {
+const Content = ({ title, userName, createdAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount,isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { commentCount } = useComment(postId);
 
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
@@ -31,8 +33,6 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
     const newLikeCount = isLiked ? likeCount - 1 : likeCount + 1;  
     setIsLiked(!isLiked);  
     onLikeCount(newLikeCount);
-
-  const isOwner = currentUser; 
   };
 
   return (
@@ -47,6 +47,7 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
             <S.Profile>
               <S.UserIcon src={examIcon} alt="유저 아이콘" />
               <S.User>{userName}</S.User>
+              {isAuth && <S.CheckIcon src={authIcon} alt="인증된 사용자" />}
             </S.Profile>
             <S.Date>{createdAt}</S.Date>
           </S.Info>
@@ -60,7 +61,7 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
         <S.Stats>
           <S.StateContainer>
             <S.Stat>
-              <S.StatIcon src={isLiked ? likeFill : likeIcon}                 alt="좋아요 아이콘"
+              <S.StatIcon src={isLiked ? likeFill : likeIcon} alt="좋아요 아이콘"
                 onClick={handleLike} />
               <S.StatText>{likeCount}</S.StatText>
             </S.Stat>
@@ -74,7 +75,7 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, commen
       </S.PostConatiner>
 
       {isMenuOpen && (
-        <MenuBar
+        <PostMenuBar
     isOpen={isMenuOpen}
     closeModal={closeMenu}
     isOwner={currentUser}

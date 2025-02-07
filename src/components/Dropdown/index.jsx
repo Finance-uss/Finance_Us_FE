@@ -7,6 +7,17 @@ import {
   DropdownItemContainer,
   ItemName
 } from "../../styles/Dropdown/style"; 
+import dropIcon from '../../assets/icons/common/drop.svg'; // 화살표 아이콘 경로
+import styled from 'styled-components'; // styled-components import
+
+const ArrowIcon = styled.img`
+  width: 20px; 
+  height: 20px; 
+  position: absolute; 
+  right: 10px; 
+  top: 50%; 
+  transform: translateY(-50%); 
+`;
 
 const Dropdown = ({ items, selectedItem, setSelectedItem, placeholder }) => {
   const [isActive, setIsActive] = useState(false);
@@ -22,12 +33,13 @@ const Dropdown = ({ items, selectedItem, setSelectedItem, placeholder }) => {
 
   return (
     <DropdownContainer>
-      <DropdownBody onClick={onActiveToggle}>
+      <DropdownBody onClick={onActiveToggle} style={{ position: 'relative' }}>
         {selectedItem ? (
           <ItemName>{selectedItem}</ItemName>
         ) : (
           <DropdownSelect>{placeholder}</DropdownSelect> 
         )}
+        <ArrowIcon src={dropIcon} alt="dropdown arrow" />
       </DropdownBody>
       <DropdownMenu $isActive={isActive}>
         {items.map((item) => (

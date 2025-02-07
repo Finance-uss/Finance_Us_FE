@@ -5,18 +5,17 @@ export const Container = styled.div`
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
-    width: 100%;
-    box-sizing: border-box; 
-    padding: 20px;
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 44px 20px 24px 20px;
 `;
 
 export const Title = styled.h1`
-    margin-top: 125px; 
-    margin-bottom: 40px;
     font-size: 22px;
     font-weight: 700;
-    line-height: 16px; 
-    letter-spacing: 0.2px; 
+    line-height: 16px;
+    margin: 125px 250px 40px 0px;
+    letter-spacing: 0.2px;
 `;
 
 export const InputContainer = styled.div`
@@ -33,12 +32,15 @@ export const Input = styled.input`
     margin-bottom: 5px;
     box-sizing: border-box;
     font-size: 16px; 
-    color: black;
     width: 100%;
 
     &:focus {
         outline: none; 
     }
+
+    &::placeholder {
+        color: #b4b4b4; /* placeholder 색상 설정 */
+    }    
 `;
 
 export const Select = styled.select`

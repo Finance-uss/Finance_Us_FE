@@ -21,19 +21,10 @@ const PostDetail = () => {
     createdAt: CustomDate(),
     image: examImg,
     content: "나 진짜 미쳐버리겠다!!",
-    likeCount: likeCount,
-    commentCount: commentCount,
     currentUser: true,
     category: "자유",
-    postId: 1,
-  };
-
-  const handleLikeCount = (newLikeCount) => {
-    setLikeCount(newLikeCount);
-  };
-
-  const handleCommentCount = (newCount) => {
-    setCommentCount(newCount); 
+    postId: 4,
+    isAuth: true
   };
 
   // useEffect(() => {
@@ -63,6 +54,8 @@ const PostDetail = () => {
       <S.Container>
         <BeforeHeader />
         <S.Wrapper>
+          <Content {...post} />
+          <CommentList /> 
           <Content {...post} onLikeCount={setLikeCount} />
           <CommentList onCommentCount={setCommentCount} /> 
         </S.Wrapper>

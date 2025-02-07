@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 export const ModalOverlay = styled.div`
   position: absolute;
-  top: 148px;
+  top:${(props) => props.top || '130px'};
+  right: 20px;
   z-index: 1000;
   display: flex;
   float:right;
@@ -10,14 +11,15 @@ export const ModalOverlay = styled.div`
 `;
 
 export const ModalContent = styled.div`
-  background-color:     white;
+  background-color: white;
   padding: 16px 28px 16px 27px;
   border-radius: 8px;
-  width: 120px;
+  width: 65px;
   height:auto;
   position: relative;
   z-index: 10;
-  box-shadow: 0px 4px 32px 0px rgba(0, 0, 0, 0.16);box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.04);
+  box-shadow: 0px 4px 32px 0px rgba(0, 0, 0, 0.16);
+  box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.04);
 
 `;
 
@@ -40,4 +42,5 @@ export const MenuItem = styled.div`
   cursor: pointer;
   color:#5C5C5C;
   text-align:center;
+  font-size:14px;
 `;

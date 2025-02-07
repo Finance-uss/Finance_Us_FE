@@ -4,21 +4,17 @@ export const Container = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100%;
-    box-sizing: border-box; 
-    padding: 26px;
-    color: #b4b4b4;
+    width: calc(100% - 40px);
+    height: auto;
+    padding: 44px 20px 24px 20px;
 `;
 
 export const Title = styled.h1`
     font-size: 22px;
-    font-style: normal;
     font-weight: 700;
-    line-height: 16px; 
+    line-height: 16px;
+    margin: 125px 250px 40px 0px;
     letter-spacing: 0.2px;
-    margin-top: 125px;
-    margin-bottom: 40px;
-    color: black;
 `;
 
 export const Input = styled.input`
@@ -32,6 +28,9 @@ export const Input = styled.input`
     &:focus {
         outline: none; 
     }
+    &::placeholder {
+        color: #b4b4b4; /* placeholder 색상 설정 */
+    }
 `;
 
 export const ButtonContainer = styled.div`
@@ -43,4 +42,5 @@ export const LinkContainer = styled.div`
     justify-content: center;
     margin-top: 40px;
     cursor: pointer;
+    color: #b4b4b4;
 `;
