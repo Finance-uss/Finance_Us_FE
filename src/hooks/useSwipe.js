@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
-export const useSwipe = (onSwipeEnd) => {
+export const useSwipe = (onSwipeEnd, onClick) => {
     const [translateX, setTranslateX] = useState(0);
     const [isSwiping, setIsSwiping] = useState(false);
     const maxSwipe = -62;
@@ -22,6 +22,12 @@ export const useSwipe = (onSwipeEnd) => {
             if (onSwipeEnd) {
                 onSwipeEnd(finalTranslateX);
             }        
+        },
+        onTap: (event) => {
+            // 탭(클릭) 이벤트 발생 시 호출
+            if (onClick) {
+                onClick(event);
+            }
         },
         trackMouse: true, // PC에서도 마우스 드래그 인식
     });

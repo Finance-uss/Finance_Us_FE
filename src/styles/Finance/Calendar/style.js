@@ -8,7 +8,7 @@ export const CalendarContainer = styled.div`
     align-items: center;
     width: calc(100% - 48px);
     height: auto;
-    top: ${( props ) => props.top || "0"};
+    top: ${( props ) => props.$top || "0"};
     gap: 20px;
     border-radius: 8px;
     padding: 24px;

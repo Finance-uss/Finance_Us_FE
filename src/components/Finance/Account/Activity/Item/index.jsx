@@ -5,7 +5,10 @@ import * as S from '../../../../../styles/Finance/Account/Activity/style';
 const ActivityItem = ({ activity }) => {
 
     return (
-        <SwipeableCard>
+        <SwipeableCard 
+            itemId={activity.accountId}
+            paddingLeft={'0px'}
+        >
             <S.Image src={activity.imageUrl} alt={activity.title} />
             <S.Content>
                 <S.Subtitle>{activity.title}</S.Subtitle>
