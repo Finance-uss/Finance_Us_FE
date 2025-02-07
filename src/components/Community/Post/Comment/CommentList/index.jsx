@@ -1,144 +1,67 @@
-import React, { useState } from 'react';
-import CommentInput from '../CommentInput';
+import React, { useState } from "react";
+import CommentInput from "../CommentInput";
 import * as S from "../../../../../styles/Community/PostDetail/Comment/style";
-import CustomDate from '../../CustomDate';
-import Comment from './Comment';
-import Reply from './Reply';
-import userDefaultImg from '../../../../../assets/icons/common/Community/commentProfile.svg'; 
+import Comment from "./Comment";
+import Reply from "./Reply";
+import useComment from "../../../../../hooks/useComment";
 
 const CommentList = () => {
-  const [comments, setComments] = useState([
-    {
-      id: 1,
-      userName: '원데이식스밀',
-      commentDate: <CustomDate />,
-      comment: '너도? 나도 ㅋㅋㅋㅋㅋㅋㅋㅋ 내 힘들다 ',
-      likesCount: 5,
-      isLiked: false, 
-      userImage: '',
-      replies: [],
-    },
-    {
-      id: 2,
-      userName: '김동글',
-      commentDate: <CustomDate />,
-      comment: '댓글쓰기!!',
-      likesCount: 3,
-      isLiked: false,
-      userImage: '',
-      replies: [],
-    },
-  ]);
+  const postId = 4; // 
+  const {
+    comments,
+    isLoading,
+    isError,
+    addComment,
+    editComment,
+    deleteComment,
+    likeComment,
+  } = useComment(postId);
 
-  const [replyTo, setReplyTo] = useState(null); 
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editingContent, setEditingContent] = useState("");
 
-  const handleAddComment = (newComment) => {
-    if (replyTo) {
-      const commentId = replyTo.commentId;
+  if (isLoading) return <p>댓글을 불러오는 중...</p>;
+  if (isError) return <p>댓글을 불러오는 데 실패했습니다.</p>;
 
-      setComments((prevComments) =>
-        prevComments.map((comment) =>
-          comment.id === commentId
-            ? {
-                ...comment,
-                replies: [
-                  ...comment.replies,
-                  {
-                    id: `${commentId}.${comment.replies.length + 1}`,
-                    userName: '답글동글동글',
-                    commentDate: <CustomDate />,
-                    comment: newComment,
-                    likesCount: 0,
-                    isLiked: false, 
-                  },
-                ],
-              }
-            : comment
-        )
-      );
-    } else {
-      setComments((prevComments) => [
-        ...prevComments,
-        {
-          id: `${prevComments.length + 1}`,
-          userName: '새로운동글동글',
-          commentDate: <CustomDate />,
-          comment: newComment,
-          likesCount: 0,
-          isLiked: false,
-          userImage: '',
-          replies: [],
-        },
-      ]);
-    }
-
-    setReplyTo(null);
+  const handleReplyClick = (parentId, userName) => {
+    setReplyingTo({ parentId, userName });
   };
-
-  const handleReplyClick = (commentId, userName) => {
-    setReplyTo({ commentId, userName });
-  };
-
-  const handleLike = (commentId, isReply, replyId) => {
-    setComments((prevComments) =>
-      prevComments.map((comment) => {
-        if (comment.id === commentId) {
-          if (isReply) {
-            return {
-              ...comment,
-              replies: comment.replies.map((reply) =>
-                reply.id === replyId
-                  ? {
-                      ...reply,
-                      isLiked: !reply.isLiked,
-                      likesCount: reply.isLiked ? reply.likesCount - 1 : reply.likesCount + 1,
-                    }
-                  : reply
-              ),
-            };
-          } else {
-            return {
-              ...comment,
-              isLiked: !comment.isLiked,
-              likesCount: comment.isLiked ? comment.likesCount - 1 : comment.likesCount + 1,
-            };
-          }
-        }
-        return comment;
-      })
-    );
-  };
+  
 
   return (
     <>
-      {comments.map((comment) => (
+      {comments
+        .slice()
+        .sort((a, b) => a.commentId - b.commentId)  // commentId로 오름차순 정렬
+        .map((comment) => (
         <S.CommentListContainer key={comment.id}>
           <Comment
             comment={comment}
-            onReplyClick={handleReplyClick} 
-            onLike={() => handleLike(comment.id, false)} 
+            onLike={() => likeComment(comment.id)}
+            onEditClick={() => {
+              setEditingCommentId(comment.id);
+              setEditingContent(comment.comment);
+            }}
+            onDelete={() => deleteComment(comment.id)}
+            onReplyClick={(parentId, userName) => setReplyingTo({ parentId, userName })}
+            
           />
 
-          {comment.replies.length > 0 && (
+          {comment.replies?.length > 0 && (
             <S.Replies>
               {comment.replies.map((reply) => (
                 <Reply
                   key={reply.id}
                   reply={reply}
-                  onReplyClick={handleReplyClick} 
-                  onLike={() => handleLike(comment.id, true, reply.id)} 
+                  onLike={() => likeComment(reply.id)}
                 />
               ))}
             </S.Replies>
           )}
         </S.CommentListContainer>
       ))}
-      <S.CommentListContainer>
-        <CommentInput
-          onSubmit={handleAddComment}
-          replyTo={replyTo?.userName || null}
-        />
-      </S.CommentListContainer>
+
+      <CommentInput onSubmit={addComment} />
     </>
   );
 };

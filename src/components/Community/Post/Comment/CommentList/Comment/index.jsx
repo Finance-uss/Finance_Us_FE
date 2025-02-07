@@ -5,9 +5,10 @@ import likeIcon from '../../../../../../assets/icons/common/Community/heart.svg'
 import likeFill from '../../../../../../assets/icons/common/Community/heartFill.svg';
 import moreIcon from '../../../../../../assets/icons/common/Community/more.svg';
 import userDefaultImg from '../../../../../../assets/icons/common/Community/commentProfile.svg';
-import MenuBar from '../../../MenuBar';
+import CommentMenuBar from '../../../MenuBar/CommentMenubar';
+import { formatDate } from '../../../../../../utils/dateUtils';
 
-const Comment = ({ comment, onReplyClick, onLike }) => {
+const Comment = ({ comment, onReplyClick, onLike, index }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openMenu = () => setIsMenuOpen(true);
@@ -26,8 +27,8 @@ const Comment = ({ comment, onReplyClick, onLike }) => {
             alt="유저 프로필 사진"
           />
           <S.UserWrapper>
-            <S.UserName>{comment.userName}</S.UserName>
-            <S.CommentDate>{comment.commentDate}</S.CommentDate>
+            <S.UserName>{comment.commentId}</S.UserName>  {/*임시로 유저 ID불러옴..*/}
+            <S.CommentDate>{formatDate(comment.updatedAt || comment.createdAt)}</S.CommentDate>
           </S.UserWrapper>
         </S.User>
         <S.Active>
@@ -47,7 +48,7 @@ const Comment = ({ comment, onReplyClick, onLike }) => {
         </S.Active>
       </S.Header>
       {isMenuOpen && (
-        <MenuBar
+        <CommentMenuBar
           isOpen={isMenuOpen}
           closeModal={closeMenu}
           isOwner={comment.isOwner}
@@ -55,9 +56,10 @@ const Comment = ({ comment, onReplyClick, onLike }) => {
           onDelete={handleDelete}
           onReport={handleReport}
           commentId={comment.id}
+          index={index}
         />
       )}
-      <S.CommentText>{comment.comment}</S.CommentText>
+      <S.CommentText>{comment.content}</S.CommentText>
     </S.CommentListContainer>
   );
 };

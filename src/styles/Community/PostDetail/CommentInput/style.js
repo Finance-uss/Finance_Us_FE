@@ -8,6 +8,7 @@ export const CommentInputContainer = styled.div`
     padding:12px 20px;
     position:fixed;
     bottom:77px;
+    left:0px;
     
 `;
 

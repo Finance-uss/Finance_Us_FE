@@ -1,27 +1,31 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import { useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
+import * as S from '../../../styles/common/SearchHeader/style';
 import AlarmIcon from '../../../assets/icons/common/Alarm.svg';
 import SearchIcon from '../../../assets/icons/common/Search.svg';
+import axiosInstance from '../../../api/axiosInstance';
 
-const HeaderContainer = styled.div`
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end; 
-  padding: 20px;
-  background-color: #ffffff;
-`;
-
-const Icon = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-left: 16px;
-  cursor: pointer; 
-`;
+const API_URL = import.meta.env.VITE_API_URL; 
 
 const SearchHeader = () => {
     const navigate = useNavigate(); 
+    const [isUnread, setIsUnread] = useState(false);
+    const userId = 1; // 실제 사용자 ID로 교체 필요..
+
+    useEffect(() => {
+        const checkUnreadAlarms = async () => {
+            try {
+                const response = await axiosInstance.get(`${API_URL}/api/notifications/unread?userId=${userId}`);
+                if (response.data.isSuccess) {
+                    setIsUnread(response.data.result.isUnread); 
+                }
+            } catch (error) {
+                console.error("읽지 않은 알림 확인 실패:", error);
+            }
+        };
+
+        checkUnreadAlarms();
+    }, [userId]);
 
     const handleSearchClick = () => {
         navigate('/search'); // 검색 페이지로 이동
@@ -32,11 +36,14 @@ const SearchHeader = () => {
     };
 
     return (
-        <HeaderContainer>
+        <S.HeaderContainer>
             
-            <Icon src={SearchIcon} alt="검색 페이지 가기" onClick={handleSearchClick} />
-            <Icon src={AlarmIcon} alt="알림 페이지 가기" onClick={handleAlarmClick} />
-        </HeaderContainer>
+            <S.Icon src={SearchIcon} alt="검색 페이지 가기" onClick={handleSearchClick} />
+            <S.AlarmContainer>
+            {isUnread && <S.RedDot />}
+            <S.Icon src={AlarmIcon} alt="알림 페이지 가기" onClick={handleAlarmClick} />
+            </S.AlarmContainer>
+        </S.HeaderContainer>
     );
 };
 
