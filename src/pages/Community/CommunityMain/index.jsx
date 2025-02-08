@@ -1,21 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, ProfileList } from '../../../styles/Community/CommunityMain/style';
-
 import Profile from '../../../components/Community/Profile';
 import icon from '../../../assets/icons/common/Community/exam.png';
-
 import SearchHeader from '../../../components/common/SearchHeader';
 import BottomBar from '../../../components/common/BottomBar';
 import TopBar from '../../../components/common/TopBar';
 import FloatingButton from '../../../components/common/FloatingButton/CommunityWriteButton';
 import CateButton from '../../../components/Community/Category/CateButton';
-
+import { useAuth } from "../../../contexts/AuthContext"; 
+import { getFollowList } from "../../../api/apiFollow"; 
+import exam from "../../../assets/icons/common/Community/exam.png";
 const CommunityMain = () => {
     const [selectedTab, setSelectedTab] = useState(0); 
+    const [followList, setFollowList] = useState([]);
+    const { formData } = useAuth(); 
+    const accessToken = formData.token; 
 
     const handleTabClick = (index) => {
         setSelectedTab(index);
     };
+
+    // 임시 데이터 사용
+    // const fakeFollowData = [
+    //     { followingId: 1, username: '친구1', profileImageUrl: exam },
+    //     { followingId: 2, username: '친구2', profileImageUrl: exam },
+    //     { followingId: 3, username: '친구3', profileImageUrl: exam },
+    //     { followingId: 4, username: '친구4', profileImageUrl: exam },
+    //     { followingId: 5, username: '친구5', profileImageUrl: exam },
+    //     { followingId: 6, username: '친구6', profileImageUrl: exam },
+    //     { followingId: 7, username: '친구7', profileImageUrl: exam },
+    //     { followingId: 8, username: '친구8', profileImageUrl: exam },
+    // ];
+
+    // useEffect(() => {
+    //     const fetchData = () => {
+    //         setFollowList(fakeFollowData);
+    //     };
+
+    //     fetchData();
+    // }, [accessToken]); 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (accessToken) { 
+                    const data = await getFollowList(accessToken);
+                    setFollowList(data);
+                } else {
+                    console.error("로그인 정보가 없습니다.");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+    }, [accessToken]); 
 
     const categoryFreeBoard = ['자유', '정보', '낭비했어요', '절약했어요'];
     const categoryInfoBoard = ['칼럼', '강연', '홍보'];
@@ -24,10 +64,13 @@ const CommunityMain = () => {
         <Container>
             <SearchHeader/>
             <ProfileList>
-                <Profile image={icon} name="김동글"/>
-                <Profile image={icon} name="김동글"/>
-                <Profile image={icon} name="김동글"/>
-                <Profile image={icon} name="김동글"/>
+            {followList.length === 0 ? ( 
+                    <p>팔로우한 친구가 없습니다</p> 
+                ) : (
+                    followList.map((user) => (
+                        <Profile key={user.userId} image={user.profileImageUrl} name={user.username} />
+                    ))
+                )}
             </ProfileList>
             <TopBar 
                 leftText="자유게시판" 
@@ -35,7 +78,6 @@ const CommunityMain = () => {
                 onTabClick={handleTabClick} 
                 selectedTab={selectedTab} 
             />
-            {/* selectedTab 값에 따라 다른 카테고리 버튼 렌더링 */}
             {selectedTab === 0 && <CateButton categories={categoryFreeBoard}/>}
             {selectedTab === 1 && <CateButton categories={categoryInfoBoard}/>}
 
