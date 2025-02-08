@@ -54,8 +54,6 @@ const PostDetail = () => {
       <S.Container>
         <BeforeHeader />
         <S.Wrapper>
-          <Content {...post} />
-          <CommentList /> 
           <Content {...post} onLikeCount={setLikeCount} />
           <CommentList onCommentCount={setCommentCount} /> 
         </S.Wrapper>
