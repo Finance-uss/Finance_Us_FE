@@ -18,6 +18,6 @@ export const ProfileImage = styled.img`
 export const ProfileName = styled.div`
   margin-top: 8px;
   font-size: 16px;
-  color: #000000;
+  color: ${(props) => (props.isAdd ? '#b4b4b4' : '#000000')};
   text-align:center;
 `;

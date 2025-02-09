@@ -7,9 +7,10 @@ import axiosInstance from "./axiosInstance";
  * @param {number} [size=10] - 한 번에 조회할 데이터 개수
  * @returns {Promise<Array>} - 팔로우한 사용자 목록 배열
  */
+
 export const getFollowList = async (accessToken, lastfollowingId = null, size = 10) => {
     try {
-        const response = await axiosInstance.get("/api/follows", {
+        const response = await axiosInstance.get(`/api/follows`, {
             headers: { Authorization: `Bearer ${accessToken}` },
             params: { size, ...(lastfollowingId && { lastfollowingId }) },
         });
@@ -19,5 +20,33 @@ export const getFollowList = async (accessToken, lastfollowingId = null, size = 
     } catch (error) {
         console.error("팔로우 목록 조회 실패:", error);
         throw error.response?.data?.message || "팔로우 목록을 불러오는 중 오류가 발생했습니다.";
+    }
+};
+
+export const followUser = async (accessToken, followingId) => {
+    try {
+        const response = await axiosInstance.post(
+            `/api/follows/${followingId}`,
+            {}, { headers: { Authorization: `Bearer ${accessToken}` } } 
+        );
+        console.log("API 응답 데이터:", response.data);
+        return response.data.isSuccess;
+    } catch (error) {
+        console.error("팔로우 실패:", error);
+        throw error.response?.data?.message || "팔로우하는 중 오류가 발생했습니다.";
+    }
+};
+
+
+export const unfollowUser = async (accessToken, followingId) => {
+    try {
+        const response = await axiosInstance.delete(`/api/follows/${followingId}`, {
+            headers: { Authorization: `Bearer ${accessToken}` },
+        });
+        console.log("API 응답 데이터:", response.data);
+        return response.data.isSuccess;
+    } catch (error) {
+        console.error("언팔로우 실패:", error);
+        throw error.response?.data?.message || "언팔로우하는 중 오류가 발생했습니다.";
     }
 };

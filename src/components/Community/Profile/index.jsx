@@ -5,12 +5,16 @@ import { useNavigate } from 'react-router-dom';
 const Profile = ({ image, name }) => {
   const navigate = useNavigate();
   const handleClick = () => {
-    navigate(`/community/followfinance/${name}`);
+    if (name == "친구 추가"){
+      navigate(`/search`);
+    }else{
+      navigate(`/community/followfinance/${name}`);
+    }    
 };
   return (
     <ProfileContainer onClick={handleClick} style={{ cursor: 'pointer' }}>
       <ProfileImage src={image} alt={`${name}`} />
-      <ProfileName>{name}</ProfileName>
+      <ProfileName isAdd={name === "친구 추가"}>{name}</ProfileName>
     </ProfileContainer>
   );
 };
