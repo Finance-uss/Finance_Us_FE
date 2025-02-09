@@ -23,41 +23,41 @@ const CommunityMain = () => {
     };
 
     //임시 데이터 사용
-    const fakeFollowData = [
-        { followingId: 1, username: '친구1', profileImageUrl: exam },
-        { followingId: 2, username: '친구2', profileImageUrl: exam },
-        { followingId: 3, username: '친구3', profileImageUrl: exam },
-        { followingId: 4, username: '친구4', profileImageUrl: null },
-        { followingId: 5, username: '친구5', profileImageUrl: exam },
-        { followingId: 6, username: '친구6', profileImageUrl: exam },
-        { followingId: 7, username: '친구7', profileImageUrl: exam },
-        { followingId: 8, username: '친구8', profileImageUrl: null },
-    ];
-
-    useEffect(() => {
-        const fetchData = () => {
-            setFollowList(fakeFollowData);
-        };
-
-        fetchData();
-    }, [accessToken]); 
+    // const fakeFollowData = [
+    //     { followingId: 1, username: '친구1', profileImageUrl: exam },
+    //     { followingId: 2, username: '친구2', profileImageUrl: exam },
+    //     { followingId: 3, username: '친구3', profileImageUrl: exam },
+    //     { followingId: 4, username: '친구4', profileImageUrl: null },
+    //     { followingId: 5, username: '친구5', profileImageUrl: exam },
+    //     { followingId: 6, username: '친구6', profileImageUrl: exam },
+    //     { followingId: 7, username: '친구7', profileImageUrl: exam },
+    //     { followingId: 8, username: '친구8', profileImageUrl: null },
+    // ];
 
     // useEffect(() => {
-    //     const fetchData = async () => {
-    //         try {
-    //             if (accessToken) { 
-    //                 const data = await getFollowList(accessToken);
-    //                 setFollowList(data);
-    //             } else {
-    //                 console.error("로그인 정보가 없습니다.");
-    //             }
-    //         } catch (error) {
-    //             console.error(error);
-    //         }
+    //     const fetchData = () => {
+    //         setFollowList(fakeFollowData);
     //     };
 
     //     fetchData();
     // }, [accessToken]); 
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                if (accessToken) { 
+                    const data = await getFollowList(accessToken);
+                    setFollowList(data);
+                } else {
+                    console.error("로그인 정보가 없습니다.");
+                }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        fetchData();
+    }, [accessToken]); 
 
     const categoryFreeBoard = ['자유', '정보', '낭비했어요', '절약했어요'];
     const categoryInfoBoard = ['칼럼', '강연', '홍보'];
