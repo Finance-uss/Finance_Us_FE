@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { useLocation } from "react-router-dom";
-import { Bottom, Button, StyledIcon}from '../../../styles/common/BottomBar/style';
+import { Bottom, Button, StyledIcon } from "../../../styles/common/BottomBar/style";
 import FinanceIconActive from "../../../assets/icons/common/Bottombar/FinanceActive.svg";
 import FinanceIconInactive from "../../../assets/icons/common/Bottombar/Finance.svg";
 import CommunityIconActive from "../../../assets/icons/common/Bottombar/CommunityActive.svg";
@@ -12,48 +12,40 @@ import MypageIconInactive from "../../../assets/icons/common/Bottombar/Mypage.sv
 
 const BottomBar = () => {
   const location = useLocation(); 
-  const [activeIcon, setActiveIcon] = useState(location.pathname); 
-  const handleClick = (path) => {
-    setActiveIcon(path);
-  };
 
   return (
     <Bottom>
       <NavButton
         to="/finance"
-        Icon={activeIcon === "/finance" ? FinanceIconActive : FinanceIconInactive}
+        Icon={location.pathname === "/finance" ? FinanceIconActive : FinanceIconInactive}
         label="가계부"
-        onClick={() => handleClick("/finance")}
         active={location.pathname === "/finance" ? "true" : "false"}
       />
       <NavButton
         to="/community"
-        Icon={activeIcon === "/community" ? CommunityIconActive : CommunityIconInactive}
+        Icon={location.pathname === "/community" ? CommunityIconActive : CommunityIconInactive}
         label="커뮤니티"
-        onClick={() => handleClick("/community")}
         active={location.pathname === "/community" ? "true" : "false"}
       />
       <NavButton
         to="/statistics"
-        Icon={activeIcon === "/statistics" ? StatisticsIconActive : StatisticsIconInactive}
+        Icon={location.pathname === "/statistics" ? StatisticsIconActive : StatisticsIconInactive}
         label="통계"
-        onClick={() => handleClick("/statistics")}
-        active={location.pathname === "/statistics"? "true" : "false"}
+        active={location.pathname === "/statistics" ? "true" : "false"}
       />
       <NavButton
         to="/user"
-        Icon={activeIcon === "/user" ? MypageIconActive : MypageIconInactive}
+        Icon={location.pathname === "/user" ? MypageIconActive : MypageIconInactive}
         label="마이페이지"
-        onClick={() => handleClick("/user")}
-        active={location.pathname === "/user"? "true" : "false"}
+        active={location.pathname === "/user" ? "true" : "false"}
       />
     </Bottom>
   );
 };
 
-const NavButton = ({ to, Icon, label, onClick, active }) => {
+const NavButton = ({ to, Icon, label, active }) => {
   return (
-    <Button to={to} active={active} onClick={onClick}>
+    <Button to={to} active={active}>
       <StyledIcon src={Icon} alt={label} />
       {label}
     </Button>

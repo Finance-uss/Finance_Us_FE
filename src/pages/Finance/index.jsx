@@ -1,7 +1,13 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { DateProvider } from '../../contexts/DateContext';
+
 const Finance = () => {
     return (
-        <h1>가계부 페이지</h1>
+        <DateProvider>
+            <Outlet />
+        </DateProvider>
+        
     );
 };
 

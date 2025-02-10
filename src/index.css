@@ -4,7 +4,14 @@
     font-weight: normal;
     font-style: normal;
   }
-  
+  /* #root {
+    width: 100%;
+    max-width: 393px;
+    margin: 0 auto;
+    box-sizing: border-box;
+   
+  } */
   body {
     font-family: 'Pretendard', Arial, sans-serif;
   }  
+  
