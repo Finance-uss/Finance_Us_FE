@@ -70,7 +70,7 @@ const CommunityMain = () => {
                     <Profile image={defaultImage} name="친구 추가"/>
                 ) : (
                     followList.map((user) => (
-                        <Profile key={user.userId} image={user.profileImageUrl||defaultImage} name={user.username} />
+                        <Profile key={user.userId} image={user.profileImageUrl||defaultImage} name={user.name} />
                     ))
                 )}
             </ProfileList>
