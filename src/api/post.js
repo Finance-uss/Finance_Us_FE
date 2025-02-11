@@ -10,7 +10,7 @@ export const getPost = async (postId) => {
     }
 };
 
-export const createPost = async (postData) => {
+export const createPost = async (postData, token) => {
     try {
       const response = await axiosInstance.post(`/api/post`, postData,{
         headers: {Authorization: `Bearer ${token}`}} );
@@ -28,7 +28,7 @@ export const createPost = async (postData) => {
     }
   };
 
-export const updatePost = async (postId, updatedData) => {
+export const updatePost = async (postId, updatedData, token) => {
   try {
     const response = await axiosInstance.patch(`/api/post/${postId}`, updatedData, {
       headers: { Authorization: `Bearer ${token}` },
@@ -65,7 +65,7 @@ export const deletePost = async (postId, token) => {
 };
 
 
-export const scrapPost = async (postId) => {
+export const scrapPost = async (postId,token) => {
   try {
     const response = await axiosInstance.post(
       `/api/scrap/${postId}`,{
