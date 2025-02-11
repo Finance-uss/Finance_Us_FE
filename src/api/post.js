@@ -12,7 +12,8 @@ export const getPost = async (postId) => {
 
 export const createPost = async (postData) => {
     try {
-      const response = await axiosInstance.post(`/api/post`, postData );
+      const response = await axiosInstance.post(`/api/post`, postData,{
+        headers: {Authorization: `Bearer ${token}`}} );
   
       if (response.data.isSuccess) {
         alert('게시글이 작성되었습니다!');
@@ -30,9 +31,7 @@ export const createPost = async (postData) => {
 export const updatePost = async (postId, updatedData) => {
   try {
     const response = await axiosInstance.patch(`/api/post/${postId}`, updatedData, {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     if (response.data.isSuccess) {
@@ -48,9 +47,11 @@ export const updatePost = async (postId, updatedData) => {
   }
 };
 
-export const deletePost = async (postId) => {
+export const deletePost = async (postId, token) => {
   try {
-    const response = await axiosInstance.delete(`/api/post/${postId}`);
+    const response = await axiosInstance.delete(`/api/post/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
     if (response.data.isSuccess) {
       alert('게시글이 삭제되었습니다!');
@@ -62,3 +63,26 @@ export const deletePost = async (postId) => {
     alert('게시글 삭제 중 오류가 발생했습니다.');
   }
 };
+
+
+export const scrapPost = async (postId) => {
+  try {
+    const response = await axiosInstance.post(
+      `/api/scrap/${postId}`,{
+        headers: { Authorization: `Bearer ${token}`, },
+      }
+    );
+
+    if (response.data.isSuccess) {
+      return response.data; 
+    } else {
+      alert('게시글 스크랩에 실패했습니다.');
+      return response.data; 
+    }
+  } catch (error) {
+    console.error('Error scrapping post:', error);
+    alert('게시글 스크랩 중 오류가 발생했습니다.');
+    return { isSuccess: false, result: { isScraped: false } }; 
+  }
+};
+

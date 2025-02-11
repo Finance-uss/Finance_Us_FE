@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as S from "../../../../styles/Community/PostDetail/Content/style";
 import likeIcon from "../../../../assets/icons/common/Community/heart.svg";
 import likeFill from "../../../../assets/icons/common/Community/heartFill.svg";
@@ -10,22 +10,49 @@ import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
 import PostMenuBar from "../MenuBar/PostMenubar";
 import { useNavigate } from "react-router-dom";
 import useComment from "../../../../hooks/useComment";
+import { useAuth } from "../../../../contexts/AuthContext";
+import {scrapPost} from "../../../../api/post";
+import bookmarkFillIcon from "../../../../assets/icons/common/user/Scrapped.svg";
 
 const Content = ({ title, userName, createdAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount,isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { commentCount } = useComment(postId);
+  const [isScrapped, setIsScrapped] = useState(false); 
+  const { formData } = useAuth();
+  const token = formData.token;
 
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
 
   const handleEdit = (postData) => {
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
     navigate(`/update/${postData.postId}`, { state: postData });
   };
 
   const handleDelete = () => alert("게시글 삭제");
   const handleReport = () => alert("게시글 신고");
-  const handleBookmark = () => alert("게시글 스크랩");
+
+
+  const handleBookmark = async () => {
+    if (!token) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    try {
+      const response = await scrapPost(postId, token); 
+      if (response.isSuccess) {
+        setIsScrapped(response.result.isScraped);
+      }
+    } catch (error) {
+      console.error("스크랩 오류:", error);
+    }
+  };
+  
+  
 
   const [isLiked, setIsLiked] = useState(false); 
 
@@ -71,7 +98,8 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, curren
             </S.Stat>
           </S.StateContainer>
         </S.Stats>
-        <S.BookMark src={bookmarkIcon} alt="북마크 아이콘" onClick={handleBookmark} />
+        <S.BookMark src={isScrapped ? bookmarkFillIcon : bookmarkIcon} alt="북마크 아이콘" 
+         onClick= {handleBookmark}/>
       </S.PostConatiner>
 
       {isMenuOpen && (
