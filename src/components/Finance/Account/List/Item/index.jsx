@@ -28,6 +28,7 @@ const AccountItem = ({ activity }) => {
     const handleClick = (event) => {
         // 스와이프 중이 아닐 때만 클릭 이벤트를 처리하도록 추가 검증 가능
         if (!isStarHidden) {
+            localStorage.setItem("selectedActivity", JSON.stringify(activity));
             navigate(`account/${accountId}`);
         }
     };
