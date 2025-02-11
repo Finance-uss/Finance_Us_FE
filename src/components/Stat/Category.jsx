@@ -1,5 +1,14 @@
 import React from 'react';
-import { TotalProgressContainer, ProgressBar, Amount, Title, Separator, CategoryProgressContainer, CategoryBar, CategoryLabel } from '../../styles/Statistics/style';
+import { 
+  TotalProgressContainer, 
+  ProgressBar, 
+  Amount, 
+  Title, 
+  Separator, 
+  CategoryProgressContainer, 
+  CategoryBar, 
+  CategoryLabel 
+} from '../../styles/Statistics/style';
 
 const colors = [
   '#142755', '#FFB55D', '#F17357', '#B75075', '#6C3971', 
@@ -19,7 +28,7 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
             style={{ 
               height: '100%', 
               width: `${progressPercentage}%`, 
-              backgroundColor: '#ED1B87', 
+              backgroundColor: '#142755', 
               borderRadius: '2px' 
             }} 
           />
@@ -37,12 +46,10 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
         </Title>
         {Object.entries(categoryData).map(([category, data], index) => {
           const percentage = activeButton === 'expense' ? (data.spent / data.goal) * 100 : (data.earned / data.goal) * 100;
+
           return (
             <CategoryBar key={category}>
               <CategoryLabel>{category}</CategoryLabel>
-                <div style={{ position: 'absolute', left: `${percentage}%`, transform: 'translateX(-50%)', marginTop: '-17px', fontSize: '12px', color: '#818C99' }}>
-                  {Math.round(percentage)}%
-                </div>
               <ProgressBar 
                 style={{ 
                   backgroundColor: '#E9ECF1', 
@@ -61,7 +68,7 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
                 />
               </ProgressBar>
               <Amount>
-                <span>{Math.min(activeButton === 'expense' ? data.spent : data.earned, data.goal).toLocaleString()}원</span> <span>{data.goal.toLocaleString()}원</span>
+                <span>{activeButton === 'expense' ? data.spent : data.earned}원</span> <span>{data.goal}원</span>
               </Amount>
             </CategoryBar>
           );

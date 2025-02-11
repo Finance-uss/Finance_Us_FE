@@ -18,8 +18,9 @@ export const ChartWrapper = styled.div`
 export const LegendContainer = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
-  margin-top: 10px; 
+  align-items: center;
+  justify-content: center;
+  margin-top: 30px; 
 `;
 
 export const LegendItem = styled.div`
@@ -32,6 +33,6 @@ export const LegendColorBox = styled.div`
   width: 10px;
   height: 10px;
   border-radius: 10px;
-  margin-left: 30px;
+  margin-left: 25px;
   margin-right: 5px;
 `;
