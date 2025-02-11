@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 import useComment from "../../../../hooks/useComment";
 import { useAuth } from "../../../../contexts/AuthContext";
 import {scrapPost} from "../../../../api/post";
-import bookmarkFillIcon from "../../../../assets/icons/common/user/Scrapped.svg";
+import bookmarkFillIcon from "src/assets/icons/common/User/Scrapped.svg";
 
 const Content = ({ title, userName, createdAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount,isAuth }) => {
   const navigate = useNavigate();
