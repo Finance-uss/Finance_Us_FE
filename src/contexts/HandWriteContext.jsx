@@ -14,6 +14,7 @@ export const HandWriteProvider = ({ children }) => {
             date: "",
             subName: "",
             subAssetName: "",
+            amount: "",
             title: "",
             status: false,
             score: 0,
