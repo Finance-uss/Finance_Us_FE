@@ -48,9 +48,10 @@ const AlarmCard = ({ alarm, markRead }) => {
         navigate(`/community/postdetail/${resourceId}`); // 게시글 페이지로 이동
         break;
       case "EMOJI":
+        category="알림";
         navigate(`/finance`); // 가계부 페이지로 이동
         break;
-      case "LIKE":
+      case "FOLLOW":
         navigate(`/community`); 
         break;
       default:
@@ -59,10 +60,24 @@ const AlarmCard = ({ alarm, markRead }) => {
 
     
   }; 
+  const getType = (type) => {
+    switch (type) {
+      case "COMMENT":
+        return "댓글";
+      case "REPLY":
+        return "답글";
+      case "EMOJI":
+        return "반응";
+      case "FOLLOW":
+        return "팔로우";
+      default:
+        return "새로운 알림";
+    }
+  };
 
   return (
     <S.AlarmContainer onClick={handleClick}>
-      <S.Category>{type} 알림</S.Category>
+      <S.Category>{getType(type)} 알림</S.Category>
       <S.Content>{getCategory(type, title, resourceType)}</S.Content>
     </S.AlarmContainer>
   );
