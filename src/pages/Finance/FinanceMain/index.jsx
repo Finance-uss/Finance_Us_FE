@@ -17,10 +17,12 @@ import Bell from '../../../assets/icons/common/Bell.svg';
 const FinanceMain = () => {
     const { selectedDate } = useDate();
     const [monthData, setMonthData] = useState(null);
-    const { accountData, loading, error } = useAccountData(
-        selectedDate, 
-        `/api/calendar/${selectedDate.year}/${selectedDate.month}/${selectedDate.day}`
-    );
+    // ✅ `useAccountData` 항상 호출, selectedDate.day가 없으면 null 반환
+    const apiUrl = selectedDate.day 
+        ? `/api/calendar/${selectedDate.year}/${selectedDate.month}/${selectedDate.day}`
+        : null;
+
+    const { accountData, loading, error, refetch } = useAccountData(selectedDate, apiUrl);
 
     useEffect(() => {
         selectedDate.day = null;
@@ -54,7 +56,12 @@ const FinanceMain = () => {
             <Calendar header={`지출 ${monthData.totalExpense.toLocaleString()}원 수익 ${monthData.totalIncome.toLocaleString()}원`} />
             <FinancePlusButton />
             {selectedDate.day && <Today>{selectedDate.day}일</Today>}
-            {accountData && <AccountList activities={accountData} />}
+            {accountData && (
+                <AccountList 
+                    activities={accountData}
+                    onDeleteSuccess={refetch} 
+                />
+            )}
             <BottomMargin />
             <BottomBar />
         </Container>

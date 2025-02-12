@@ -4,6 +4,7 @@ import useApi from '../../../../hooks/useApi';
 import { useAccountDetail } from '../../../../contexts/AccountDetailContext';
 import { formatFormData } from '../../../../utils/accountUtils';
 import { useNavigate } from 'react-router-dom';
+import { isSubmitDisabled } from '../../../../utils/validation';
 
 import { Container } from '../../../../styles/Finance/style';
 import * as S from '../../../../styles/Finance/AccountDetail/style';
@@ -21,8 +22,11 @@ import RatingModal from '../../../../components/Finance/AccountDetail/RatingModa
 const AccountDetailContent = () => {
     const { accountId } = useParams(); // URL에서 accountId 가져오기
     const { formData, setFormField } = useAccountDetail(JSON.parse(localStorage.getItem("selectedActivity")));
-    const {request} = useApi();
+    const requiredFields = ["accountType", "date", "subName", "subAssetName", "amount", "title", "status", "score", "content"];
+    const { request } = useApi();
     const navigate = useNavigate();
+
+    const [isDisabled, setIsDisabled] = useState(true);
 
     useEffect(() => {
         const storedActivity = JSON.parse(localStorage.getItem("selectedActivity"));
@@ -32,7 +36,12 @@ const AccountDetailContent = () => {
             });
         }
     }, []);
+
+    useEffect(() => {
+        setIsDisabled(isSubmitDisabled(formData || {}, requiredFields)); // ✅ formData 변경 감지
+    }, [formData]);
     
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formattedData = formatFormData(formData);
@@ -60,13 +69,18 @@ const AccountDetailContent = () => {
                 <TextSection />
                 <S.Line />
                 <OtherSection />
-                <CalendarModal />
-                <CategoryModal type={formData.accountType}/>
-                <AssetModal />
-                <RatingModal />
-                <SubmitButton text="수정 완료" />
+                
+                <SubmitButton 
+                    text="수정 완료" 
+                    disabled={isDisabled} 
+                    customOpacity={!isDisabled ? 1 : 0.4}
+                />
             </form>
 
+            <CalendarModal />
+            <CategoryModal type={formData.accountType}/>
+            <AssetModal />
+            <RatingModal />
 
         </Container>
     );

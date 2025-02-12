@@ -2,12 +2,13 @@ import React from 'react';
 import SwipeableCard from '../../SwipeableCard';
 import * as S from '../../../../../styles/Finance/Account/Activity/style';
 
-const ActivityItem = ({ activity }) => {
+const ActivityItem = ({ activity, onDeleteSuccess }) => {
 
     return (
         <SwipeableCard 
             itemId={activity.accountId}
             paddingLeft={'0px'}
+            onDeleteSuccess={onDeleteSuccess}
         >
             <S.Image src={activity.imageUrl} alt={activity.title} />
             <S.Content>
