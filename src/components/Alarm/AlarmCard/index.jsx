@@ -49,7 +49,7 @@ const AlarmCard = ({ alarm, markRead }) => {
         break;
       case "EMOJI":
         category="알림";
-        navigate(`/finance`); // 가계부 페이지로 이동
+        navigate(`/finance/account/${resourceId}`); // 가계부 페이지로 이동
         break;
       case "FOLLOW":
         navigate(`/community`); 
