@@ -15,7 +15,7 @@ import { Container, Today } from '../../../styles/Finance/style';
 import Bell from '../../../assets/icons/common/Bell.svg';
 
 const FinanceMain = () => {
-    const { selectedDate } = useDate();
+    const { selectedDate, setSelectedDate } = useDate();
     const [monthData, setMonthData] = useState(null);
     // ✅ `useAccountData` 항상 호출, selectedDate.day가 없으면 null 반환
     const apiUrl = selectedDate.day 
@@ -23,9 +23,8 @@ const FinanceMain = () => {
         : null;
 
     const { accountData, loading, error, refetch } = useAccountData(selectedDate, apiUrl);
-
     useEffect(() => {
-        selectedDate.day = null;
+        setSelectedDate((prev) => ({...prev, day: null}));
     }, []);
 
     useEffect(() => {
@@ -43,7 +42,8 @@ const FinanceMain = () => {
     }, [selectedDate]);
 
     useEffect(() => {
-        selectedDate.day = null;
+        setSelectedDate((prev) => ({...prev, day: null}));
+        refetch(null);
     }, [selectedDate.month, selectedDate.year]);
 
     if(!monthData) {
@@ -56,7 +56,7 @@ const FinanceMain = () => {
             <Calendar header={`지출 ${monthData.totalExpense.toLocaleString()}원 수익 ${monthData.totalIncome.toLocaleString()}원`} />
             <FinancePlusButton />
             {selectedDate.day && <Today>{selectedDate.day}일</Today>}
-            {accountData && (
+            {selectedDate.day && accountData && (
                 <AccountList 
                     activities={accountData}
                     onDeleteSuccess={refetch} 
