@@ -2,7 +2,7 @@ import axiosInstance from './axiosInstance';
 
 export const getPost = async (postId) => {
     try {
-        const response = await axiosInstance.get(`/api/post/${postId}`);
+        const response = await axiosInstance.get(`/api/post/detail/${postId}`);
         return response.data;
     } catch (error) {
         console.error('게시글 조회 실패:', error);

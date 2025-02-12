@@ -13,8 +13,9 @@ import useComment from "../../../../hooks/useComment";
 import { useAuth } from "../../../../contexts/AuthContext";
 import {scrapPost} from "../../../../api/post";
 import bookmarkFillIcon from "../../../../assets/icons/common/Community/Scrap.svg";
+import { formatDate } from "../../../../utils/dateUtils";
 
-const Content = ({ title, userName, createdAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount,isAuth }) => {
+const Content = ({ title, userName, createdAt, updatedAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount,isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { commentCount } = useComment(postId);
@@ -72,17 +73,18 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, curren
           </S.TitleContainer>
           <S.Info>
             <S.Profile>
+              {/* <S.UserIcon src={userImg} alt="유저 아이콘" /> */}
               <S.UserIcon src={examIcon} alt="유저 아이콘" />
               <S.User>{userName}</S.User>
               {isAuth && <S.CheckIcon src={authIcon} alt="인증된 사용자" />}
             </S.Profile>
-            <S.Date>{createdAt}</S.Date>
+            <S.Date>{formatDate(updatedAt || createdAt)}</S.Date>
           </S.Info>
         </S.Header>
 
         <S.PostContent>
-          <S.PostImage src={image} alt="게시글 이미지" />
-          <S.PostText>{content}</S.PostText>
+          {image && <S.PostImage src={image} alt="게시글 이미지" />}
+          {content &&<S.PostText>{content}</S.PostText>}
         </S.PostContent>
 
         <S.Stats>
