@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, ProfileList } from '../../../styles/Community/CommunityMain/style';
 import Profile from '../../../components/Community/Profile';
-import icon from '../../../assets/icons/common/Community/exam.png';
+import exam from "../../../assets/icons/common/Community/exam.png";
 import SearchHeader from '../../../components/common/SearchHeader';
 import BottomBar from '../../../components/common/BottomBar';
 import TopBar from '../../../components/common/TopBar';
@@ -9,7 +9,6 @@ import FloatingButton from '../../../components/common/FloatingButton/CommunityW
 import CateButton from '../../../components/Community/Category/CateButton';
 import { useAuth } from "../../../contexts/AuthContext"; 
 import { getFollowList } from "../../../api/apiFollow"; 
-import exam from "../../../assets/icons/common/Community/exam.png";
 import defaultImage from "../../../assets/icons/common/Community/commentProfile.svg";
 
 const CommunityMain = () => {
@@ -47,7 +46,12 @@ const CommunityMain = () => {
             try {
                 if (accessToken) { 
                     const data = await getFollowList(accessToken);
-                    setFollowList(data);
+                    console.log("팔로우 목록:", data);
+                    if (Array.isArray(data)) {
+                        setFollowList(data); 
+                    } else {
+                        console.error("API 응답 데이터가 예상과 다릅니다.", data);
+                    }
                 } else {
                     console.error("로그인 정보가 없습니다.");
                 }
@@ -55,10 +59,10 @@ const CommunityMain = () => {
                 console.error(error);
             }
         };
-
+    
         fetchData();
-    }, [accessToken]); 
-
+    }, [accessToken]);
+    
     const categoryFreeBoard = ['자유', '정보', '낭비했어요', '절약했어요'];
     const categoryInfoBoard = ['칼럼', '강연', '홍보'];
 
@@ -67,12 +71,17 @@ const CommunityMain = () => {
             <SearchHeader/>
             <ProfileList>
             {followList.length === 0 ? ( 
-                    <Profile image={defaultImage} name="친구 추가"/>
-                ) : (
-                    followList.map((user) => (
-                        <Profile key={user.userId} image={user.profileImageUrl||defaultImage} name={user.name} />
-                    ))
-                )}
+                <Profile image={defaultImage} name="친구 추가"/>
+            ) : (
+                followList.map((user) => (
+                    <Profile 
+                        key={user.followingId} 
+                        image={user.profileImageUrl || defaultImage} 
+                        name={user.name} 
+                        followingId={user.followingId} 
+                    />
+                ))
+            )}
             </ProfileList>
             <TopBar 
                 leftText="자유게시판" 
@@ -82,7 +91,7 @@ const CommunityMain = () => {
             />
             {selectedTab === 0 && <CateButton categories={categoryFreeBoard}/>}
             {selectedTab === 1 && <CateButton categories={categoryInfoBoard}/>}
-
+            
             <FloatingButton/>
             <BottomBar/>
         </Container>

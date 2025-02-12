@@ -74,7 +74,7 @@ function App() {
           {/* 커뮤니티 페이지 */}
           <Route path="/community" element={<Community />}>
             <Route index element={<CommunityMain />} />
-            <Route path="followfinance/:name" element={<FollowFinance />} />
+            <Route path="followfinance/:followingId" element={<FollowFinance />} />
             <Route path="postwrite" element={<PostWrite />} />
             <Route path="postdetail/:postId" element={<PostDetail/>}/>
           </Route>
