@@ -4,9 +4,9 @@ import { useImageUploader } from '../hooks/useImageUploader';
 import { useForm } from '../hooks/useForm';
 import { useModalManager } from '../hooks/useModalManager';
 
-const HandWriteContext = createContext();
+const AccountDetailContext = createContext();
 
-export const HandWriteProvider = ({ children }) => {
+export const AccountDetailProvider = ({ children }) => {
     const { selectedDate } = useDate();
     const { imageUrl, handleImageUpload } = useImageUploader();
     const { formData, handleChange, setFormField } = useForm({
@@ -38,7 +38,7 @@ export const HandWriteProvider = ({ children }) => {
     }, [selectedDate, imageUrl]);
 
     return (
-        <HandWriteContext.Provider 
+        <AccountDetailContext.Provider 
             value={{ 
                 formData, 
                 handleChange, 
@@ -50,8 +50,8 @@ export const HandWriteProvider = ({ children }) => {
             }}
         >
             {children}
-        </HandWriteContext.Provider>
+        </AccountDetailContext.Provider>
     );
 };
 
-export const useHandWrite = () => useContext(HandWriteContext);
+export const useAccountDetail = () => useContext(AccountDetailContext);

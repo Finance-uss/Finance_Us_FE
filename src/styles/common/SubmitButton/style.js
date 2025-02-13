@@ -15,7 +15,7 @@ export const SubmitButton = styled.button`
   letter-spacing: -0.4px;
   cursor: pointer; 
   text-align: center;
-   opacity: ${({ opacity, disabled }) => (disabled ? 0.5 : opacity || 1)};
+  opacity: ${({ opacity, disabled }) => (disabled ? 0.5 : opacity || 1)};
   
 
   &:hover {

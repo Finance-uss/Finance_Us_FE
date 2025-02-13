@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
 import { useAccount } from "../../../../hooks/useAccount.js";
 import { formatFormData } from "../../../../utils/accountUtils.js";
 import { useNavigate } from "react-router-dom";
+import { isSubmitDisabled } from "../../../../utils/validation.js";
 
 import { Container } from "../../../../styles/Finance/style.js";
 import * as S from "../../../../styles/Finance/HandWrite/style.js";
@@ -20,7 +21,14 @@ import RatingModal from "../../../../components/Finance/HandWrite/RatingModal/in
 const HandWriteContent = () => {
     const { formData, setFormField } = useHandWrite();
     const { handleRequest, loading, error } = useAccount();
+    const requiredFields = ["accountType", "date", "subName", "subAssetName", "amount", "title", "status", "score", "content"];
     const navigate = useNavigate();
+
+    const [isDisabled, setIsDisabled] = useState(true);
+    
+    useEffect(() => {
+        setIsDisabled(isSubmitDisabled(formData || {}, requiredFields)); // ✅ formData 변경 감지
+    }, [formData]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -42,7 +50,11 @@ const HandWriteContent = () => {
                 <TextSection/>
                 <S.Line/>
                 <OtherSection/>
-                <SubmitButton text="작성 완료" />
+                <SubmitButton 
+                    text="작성 완료" 
+                    disabled={isDisabled} 
+                    customOpacity={!isDisabled ? 1 : 0.4}
+                />
             </form>
 
             {/* 모달 컴포넌트 */}
