@@ -5,7 +5,7 @@ import SwipeableCard from '../../SwipeableCard';
 import styled from 'styled-components';
 
 //하나의 아이템
-const AccountItem = ({ activity }) => {
+const AccountItem = ({ activity, onDeleteSuccess }) => {
     const { accountId, score, title, amount, subName, imageUrl } = activity;
     // 스와이프가 완전히 끝났을 때 별점을 숨길지 여부
     const [isStarHidden, setIsStarHidden] = useState(false);
@@ -28,6 +28,7 @@ const AccountItem = ({ activity }) => {
     const handleClick = (event) => {
         // 스와이프 중이 아닐 때만 클릭 이벤트를 처리하도록 추가 검증 가능
         if (!isStarHidden) {
+            localStorage.setItem("selectedActivity", JSON.stringify(activity));
             navigate(`account/${accountId}`);
         }
     };
@@ -39,6 +40,7 @@ const AccountItem = ({ activity }) => {
             itemId={accountId}
             boxShadow={'0px 0px 3px 0px rgba(0, 0, 0, 0.25)'}
             borderRadius={'5px'}
+            onDeleteSuccess={onDeleteSuccess}
         >
             <Image src={imageUrl} alt={title} />
             <Content>

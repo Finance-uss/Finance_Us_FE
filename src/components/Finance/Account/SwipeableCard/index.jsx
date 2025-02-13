@@ -5,7 +5,7 @@ import useApi from '../../../../hooks/useApi';
 import DeleteConfirmModal from '../DeleteConfirmModal';
 
 
-const SwipeableCard = ({ children, onSwipeEnd, onClick, itemId, boxShadow, borderRadius, paddingLeft }) => {
+const SwipeableCard = ({ children, onSwipeEnd, onClick, itemId, boxShadow, borderRadius, paddingLeft, onDeleteSuccess }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const { request, loading } = useApi();
     const { translateX, isSwiping, handlers } = useSwipe(onSwipeEnd, onClick);
@@ -20,6 +20,9 @@ const SwipeableCard = ({ children, onSwipeEnd, onClick, itemId, boxShadow, borde
             console.log('삭제 성공');
             setIsDeleteModalOpen(false);
             onSwipeEnd && onSwipeEnd(); // UI 업데이트를 위한 콜백 호출
+            if (onDeleteSuccess) {
+                onDeleteSuccess();
+            }
         } catch (error) {
             console.error("삭제 중 오류 발생", error);
         }

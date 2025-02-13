@@ -9,7 +9,7 @@ import { Container } from '../../../styles/Finance/style';
 
 const Report = () => {
     const { selectedDate } = useDate();
-    const { accountData: activities, loading, error } = useAccountData(
+    const { accountData: activities, loading, error, refetch } = useAccountData(
         selectedDate, 
         `/api/account/report/${selectedDate.year}/${selectedDate.month}`
     );
@@ -22,7 +22,8 @@ const Report = () => {
             {activities?.reduceActivity?.length > 0 && (
                 <Activity 
                     title="아쉬운 활동 줄이기 ★1~2점" 
-                    activities={activities.reduceActivity} 
+                    activities={activities.reduceActivity}
+                    onDeleteSuccess={refetch}
                 />
             )}
 
@@ -30,7 +31,8 @@ const Report = () => {
             {activities?.satisfactoryActivity?.length > 0 && (
                 <Activity 
                     title="만족스러운 활동 늘리기 ★4~5점" 
-                    activities={activities.satisfactoryActivity} 
+                    activities={activities.satisfactoryActivity}
+                    onDeleteSuccess={refetch} 
                 />
             )}
 
@@ -38,7 +40,8 @@ const Report = () => {
             {activities?.maintainActivity?.length > 0 && (
                 <Activity 
                     title="괜찮은 활동 유지하기 ★3점" 
-                    activities={activities.maintainActivity} 
+                    activities={activities.maintainActivity}
+                    onDeleteSuccess={refetch} 
                 />
             )}
 
