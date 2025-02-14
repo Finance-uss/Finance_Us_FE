@@ -4,7 +4,6 @@ import likeIcon from "../../../../assets/icons/common/Community/heart.svg";
 import likeFill from "../../../../assets/icons/common/Community/heartFill.svg";
 import commentIcon from "../../../../assets/icons/common/Community/comment.svg";
 import moreIcon from "../../../../assets/icons/common/Community/more.svg";
-import examIcon from "../../../../assets/icons/common/Community/exam.png";
 import bookmarkIcon from "../../../../assets/icons/common/bookmark.svg";
 import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
 import PostMenuBar from "../MenuBar/PostMenubar";
@@ -15,22 +14,16 @@ import {scrapPost} from "../../../../api/post";
 import bookmarkFillIcon from "../../../../assets/icons/common/Community/Scrap.svg";
 import { formatDate } from "../../../../utils/dateUtils";
 
-const Content = ({ title, userName, createdAt, updatedAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount,isAuth }) => {
+const Content = ({ title, userImg, userName, createdAt, updatedAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount, isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { commentCount } = useComment(postId);
   const [isScrapped, setIsScrapped] = useState(false); 
-  const { formData } = useAuth();
-  const token = formData.token;
 
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
 
   const handleEdit = (postData) => {
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
     navigate(`/update/${postData.postId}`, { state: postData });
   };
 
@@ -39,10 +32,6 @@ const Content = ({ title, userName, createdAt, updatedAt, image, content, likeCo
 
 
   const handleBookmark = async () => {
-    if (!token) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
     try {
       const response = await scrapPost(postId, token); 
       if (response.isSuccess) {
@@ -52,8 +41,6 @@ const Content = ({ title, userName, createdAt, updatedAt, image, content, likeCo
       console.error("스크랩 오류:", error);
     }
   };
-  
-  
 
   const [isLiked, setIsLiked] = useState(false); 
 
@@ -73,8 +60,7 @@ const Content = ({ title, userName, createdAt, updatedAt, image, content, likeCo
           </S.TitleContainer>
           <S.Info>
             <S.Profile>
-              {/* <S.UserIcon src={userImg} alt="유저 아이콘" /> */}
-              <S.UserIcon src={examIcon} alt="유저 아이콘" />
+              <S.UserIcon src={userImg} alt="유저 아이콘" />
               <S.User>{userName}</S.User>
               {isAuth && <S.CheckIcon src={authIcon} alt="인증된 사용자" />}
             </S.Profile>

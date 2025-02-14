@@ -6,6 +6,7 @@ import Content from "../../../components/Community/Post/Content";
 import CommentList from "../../../components/Community/Post/Comment/CommentList";
 import * as S from '../../../styles/Community/PostDetail/style';
 import { getPost } from "../../../api/post";
+import defaultUserImg from "../../../assets/icons/common/Community/commentProfile.svg";
 
 const PostDetail = () => {
   const [post, setPost] = useState(null);
@@ -43,7 +44,7 @@ const PostDetail = () => {
           <Content 
             title={post.title}
             userName={post.name}
-            // userImg={post.userImgUrl} 
+            userImg={post.userImageUrl||defaultUserImg} 
             createdAt={post.createdAt}
             updatedAt={post.updatedAt}
             image={post.imageUrl} 

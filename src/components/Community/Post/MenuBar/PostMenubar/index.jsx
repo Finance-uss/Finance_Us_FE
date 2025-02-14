@@ -4,23 +4,19 @@ import closeIcon from '../../../../../assets/icons/common/X.svg';
 import { useNavigate } from 'react-router-dom';
 import { deletePost, getPost } from '../../../../../api/post';
 import ConfirmModal from '../../../../User/ConfirmModal';
-import { useAuth } from '../../../../../contexts/AuthContext';
 
 const PostMenuBar = ({ isOpen, closeModal, isOwner, onReport, postId }) => {
   if (!isOpen) return null;
 
   const navigate = useNavigate();
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
-  const { formData } = useAuth();
-  const token = formData.token;
-
   const handleClick = (e) => {
     e.stopPropagation();
   };
 
   const handleUpdate = async () => {
     try {
-      const postData = await getPost(postId, token);
+      const postData = await getPost(postId);
       navigate(`/community/update/${postId}`, { state: postData });
     } catch (error) {
       console.error('수정 실패:', error);
@@ -29,7 +25,7 @@ const PostMenuBar = ({ isOpen, closeModal, isOwner, onReport, postId }) => {
 
   const handleDelete = async () => {
     try {
-      await deletePost(postId, token);
+      await deletePost(postId);
       closeModal();
       navigate('/community');
     } catch (error) {
@@ -42,7 +38,7 @@ const PostMenuBar = ({ isOpen, closeModal, isOwner, onReport, postId }) => {
     <S.ModalOverlay onClick={closeModal}>
       <S.ModalContent onClick={handleClick}>
         <S.Menu>
-          {isOwner ? (
+          {!isOwner ? ( // 테스트용 수정 예정
             <>
               <S.MenuItem onClick={handleUpdate}>게시글 수정</S.MenuItem>
               <S.MenuItem onClick={() => setDeleteModalOpen(true)}>게시글 삭제</S.MenuItem>
