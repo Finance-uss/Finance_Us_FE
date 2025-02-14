@@ -33,7 +33,7 @@ const Content = ({ title, userImg, userName, createdAt, updatedAt, image, conten
 
   const handleBookmark = async () => {
     try {
-      const response = await scrapPost(postId, token); 
+      const response = await scrapPost(postId); 
       if (response.isSuccess) {
         setIsScrapped(response.result.isScraped);
       }
