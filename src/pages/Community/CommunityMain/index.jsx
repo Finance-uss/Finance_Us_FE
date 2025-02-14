@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Container, ProfileList } from '../../../styles/Community/CommunityMain/style';
 import Profile from '../../../components/Community/Profile';
-import exam from "../../../assets/icons/common/Community/exam.png";
 import SearchHeader from '../../../components/common/SearchHeader';
 import BottomBar from '../../../components/common/BottomBar';
 import TopBar from '../../../components/common/TopBar';
@@ -20,26 +19,6 @@ const CommunityMain = () => {
     const handleTabClick = (index) => {
         setSelectedTab(index);
     };
-
-    //임시 데이터 사용
-    // const fakeFollowData = [
-    //     { followingId: 1, username: '친구1', profileImageUrl: exam },
-    //     { followingId: 2, username: '친구2', profileImageUrl: exam },
-    //     { followingId: 3, username: '친구3', profileImageUrl: exam },
-    //     { followingId: 4, username: '친구4', profileImageUrl: null },
-    //     { followingId: 5, username: '친구5', profileImageUrl: exam },
-    //     { followingId: 6, username: '친구6', profileImageUrl: exam },
-    //     { followingId: 7, username: '친구7', profileImageUrl: exam },
-    //     { followingId: 8, username: '친구8', profileImageUrl: null },
-    // ];
-
-    // useEffect(() => {
-    //     const fetchData = () => {
-    //         setFollowList(fakeFollowData);
-    //     };
-
-    //     fetchData();
-    // }, [accessToken]); 
 
     useEffect(() => {
         const fetchData = async () => {
@@ -76,7 +55,7 @@ const CommunityMain = () => {
                 followList.map((user) => (
                     <Profile 
                         key={user.followingId} 
-                        image={user.profileImageUrl || defaultImage} 
+                        image={user.profileImage || defaultImage} 
                         name={user.name} 
                         followingId={user.followingId} 
                     />
