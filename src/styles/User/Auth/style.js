@@ -58,12 +58,6 @@ export const Line = styled.div`
 
 `;
 
-export const CameraButton = styled.img`
-    width: 32px;
-    height: 32px;
-    top: 100%;
-    margin-bottom:16px;
-`;
 export const ImagePreview = styled.img`
     width:100%;
     height:100%;
@@ -153,4 +147,30 @@ export const Icon = styled.span`
   color: #007bff;
   margin-right: 8px;
   font-size: 18px;
+`;
+
+export const ImageUploadWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* 왼쪽 정렬 */
+  border: 2px dashed #ccc;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 8px;
+  width: 30px; 
+  height: 30px; 
+  cursor: pointer;
+  background-color: #f9f9f9;
+  position: relative;
+
+  &:hover {
+    background-color: #e9e9e9;
+  }
+`;
+
+export const CameraButton = styled.img`
+    width: 32px;
+    height: 32px;
+    top: 100%;
+    margin-bottom:16px;
 `;
