@@ -70,3 +70,31 @@ export const getFollowFinance = async (accessToken, followId) => {
         throw error.response?.data?.message || "팔로우한 사용자 가계부 불러오는 중 오류 발생";
     }
 };
+
+// 가계부 좋아요
+export const accountLike = async (accessToken, accountId) => {
+    try {
+        const response = await axiosInstance.post(`/api/account/like`, {accountId},
+            { headers: { Authorization: `Bearer ${accessToken}` } } 
+        );
+        console.log("API 응답 데이터:", response.data);
+        return response.data.isSuccess? response.data.result.totalLike : null;
+    } catch (error) {
+        console.error("좋아요 실패:", error);
+        throw error.response?.data?.message || "좋아요 중 오류가 발생했습니다.";
+    }
+};
+
+// 가계부 응원해요
+export const accountCheer = async (accessToken) => {
+    try {
+        const response = await axiosInstance.post(`/api/account/cheer`, {accountId}, 
+            { headers: { Authorization: `Bearer ${accessToken}` } } 
+        );
+        console.log("API 응답 데이터:", response.data);
+        return response.data.isSuccess? response.data.result.totalCheer : null;
+    } catch (error) {
+        console.error("응원해요 실패:", error);
+        throw error.response?.data?.message || "응원 중 오류가 발생했습니다.";
+    }
+};

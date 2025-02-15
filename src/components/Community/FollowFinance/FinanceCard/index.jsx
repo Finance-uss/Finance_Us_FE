@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as S from '../../../../styles/Community/FollowFinance/FinanceCard/style';
-import axiosInstance from '../../../../api/axiosInstance'; // axios 추가
+import { accountLike, accountCheer } from '../../../../api/apiFollow';
 
 const FinanceCard = ({ title, preview, image, satisfaction, like, thumbs, accountId, accessToken }) => {
   const [likesCount, setLikesCount] = useState(like);
@@ -8,25 +8,23 @@ const FinanceCard = ({ title, preview, image, satisfaction, like, thumbs, accoun
 
   const handleLike = async () => {
     try {
-      const response = await axiosInstance.post('/api/account/like', { accountId }, 
-        { headers: { Authorization: `Bearer ${accessToken}` } } );
-      if (response.data.isSuccess) {
-        setLikesCount(response.data.result.totalLike); 
-      }
+        const totalLike = await accountLike(accessToken, accountId);
+        if (totalLike !== null) {
+            setLikesCount(totalLike);
+        }
     } catch (error) {
-      console.error('좋아요 처리 실패:', error);
+        console.error('좋아요 처리 실패:', error);
     }
   };
 
-  const handleThumb = async () => {
+const handleThumb = async () => {
     try {
-      const response = await axiosInstance.post('/api/account/cheer',  { accountId }, 
-        { headers: { Authorization: `Bearer ${accessToken}` } });
-      if (response.data.isSuccess) {
-        setThumbsCount(response.data.result.totalCheer); 
-      }
+        const totalCheer = await accountCheer(accessToken, accountId);
+        if (totalCheer !== null) {
+            setThumbsCount(totalCheer);
+        }
     } catch (error) {
-      console.error('응원 처리 실패:', error);
+        console.error('응원 처리 실패:', error);
     }
   };
 
@@ -35,6 +33,7 @@ const FinanceCard = ({ title, preview, image, satisfaction, like, thumbs, accoun
     const emptyStars = '☆'.repeat(5 - rate); 
     return filledStars + emptyStars; 
   };
+  
   return (
     <S.Container>
       <S.TitleWrapper>
