@@ -21,7 +21,6 @@ const Alarm = () => {
       const notifications = response.data.result.notifications;
       const alarmsWithTitle = notifications.map((alarm) => ({
         ...alarm,
-        title: alarm.resourceTitle, 
       }));
       setAlarms(alarmsWithTitle); 
     } catch (error) {

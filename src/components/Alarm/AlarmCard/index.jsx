@@ -2,27 +2,13 @@ import React from "react";
 import * as S from "../../../styles/Alarm/style";
 import { useNavigate } from "react-router-dom";
 
-const getCategory = (category, title, user) => {
-  switch (category) {
-    case "COMMENT":
+const getCategory = (type, recourceTitle, user, message) => {
+  switch (type) {
+    case "COMMENT": case "REPLY": case "EMOJI": case "LIKE":
       return (
         <>
-          <S.TitleText>{title}</S.TitleText>
-          <S.ContentText>해당 게시글에 댓글이 달렸습니다.</S.ContentText>
-        </>
-      );
-    case "REPLY":
-      return (
-        <>
-          <S.TitleText>{title}</S.TitleText>
-          <S.ContentText>해당 게시글에 답글이 달렸습니다.</S.ContentText>
-        </>
-      );
-    case "EMOJI":
-      return (
-        <>
-          <S.TitleText>{title}</S.TitleText>
-          <S.ContentText>해당 가계부에 느낌을 표시했습니다.</S.ContentText>
+          <S.TitleText>{recourceTitle}</S.TitleText>
+          <S.ContentText>{message}</S.ContentText>
         </>
       );
     case "FOLLOW":
@@ -38,27 +24,17 @@ const getCategory = (category, title, user) => {
 
 const AlarmCard = ({ alarm, markRead }) => {
   const navigate = useNavigate();
-  const { id, type, title, resourceType, resourceId } = alarm;
+  const { id, type, resourceType, resourceId } = alarm;
 
   const handleClick = async () => {
     await markRead(id);
-    switch (type) {
-      case "COMMENT":
-      case "REPLY":
-        navigate(`/community/postdetail/${resourceId}`); // 게시글 페이지로 이동
-        break;
-      case "EMOJI":
-        category="알림";
-        navigate(`/finance/account/${resourceId}`); // 가계부 페이지로 이동
-        break;
-      case "FOLLOW":
-        navigate(`/community`); 
-        break;
-      default:
-        return;
-    }
-
-    
+    if (resourceType === "POST") {
+      navigate(`/community/postdetail/${resourceId}`); 
+    } else if (resourceType === "ACCOUNT") {
+      navigate(`/finance/account/${resourceId}`); 
+    } else {
+      navigate(`/community`);
+    }    
   }; 
   const getType = (type) => {
     switch (type) {
@@ -66,7 +42,7 @@ const AlarmCard = ({ alarm, markRead }) => {
         return "댓글";
       case "REPLY":
         return "답글";
-      case "EMOJI":
+      case "EMOJI": case"LIKE":
         return "반응";
       case "FOLLOW":
         return "팔로우";
@@ -78,7 +54,7 @@ const AlarmCard = ({ alarm, markRead }) => {
   return (
     <S.AlarmContainer onClick={handleClick}>
       <S.Category>{getType(type)} 알림</S.Category>
-      <S.Content>{getCategory(type, title, resourceType)}</S.Content>
+      <S.Content>{getCategory(type, alarm.recourceTitle , alarm.user||"", alarm.message, resourceType)}</S.Content>
     </S.AlarmContainer>
   );
 };
