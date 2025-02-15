@@ -1,36 +1,49 @@
 import { useState } from 'react';
 import { useSwipeable } from 'react-swipeable';
 
-export const useSwipe = (onSwipeEnd, onClick) => {
+export const useSwipe = (onSwipeStart, onSwipeEnd, onClick) => {
     const [translateX, setTranslateX] = useState(0);
     const [isSwiping, setIsSwiping] = useState(false);
+    const [hasStarted, setHasStarted] = useState(false); // 스와이프 시작 여부 확인
     const maxSwipe = -62;
 
     const handlers = useSwipeable({
         onSwiping: ({ deltaX, dir }) => {
-            setIsSwiping(true);
-            let newX = translateX + (dir === 'Left' ? -Math.abs(deltaX) : Math.abs(deltaX));
-            if (newX < maxSwipe) newX = maxSwipe;
-            if (newX > 0) newX = 0;
+            if (!hasStarted) {
+                setHasStarted(true);
+                if (onSwipeStart) {
+                    onSwipeStart(); // ✅ 처음 스와이프 시작 시 `onSwipeStart` 실행
+                }
+            }
+
+            const newX = dir === 'Left' 
+                ? Math.max(maxSwipe, translateX - Math.abs(deltaX)) // 왼쪽으로 스와이프
+                : Math.min(0, translateX + Math.abs(deltaX)); // 오른쪽으로 스와이프
+
             setTranslateX(newX);
         },
-        onSwiped: () => {
+        onSwiped: ({ velocity }) => {
             setIsSwiping(false);
-            // 이동 거리가 절반 이상이면 고정, 아니면 원래 위치로 복귀
+            setHasStarted(false); // ✅ 스와이프 종료 후 초기화
+
             const finalTranslateX = translateX <= maxSwipe / 2 ? maxSwipe : 0;
             setTranslateX(finalTranslateX);
+
             if (onSwipeEnd) {
                 onSwipeEnd(finalTranslateX);
-            }        
+            }
         },
         onTap: (event) => {
-            // 탭(클릭) 이벤트 발생 시 호출
             if (onClick) {
                 onClick(event);
             }
         },
-        trackMouse: true, // PC에서도 마우스 드래그 인식
+        trackMouse: true,
     });
 
-    return { translateX, isSwiping, handlers };
+    const resetSwipe = () => {
+        setTranslateX(0);
+    };
+
+    return { translateX, isSwiping, handlers, resetSwipe };
 };
