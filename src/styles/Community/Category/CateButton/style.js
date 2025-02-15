@@ -12,8 +12,7 @@ export const ButtonWrapper = styled.div`
 `;
 
 export const Button = styled.button`
-  // width: 77px;
-  width:25%;
+  width: 77px;
   height: 22px;
   border-radius: 5px;
   background-color: ${({ isClick }) => (isClick ? '#142755' : '#f7f7f7')};
