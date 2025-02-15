@@ -1,9 +1,9 @@
 import axiosInstance from "./axiosInstance";
 
 // 전체 게시글 목록 조회
-export const getPostList = async (postType) => {
+export const getPostList = async (postType, cursor, size) => {
     try {
-        const response = await axiosInstance.get(`/api/post/${postType}`);
+        const response = await axiosInstance.get(`/api/post/${postType}?cursor=${cursor||''}&size=${size}`);
         return response.data;
     } catch (error) {
         console.error("특정 게시글 목록 조회 실패:", error);
@@ -12,7 +12,7 @@ export const getPostList = async (postType) => {
 };
 
 // 특정 카테고리 게시글 목록 조회
-export const getPostCategoryList = async (postType, category) => {
+export const getPostCategoryList = async (postType, category, cursor, size) => {
     try {
         let engCategory = category;
         switch (category) {
@@ -39,7 +39,7 @@ export const getPostCategoryList = async (postType, category) => {
             default:
                 break;
         }
-        const response = await axiosInstance.get(`/api/post/${postType}/${engCategory}`);
+        const response = await axiosInstance.get(`/api/post/${postType}/${engCategory}?cursor=${cursor||''}&size=${size}`);
         return response.data;
     } catch (error) {
         console.error("특정 카테고리 게시글 목록 조회 실패:", error);

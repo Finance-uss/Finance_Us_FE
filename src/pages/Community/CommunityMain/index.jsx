@@ -17,6 +17,7 @@ const CommunityMain = () => {
 
   const handleTabClick = (index) => {
     setSelectedTab(index);
+    setSelectedCategory(null);
   };
 
   const categoryFreeBoard = ['자유', '정보', '낭비했어요', '절약했어요'];
