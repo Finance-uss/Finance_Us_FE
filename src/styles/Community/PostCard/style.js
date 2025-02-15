@@ -54,12 +54,15 @@ export const Title = styled.h3`
 `;
 
 export const Preview = styled.p`
-    width:211px;
+  width:211px;
+  height:40px;
   font-size: 16px;
   color: #000000;
   margin: 0 0 13px;
   line-height: 1.4;
-   white-space: pre-wrap;  
+  white-space: pre-wrap;  
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 
 export const Footer = styled.div`

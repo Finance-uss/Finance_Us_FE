@@ -29,8 +29,8 @@ const PostCard = ({ postId , category, postName, preview, image, likes = 0, comm
         </S.TextWrapper>
        
       </S.Content>
-      <S.Thumbnail src={image} alt={postName} />
-    </S.CardContainer>
+      {image && <S.Thumbnail src={image} alt={postName}/>}
+      </S.CardContainer>
   );
 };
 
