@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ButtonWrapper, Button } from '../../../../styles/Community/Category/CateButton/style';
-import PostList from '../../Board/PostList';
 
 const CateButton = ({ categories, setSelectedCategory }) => {
   const [selectedCategory, setSelected] = useState(null);
