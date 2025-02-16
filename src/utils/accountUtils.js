@@ -11,6 +11,7 @@ export const formatFormData = (formData) => {
         status: formData.status ?? false, // 기본값 추가
         score: formData.score,
         imageUrl: formData.imageUrl,
+        imageName: formData.imageName,
         content: formData.content
     };
 };

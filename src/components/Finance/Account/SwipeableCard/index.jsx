@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSwipe } from '../../../../hooks/useSwipe';
 import useApi from '../../../../hooks/useApi';
+import { deleteS3, deleteAccount } from '../../../../api/financeAPI';
 import DeleteConfirmModal from '../DeleteConfirmModal';
 
 const SwipeableCard = ({ 
@@ -14,7 +15,8 @@ const SwipeableCard = ({
     borderRadius, 
     paddingLeft, 
     onDeleteSuccess,
-    activeSwipeId 
+    activeSwipeId,
+    imageName
 }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const { request, loading } = useApi();
@@ -29,10 +31,8 @@ const SwipeableCard = ({
     // 실제 삭제를 처리하는 함수
     const handleDelete = async () => {
         try {
-            await request({
-                method: "DELETE",
-                url: `/api/account/${itemId}`,
-            });
+            await request(deleteS3(imageName));
+            await request(deleteAccount(itemId));
 
             setIsDeleteModalOpen(false);
             onSwipeEnd && onSwipeEnd(); // UI 업데이트를 위한 콜백 호출
