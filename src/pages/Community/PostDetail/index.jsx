@@ -49,7 +49,9 @@ const PostDetail = () => {
             updatedAt={post.updatedAt}
             image={post.imageUrl} 
             content={post.content} 
-            currentUser={post.isAuth} 
+            isLike={post.isLiked}
+            isAuth={post.isAuthenticated}
+            isOwner={post.isMine} 
             category={post.category} 
             postType={post.postType}
             postId={post.postId}

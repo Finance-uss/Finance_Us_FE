@@ -14,7 +14,7 @@ import {scrapPost} from "../../../../api/post";
 import bookmarkFillIcon from "../../../../assets/icons/common/Community/Scrap.svg";
 import { formatDate } from "../../../../utils/dateUtils";
 
-const Content = ({ title, userImg, userName, createdAt, updatedAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount, isAuth }) => {
+const Content = ({ title, userImg, userName, createdAt, updatedAt, image, content, likeCount, isOwner,category, postId, onLikeCount, onCommentCount, isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { commentCount } = useComment(postId);
@@ -94,7 +94,7 @@ const Content = ({ title, userImg, userName, createdAt, updatedAt, image, conten
         <PostMenuBar
     isOpen={isMenuOpen}
     closeModal={closeMenu}
-    isOwner={currentUser}
+    isOwner={isOwner}
     onEdit={() => handleEdit({ title, content, category, image, postId })}
     onDelete={handleDelete}
     onReport={handleReport}

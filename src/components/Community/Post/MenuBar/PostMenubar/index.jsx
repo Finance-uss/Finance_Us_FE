@@ -38,7 +38,7 @@ const PostMenuBar = ({ isOpen, closeModal, isOwner, onReport, postId }) => {
     <S.ModalOverlay onClick={closeModal}>
       <S.ModalContent onClick={handleClick}>
         <S.Menu>
-          {!isOwner ? ( // 테스트용 수정 예정
+          {isOwner ? ( 
             <>
               <S.MenuItem onClick={handleUpdate}>게시글 수정</S.MenuItem>
               <S.MenuItem onClick={() => setDeleteModalOpen(true)}>게시글 삭제</S.MenuItem>
