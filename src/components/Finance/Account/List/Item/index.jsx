@@ -4,7 +4,8 @@ import SwipeableCard from '../../SwipeableCard';
 import styled from 'styled-components';
 
 const AccountItem = ({ activity, onDeleteSuccess, activeSwipeId, setActiveSwipeId }) => {
-    const { accountId, score, title, amount, subName, imageUrl } = activity;
+    const { accountId, score, title, amount, subName, imageUrl, imageName } = activity;
+    const [isImageHidden, setIsImageHidden] = useState(false);
     const [isStarHidden, setIsStarHidden] = useState(false);
     const navigate = useNavigate();
     const getStarRating = (score) =>
@@ -13,6 +14,7 @@ const AccountItem = ({ activity, onDeleteSuccess, activeSwipeId, setActiveSwipeI
     useEffect(() => {
         if (activeSwipeId !== accountId) {
             setIsStarHidden(false);
+            setIsImageHidden(false);
         }
     }, [activeSwipeId]);
     const handleSwipeStart = useCallback(() => {
@@ -24,6 +26,7 @@ const AccountItem = ({ activity, onDeleteSuccess, activeSwipeId, setActiveSwipeI
         const isFullySwiped = finalTranslateX === -62;
         
         setIsStarHidden(isFullySwiped);
+        setIsImageHidden(isFullySwiped);
         if(!isFullySwiped) {
             setActiveSwipeId(null);
         }
@@ -45,8 +48,9 @@ const AccountItem = ({ activity, onDeleteSuccess, activeSwipeId, setActiveSwipeI
             borderRadius={'5px'}
             onDeleteSuccess={onDeleteSuccess}
             activeSwipeId={activeSwipeId}
+            imageName={imageName}
         >
-            <Image src={imageUrl} alt={title} />
+            <Image src={imageUrl} alt={title} $isHidden={isImageHidden}/>
             <Content>
                 <SubInfo>
                     {!isStarHidden && <div>{getStarRating(score)}</div>}
@@ -71,6 +75,7 @@ const Image = styled.img`
     border-radius: 50%;
     object-fit: cover;
     margin-right: 10px;
+    visibility: ${({ $isHidden }) => ($isHidden ? "hidden" : "visible")};
 `;
 
 const Content = styled.div`
