@@ -9,7 +9,15 @@ const PostList = ({ selectedCategory, postType, onPostClick }) => {
     const [cursor, setCursor] = useState(null);
     const [hasMore, setHasMore] = useState(true);
     const observerRef = useRef(null);
-
+    const categoryMap = {
+        'FREE':'자유',
+        'INFO': '정보',
+        'WASTE': '낭비했어요',
+        'SAVE': '절약했어요',
+        'COLUMN': '칼럼',
+        'LECTURE': '강연',
+        'PROMOTION': '홍보',
+    };
     useEffect(() => {
         setPosts([]); 
         setCursor(null);
@@ -61,7 +69,7 @@ const PostList = ({ selectedCategory, postType, onPostClick }) => {
             {posts.map((post) => (
                 <PostCard
                     id={post.postId}
-                    category={post.category}
+                    category={categoryMap[post.category]||selectedCategory}
                     postName={post.title}
                     preview={post.content}
                     image={post.imageUrl}
