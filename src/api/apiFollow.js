@@ -81,12 +81,12 @@ export const accountLike = async (accessToken, accountId) => {
         return response.data.isSuccess? response.data.result.totalLike : null;
     } catch (error) {
         console.error("좋아요 실패:", error);
-        throw error.response?.data?.message || "좋아요 중 오류가 발생했습니다.";
+        throw alert(error.response?.data?.message || "좋아요 중 오류가 발생했습니다.");
     }
 };
 
 // 가계부 응원해요
-export const accountCheer = async (accessToken) => {
+export const accountCheer = async (accessToken, accountId) => {
     try {
         const response = await axiosInstance.post(`/api/account/cheer`, {accountId}, 
             { headers: { Authorization: `Bearer ${accessToken}` } } 
@@ -95,6 +95,6 @@ export const accountCheer = async (accessToken) => {
         return response.data.isSuccess? response.data.result.totalCheer : null;
     } catch (error) {
         console.error("응원해요 실패:", error);
-        throw error.response?.data?.message || "응원 중 오류가 발생했습니다.";
+        throw alert(error.response?.data?.message || "응원 중 오류가 발생했습니다.");
     }
 };
