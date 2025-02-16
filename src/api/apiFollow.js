@@ -57,9 +57,9 @@ export const unfollowUser = async (accessToken, followingId) => {
  * @param {number} followId - 조회할 사용자의 followId
  * @returns {Promise<Object>} - 팔로우 사용자 가계부 데이터
  */
-export const getFollowFinance = async (accessToken, followId) => {
+export const getFollowFinance = async (accessToken, followingId) => {
     try {
-        const response = await axiosInstance.get(`/api/account/follow/${followId}`, {
+        const response = await axiosInstance.get(`/api/account/follow/${followingId}`, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
 

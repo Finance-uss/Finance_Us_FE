@@ -57,6 +57,7 @@ const FollowFinance = () => {
       {accounts.map((account) => (
         <Finance
           key={account.accountId}
+          accountId={account.accountId}
           title={account.title}
           image={account.imageUrl||defaultImage}
           preview={account.subName}
