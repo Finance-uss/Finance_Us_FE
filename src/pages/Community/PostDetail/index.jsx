@@ -5,13 +5,11 @@ import BottomBar from "../../../components/common/BottomBar";
 import Content from "../../../components/Community/Post/Content";
 import CommentList from "../../../components/Community/Post/Comment/CommentList";
 import * as S from '../../../styles/Community/PostDetail/style';
-import { getPost } from "../../../api/post";
+import { getPost, getLike } from "../../../api/post";
 import defaultUserImg from "../../../assets/icons/common/Community/commentProfile.svg";
 
 const PostDetail = () => {
   const [post, setPost] = useState(null);
-  const [likeCount, setLikeCount] = useState(0);
-  const [commentCount, setCommentCount] = useState(0);
   const { postId } = useParams(); 
 
   useEffect(() => {
@@ -21,8 +19,6 @@ const PostDetail = () => {
         if (response.isSuccess) {
           const postData = response.result;
           setPost(postData);
-          setLikeCount(postData.likeCount || 0);
-          setCommentCount(postData.commentCount || 0);
         } else {
           alert("게시글을 불러올 수 없습니다.");
         }
@@ -30,10 +26,19 @@ const PostDetail = () => {
         alert("오류 발생: " + error.message);
       }
     };
-
     fetchPost();
   }, [postId]);
+  const [likesCount, setLikesCount] = useState(0);
 
+  useEffect(() => {
+    const fetchLikes = async () => {
+      const count = await getLike(postId);
+      if (count !== null) {
+        setLikesCount(count);
+      }
+    };
+    fetchLikes();
+  }, [postId]);
   if (!post) return <div>로딩 중...</div>;
 
   return (
@@ -56,9 +61,9 @@ const PostDetail = () => {
             postType={post.postType}
             postId={post.postId}
             userId={post.userId}
-            onLikeCount={setLikeCount} 
+            updatedCount={likesCount}
           />
-          <CommentList onCommentCount={setCommentCount} /> 
+          <CommentList/> 
         </S.Wrapper>
       </S.Container>
       <BottomBar />

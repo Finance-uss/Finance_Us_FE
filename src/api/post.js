@@ -86,3 +86,28 @@ export const scrapPost = async (postId,token) => {
   }
 };
 
+export const getLike = async (postId, token) => {
+  try {
+    const response = await axiosInstance.get(`/api/like/post/${postId}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data.result.likesCount;  
+  } catch (error) {
+    console.error("좋아요 조회 실패:", error);
+    return null;
+  }
+};
+
+export const postLike = async (postId, token) => {
+  try {
+    const response = await axiosInstance.post(`/api/like/post/${postId}`, null, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data.result.likesCount; 
+  } catch (error) {
+    console.error("좋아요 실패:", error);
+    throw alert ("이미 좋아요를 눌렀습니다.");
+  }
+};
+
+

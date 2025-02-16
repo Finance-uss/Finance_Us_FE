@@ -9,12 +9,11 @@ import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
 import PostMenuBar from "../MenuBar/PostMenubar";
 import { useNavigate } from "react-router-dom";
 import useComment from "../../../../hooks/useComment";
-import { useAuth } from "../../../../contexts/AuthContext";
-import {scrapPost} from "../../../../api/post";
+import {scrapPost, postLike} from "../../../../api/post";
 import bookmarkFillIcon from "../../../../assets/icons/common/Community/Scrap.svg";
 import { formatDate } from "../../../../utils/dateUtils";
 
-const Content = ({ title, userImg, userName, createdAt, updatedAt, image, content, likeCount, isOwner,category, postId, onLikeCount, onCommentCount, isAuth }) => {
+const Content = ({ title, userImg, userName, createdAt, updatedAt, image, content, isOwner,category, postId, isLike, updatedCount, isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { commentCount } = useComment(postId);
@@ -41,15 +40,21 @@ const Content = ({ title, userImg, userName, createdAt, updatedAt, image, conten
       console.error("스크랩 오류:", error);
     }
   };
+  const [isLiked, setIsLike] = useState(isLike);
+  const [likesCount, setLikesCount] = useState(updatedCount||0); 
 
-  const [isLiked, setIsLiked] = useState(false); 
-
-  const handleLike = () => {
-    const newLikeCount = isLiked ? likeCount - 1 : likeCount + 1;  
-    setIsLiked(!isLiked);  
-    onLikeCount(newLikeCount);
+  const handleLike = async () => {
+    try {
+      const updatedCount = await postLike(postId);
+      if (updatedCount !== null) {
+        setIsLike(prev => !prev); 
+        setLikesCount(updatedCount); 
+      }
+    } catch (error) {
+      console.error("좋아요 처리 오류:", error);
+    }
   };
-
+  
   return (
     <S.PageContainer>
       <S.PostConatiner>
@@ -78,7 +83,7 @@ const Content = ({ title, userImg, userName, createdAt, updatedAt, image, conten
             <S.Stat>
               <S.StatIcon src={isLiked ? likeFill : likeIcon} alt="좋아요 아이콘"
                 onClick={handleLike} />
-              <S.StatText>{likeCount}</S.StatText>
+              <S.StatText>{likesCount}</S.StatText>
             </S.Stat>
             <S.Stat>
               <S.StatIcon src={commentIcon} alt="댓글 아이콘" />
