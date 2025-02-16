@@ -8,7 +8,7 @@ import ImageUploader from "../../../../components/User/ImageUploader";
 import { authAPI } from "../../../../api/authAPI";
 import { uploadImageToS3 } from "../../../../utils/uploadImage"
 
-const PostWriteAuth = () => {
+const UserAuthWrite = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
     const [selectedFile, setSelectedFile] = useState(null); 
@@ -130,4 +130,4 @@ const PostWriteAuth = () => {
     );
 };
 
-export default PostWriteAuth;
+export default UserAuthWrite;
