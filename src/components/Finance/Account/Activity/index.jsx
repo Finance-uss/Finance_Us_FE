@@ -1,29 +1,69 @@
 import React, { useState } from 'react';
 import ActivityItem from './Item';
-import * as S from '../../../../styles/Finance/Account/Activity/style';
+import styled from 'styled-components';
 
-const Activity = ({ title, activities }) => {
+
+const Activity = ({ title, activities, onDeleteSuccess }) => {
     const [showAll, setShowAll] = useState(false);
+    const [activeSwipeId, setActiveSwipeId] = useState(null);
     const displayedActivities = showAll ? activities : activities.slice(0, 2);
     const hasMore = activities.length > 2;
-
     const handleShowMore = () => {
         setShowAll(true);
     };
 
     return (
-        <S.Section>
-            <S.Title>
+        <Section>
+            <Title>
                 {title}
-            </S.Title>
+            </Title>
             {displayedActivities.map((activity) => (
-                <ActivityItem key={activity.id} activity={activity} />
+                <ActivityItem 
+                    key={activity.accountId} 
+                    activity={activity}
+                    onDeleteSuccess={onDeleteSuccess}
+                    activeSwipeId={activeSwipeId}
+                    setActiveSwipeId={setActiveSwipeId}
+                />
             ))}
             {!showAll && hasMore && (
-                <S.MoreButton onClick={handleShowMore}>더보기</S.MoreButton>
+                <MoreButton onClick={handleShowMore}>더보기</MoreButton>
             )}
-        </S.Section>
+        </Section>
     );
 };
 
 export default Activity;
+
+const Section = styled.div`
+    display: flex;
+    flex-direction: column;
+    background: #F7F7F7;
+    width: calc(100% - 16px);
+    height: auto;
+    padding-left: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    border-radius: 5px;
+    gap: 20px;
+    box-shadow: 0px 0px 3px 0px #00000040;
+`;
+
+const Title = styled.div`
+    font-weight: 600;
+    font-size: 18px;
+    line-height: 18px;
+    color: #142755;
+`;
+
+const MoreButton = styled.button`
+    padding-left: 0px;
+    padding-right: 16px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 16px;
+    cursor: pointer;
+    color: #B4B4B4;
+    background: transparent;
+    border: none;
+`;
