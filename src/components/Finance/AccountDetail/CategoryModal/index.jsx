@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
+import { useAccountDetail } from "../../../../contexts/AccountDetailContext.jsx";
 import useApi from "../../../../hooks/useApi.js";
 import * as S from "../../../../styles/Finance/HandWrite/style.js";
 
 const CategoryModal = ({type}) => {
-    const { formData, setFormField, modals } = useHandWrite();
+    const { formData, setFormField, modals } = useAccountDetail();
 
     const { data, loading, error, request } = useApi();
 
@@ -13,7 +13,7 @@ const CategoryModal = ({type}) => {
             request({ 
                 method: "GET", 
                 url: "/api/mypage/category",
-                params: { type: type },
+                params: { type },
             });
         }
     }, [modals.categoryModal.isOpen, request]);
