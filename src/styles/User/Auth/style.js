@@ -120,7 +120,8 @@ export const NoticeText = styled.p`
 
 export const Highlight = styled.span`
   font-weight: bold;
-  color: #007bff;
+  // color: #007bff;
+  color: #142755
 `;
 
 // color: white; /* ✅ 글씨 색상을 흰색으로 설정 */
@@ -173,4 +174,26 @@ export const CameraButton = styled.img`
     height: 32px;
     top: 100%;
     margin-bottom:16px;
+`;
+
+export const DeleteButton = styled.button`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #F17357;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+
+    &:hover {
+        background-color: #F17357;
+    }
+`;
+
+export const ImagePreviewWrapper = styled.div`
+    position: relative;
+    display: inline-block;
 `;

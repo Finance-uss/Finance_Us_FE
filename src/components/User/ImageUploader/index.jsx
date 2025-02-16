@@ -9,14 +9,14 @@ const ImageUploader = ({ onFileSelect }) => {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         if (file) {
-            setPreview(URL.createObjectURL(file)); // 미리보기
+            // setPreview(URL.createObjectURL(file)); // 미리보기
             setSelectedFile(file); // 파일 저장
             onFileSelect(file); // 부모 컴포넌트에 파일 전달
         }
     };
 
     return (
-        <S.ImageUploadWrapper>
+        <>
             {preview && <S.ImagePreview src={preview} alt="선택한 이미지" />}
             <S.CameraButton src={CameraIconSrc} alt="카메라 아이콘"
                 onClick={() => document.getElementById("image-upload").click()} />
@@ -27,7 +27,7 @@ const ImageUploader = ({ onFileSelect }) => {
                 accept="image/*"
                 style={{ display: "none" }}  
             />
-        </S.ImageUploadWrapper>
+        </>
     );
 };
 

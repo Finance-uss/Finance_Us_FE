@@ -16,7 +16,7 @@ export const authAPI = {
                 }
             });
 
-            console.log("인증 요청 성공", response.data);
+            // console.log("인증 요청 성공", response.data);
             return response.data;
 
         } catch (error) {
