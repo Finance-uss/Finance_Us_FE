@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as S from '../../../../styles/common/SearchHeader/style';
 import AlarmIcon from '../../../../assets/icons/common/Alarm.svg';
+import newAlarmIcon from '../../../../assets/icons/common/Community/Alarmnew.svg';
 import axiosInstance from '../../../../api/axiosInstance';
 import { useAuth } from '../../../../contexts/AuthContext';
 
@@ -34,8 +35,7 @@ const AlarmIconComponent = () => {
 
     return (
         <S.AlarmContainer>
-            {isUnread && <S.RedDot />}
-            <S.Icon src={AlarmIcon} alt="알림 페이지 가기" onClick={handleAlarmClick} />
+            <S.Icon src={isUnread?newAlarmIcon:AlarmIcon} alt="알림 페이지 가기" onClick={handleAlarmClick} />
         </S.AlarmContainer>
     );
 };
