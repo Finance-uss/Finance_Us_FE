@@ -9,7 +9,8 @@ import { getFollowFinance } from "../../../api/followAPI";
 import defaultImage from "../../../assets/icons/common/Community/followfinance.svg";
 
 const FollowFinance = () => {
-  const { name, followingId } = useParams(); 
+  const { followingId } = useParams(); 
+  const [name, setName] = useState("");
   const [expenseRate, setExpenseRate] = useState(null);
   const [accounts, setAccounts] = useState([]);
 
@@ -25,6 +26,7 @@ const FollowFinance = () => {
           if (data) {
             setExpenseRate(data.expenseRate);
             setAccounts(data.accounts);
+            setName(data.name);
           }
         
       } catch (error) {
@@ -53,7 +55,7 @@ const FollowFinance = () => {
           accountId={account.accountId}
           title={account.title}
           image={account.imageUrl||defaultImage}
-          preview={account.subName}
+          preview={account.content}
           like={account.totalLike}
           thumbs={account.totalCheer}
           satisfaction={account.score}
