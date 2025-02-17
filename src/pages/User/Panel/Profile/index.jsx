@@ -34,10 +34,9 @@ const ChangeProfilePage = () => {
                     console.log("회원 정보 조회 성공:", userData);
 
                     setProfileData({
-                        id: userData.id || "",
                         name: userData.name || "",
-                        ageGroup: userData.age || "", 
                         jobCategory: userData.job || "", 
+                        ageGroup: userData.age || "", 
                         one_liner: userData.one_liner || "",
                         imgUrl: userData.imgUrl || "",
                     });
@@ -162,23 +161,17 @@ const ChangeProfilePage = () => {
                 "기타 (직접 입력)": "OTHERS"
             };
 
-            const sendData = {
-                id: profileData.id || "",
-                name: profileData.name || "",
-                ageGroup: ageGroupMap[profileData.ageGroup],
-                jobCategory: jobCategoryMap[profileData.jobCategory],
-                one_liner: profileData.one_liner || "",
-                imgUrl: profileData.imgUrl || "",
-            };
-
             console.log("[PATCH 요청] 회원 정보 수정 API 호출");
-            console.log("보낼 데이터 구조 확인:", JSON.stringify(sendData, null, 2));
 
-            const response = await axiosInstance.patch('/api/user', sendData, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
+            const response = await axiosInstance.patch('/api/user', null, {
+                headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    name: profileData.name || "",
+                    ageGroup: ageGroupMap[profileData.ageGroup],
+                    jobCategory: jobCategoryMap[profileData.jobCategory],
+                    one_liner: profileData.one_liner || "",
+                    imgUrl: profileData.imgUrl || ""
+                }
             });
 
             console.log("[PATCH 응답] 서버 응답:", response);
