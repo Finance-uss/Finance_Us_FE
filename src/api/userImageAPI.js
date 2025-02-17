@@ -8,3 +8,13 @@ export const imageUpload = (imageUrl, imageName) => {
         },
     }
 }
+
+export const userDeleteImage = () => {
+    return{
+        method: "delete",
+        url: "/api/user/image",
+        headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+    }
+}
