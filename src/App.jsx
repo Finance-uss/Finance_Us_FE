@@ -77,9 +77,10 @@ function App() {
             <Route path="followfinance/:followingId" element={<FollowFinance />} />
             <Route path="postwrite" element={<PostWrite />} />
             <Route path="postdetail/:postId" element={<PostDetail/>}/>
+            {/* 게시글 수정 */}
+             <Route path="update/:postId" element={<PostWrite />} />     
           </Route>
-          {/* 게시글 수정 */}
-          <Route path="/update/:postId" element={<PostWrite />} />          
+               
           
           {/* 검색 페이지 */}
           <Route>
