@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { Chart, registerables } from 'chart.js';
-import { ChartContainer, ChartWrapper } from '../../../styles/Chart/BarChart/style';
+import { ChartContainer, ChartWrapper, DetailsHeader, DetailsList, DetailsItem, DetailsAmount, Separator, DetailContainer } from '../../../styles/Chart/BarChart/style'; 
 import { getPeriodStatisticsData, getPeriodDetails } from '../../../api/periodStatistics';
 
 Chart.register(...registerables);
@@ -110,20 +110,37 @@ const BarChart = ({ token, startDate, endDate, type }) => {
 
             try {
                 const monthData = await getPeriodDetails(token, startDate.year, selectedMonth + 1, type);
-                
-                if (type === 'expense') {
-                  
-                    const sortedDetails = monthData.result.details.sort((a, b) => a.day - b.day);
-                    setSelectedMonthData(sortedDetails); 
-                    setTotalAmount(monthData.result.totalMoney); 
-                } else {
-              
-                    setSelectedMonthData([]); 
-                    setTotalAmount(0); 
-                }
+                const sortedDetails = monthData.result.details.sort((a, b) => a.day - b.day);
+                setSelectedMonthData(sortedDetails); 
+                setTotalAmount(monthData.result.totalMoney); 
             } catch (error) {
                 console.error("세부 데이터 조회 실패:", error);
             }
+        }
+    };
+
+    const renderDetails = () => {
+        if (selectedMonthData && selectedMonthData.length > 0) {
+            return (
+                <>
+                    <DetailsHeader>
+                        <span>{startDate.month + clickedBarIndex}월</span> 
+                        <span>{totalAmount.toLocaleString()} 원</span> 
+                    </DetailsHeader>
+                    <Separator />
+                    <DetailContainer>
+                        <DetailsList>
+                            {selectedMonthData.map((data, index) => (
+                                <DetailsItem key={index}>
+                                    <span>{data.day}일</span> 
+                                    <span>{data.title}</span> 
+                                    <DetailsAmount>{data.amount.toLocaleString()} 원</DetailsAmount> 
+                                </DetailsItem>
+                            ))}
+                        </DetailsList>
+                    </DetailContainer>
+                </>
+            );
         }
     };
 
@@ -140,25 +157,7 @@ const BarChart = ({ token, startDate, endDate, type }) => {
                     />
                 </ChartWrapper>
             </ChartContainer>
-
-            {selectedMonthData && selectedMonthData.length > 0 && type === 'expense' && (
-                <div>
-                    <h3>{startDate.year}년 {startDate.month + clickedBarIndex}월 총 지출: {totalAmount} 원</h3>
-                    <ul>
-                        {selectedMonthData.map((data, index) => (
-                            <li key={index}>
-                                {data.day}일 - {data.title}: {data.amount} 원
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
-            {type === 'income' && selectedMonthData && selectedMonthData.length === 0 && (
-                <div>
-                    <h3>{startDate.year}년 {startDate.month + clickedBarIndex}월 총 수익: 0 원</h3>
-                    <p>이 달의 수익 데이터는 없습니다.</p>
-                </div>
-            )}
+            {renderDetails()}
         </>
     );
 };

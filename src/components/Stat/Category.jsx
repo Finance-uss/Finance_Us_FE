@@ -49,13 +49,9 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
           const earned = data.earned || 0; 
           const goal = data.goal || 0; 
 
-          // 퍼센트 계산
           const percentage = activeButton === 'expense' 
             ? (goal > 0 ? (spent / goal) * 100 : 100) // 목표가 없으면 100%
             : (goal > 0 ? (earned / goal) * 100 : 0);
-
-          // 디버깅을 위한 콘솔 로그
-          console.log(`${category} - Spent: ${spent}, Goal: ${goal}, Percentage: ${percentage}`);
 
           return (
             <CategoryBar key={category}>
