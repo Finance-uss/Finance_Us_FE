@@ -30,14 +30,30 @@ const Alarm = () => {
     }
   };
   
-    useEffect(() => {
+  useEffect(() => {
       fetchAlarms();
     }, [token]);
-
+    const markRead = async (notificationId) => {
+      try {
+        const response = await axiosInstance.patch(`/api/notifications/${notificationId}`,{},{
+            headers: { Authorization: `Bearer ${token}`, 
+            },
+          }
+        );
+        if (response.data.isSuccess) {
+          console.log("알림이 읽음으로 표시되었습니다.");
+        } else {
+          console.error("알림 읽음 처리 실패");
+        }
+      } catch (error) {
+        console.error("알림 읽음 처리 중 오류 발생:", error);
+      }
+    };
+    
   return (
     <Container>
       <BeforeHeader text="알림" />
-      <AlarmList alarms={alarms} />
+      <AlarmList alarms={alarms} markRead={markRead} />
       {isLoading && <div>로딩 중..</div>}
     </Container>
   );

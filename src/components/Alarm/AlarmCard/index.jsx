@@ -2,12 +2,12 @@ import React from "react";
 import * as S from "../../../styles/Alarm/style";
 import { useNavigate } from "react-router-dom";
 
-const getCategory = (type, recourceTitle, user, message) => {
+const getCategory = (type, resourceTitle, user, message) => {
   switch (type) {
     case "COMMENT": case "REPLY": case "EMOJI": case "LIKE":
       return (
         <>
-          <S.TitleText>{recourceTitle}</S.TitleText>
+          <S.TitleText>{resourceTitle}</S.TitleText>
           <S.ContentText>{message}</S.ContentText>
         </>
       );
@@ -54,7 +54,7 @@ const AlarmCard = ({ alarm, markRead }) => {
   return (
     <S.AlarmContainer onClick={handleClick}>
       <S.Category>{getType(type)} 알림</S.Category>
-      <S.Content>{getCategory(type, alarm.recourceTitle , alarm.user||"", alarm.message, resourceType)}</S.Content>
+      <S.Content>{getCategory(type, alarm.resourceTitle , alarm.user||"", alarm.message, resourceType)}</S.Content>
     </S.AlarmContainer>
   );
 };
