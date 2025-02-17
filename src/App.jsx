@@ -44,6 +44,7 @@ import PostDetail from './pages/Community/PostDetail'; // 글 상세 페이지
 import Search from './pages/Search'; // 검색 페이지
 import SearchResult from './pages/Search/SearchResult'; // 검색 결과 페이지
 import FollowFinance from './pages/Community/FollowFinance'; // 팔로우 가계부 페이지
+import UserAuthWrite from './pages/User/Setting/Auth';
 function App() {
   const [count, setCount] = useState(0);
 
@@ -108,8 +109,10 @@ function App() {
               <Route path="scrapped-posts" element={<ScrappedPosts />} />
               <Route path="calendar" element={<CalendarSetPage />} />
               <Route path="profile-edit" element={<ChangeProfilePage />} />
+              <Route path="auth" element={<UserAuthWrite />} />
               <Route path="email-edit" element={<ChangeEmailPage />} />
               <Route path="password-edit" element={<ChangePasswordPage />} />
+              
           </Route>
 
           {/* 알림 페이지 */}
