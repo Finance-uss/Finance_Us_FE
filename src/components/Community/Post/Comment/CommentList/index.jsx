@@ -24,10 +24,9 @@ const CommentList = () => {
   if (isLoading) return <p>댓글을 불러오는 중...</p>;
   if (isError) return <p>댓글을 불러오는 데 실패했습니다.</p>;
 
-  const handleReplyClick = (parentId, userName) => {
-    setReplyingTo({ parentId, userName });
+  const handleReplyClick = (parentCommentId, userName) => {
+    setReplyingTo({ parentCommentId, userName });
   };
-  
 
   return (
     <>
@@ -35,32 +34,31 @@ const CommentList = () => {
         .slice()
         .sort((a, b) => a.commentId - b.commentId)  // commentId로 오름차순 정렬
         .map((comment) => (
-        <S.CommentListContainer key={comment.id}>
-          <Comment
-            comment={comment}
-            onLike={() => likeComment(comment.id)}
-            onEditClick={() => {
-              setEditingCommentId(comment.id);
-              setEditingContent(comment.comment);
-            }}
-            onDelete={() => deleteComment(comment.id)}
-            onReplyClick={(parentId, userName) => setReplyingTo({ parentId, userName })}
-            
-          />
-
-          {comment.replies?.length > 0 && (
-            <S.Replies>
-              {comment.replies.map((reply) => (
-                <Reply
-                  key={reply.id}
-                  reply={reply}
-                  onLike={() => likeComment(reply.id)}
-                />
-              ))}
-            </S.Replies>
-          )}
-        </S.CommentListContainer>
-      ))}
+          <S.CommentListContainer key={comment.commentId}>
+            <Comment
+              comment={comment}
+              onLike={() => likeComment(comment.commentId)}
+              onEditClick={() => {
+                setEditingCommentId(comment.commentId);
+                setEditingContent(comment.content);
+              }}
+              onDelete={() => deleteComment(comment.commentId)}
+              onReplyClick={handleReplyClick}
+              isAuth={comment.isAuthenticated}
+            />
+            {comment.replies?.length > 0 && (
+              <S.Replies>
+                {comment.replies.map((reply) => (
+                  <Reply
+                    key={reply.commentId}
+                    reply={reply}
+                    onLike={() => likeComment(reply.commentId)}
+                  />
+                ))}
+              </S.Replies>
+            )}
+          </S.CommentListContainer>
+        ))}
 
       <CommentInput onSubmit={addComment} />
     </>

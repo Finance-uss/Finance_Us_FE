@@ -6,10 +6,9 @@ export const getComment = async (postId) => {
   return response.data;
 };
 
-export const addComment = async (postId, content) => {
+export const addComment = async (postId, content, parentCommentId=null ) => {
   const response = await axiosInstance.post(
-    `/api/comment/${postId}`,
-    { content });
+    `/api/comment/${postId}`,content, parentCommentId);
   return response.data;
 };
 
@@ -38,7 +37,7 @@ export const getLikeComment = async (commentId) => {
   const response = await axiosInstance.get(
     `/api/like/comment/${commentId}`
   );
-  return response.data;
+  return response.data.likesCount;
 };
 
 export const addLikeComment = async (commentId) => {

@@ -6,8 +6,8 @@ export const PageContainer = styled.div`
   background-color: #ffffff;
 `;
 export const CheckIcon = styled.img`
-  width:19.5px;
-  height:19.5px;
+  width:24px;
+  height:24px;
 `;
 export const PostConatiner = styled.div`
   padding:16px;
