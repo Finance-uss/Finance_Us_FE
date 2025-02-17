@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import CommentInput from "../CommentInput";
 import * as S from "../../../../../styles/Community/PostDetail/Comment/style";
 import Comment from "./Comment";
@@ -6,7 +7,7 @@ import Reply from "./Reply";
 import useComment from "../../../../../hooks/useComment";
 
 const CommentList = () => {
-  const postId = 4; // 
+  const {postId} = useParams();
   const {
     comments,
     isLoading,

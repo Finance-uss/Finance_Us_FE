@@ -5,8 +5,21 @@ export const ProfileList = styled.div`
   flex-direction: row; 
   justify-content: flex-start; 
   width: 100%;
-  gap:31px;
+  max-width: 100%; 
+  gap: 31px;
+  overflow-x: auto; 
+  -webkit-overflow-scrolling: touch; 
+ 
+
 `;
+
+// export const ProfileList = styled.div`
+//   display: flex;
+//   flex-direction: row; 
+//   justify-content: flex-start; 
+//   width: 100%;
+//   gap:31px;
+// `;
 export const Container = styled.div`
     display: flex;
     flex-direction: column; 

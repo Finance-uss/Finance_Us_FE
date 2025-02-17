@@ -1,27 +1,31 @@
 import React, { useState } from 'react';
 import * as S from '../../../../styles/Community/FollowFinance/FinanceCard/style';
-const CommunityPost = ({ title, preview, image, satisfaction, like, thumbs }) => {
+import { accountLike, accountCheer } from '../../../../api/apiFollow';
+
+const FinanceCard = ({ title, preview, image, satisfaction, like, thumbs, accountId, accessToken }) => {
   const [likesCount, setLikesCount] = useState(like);
   const [thumbsCount, setThumbsCount] = useState(thumbs);
-  const [isLiked, setIsLiked] = useState(false);
-  const [isThumbed, setIsThumbed] = useState(false);
 
-  const handleLike = () => {
-    if (isLiked) {
-      setLikesCount((prev) => prev - 1);
-    } else {
-      setLikesCount((prev) => prev + 1);
+  const handleLike = async () => {
+    try {
+        const totalLike = await accountLike(accessToken, accountId);
+        if (totalLike !== null) {
+            setLikesCount(totalLike);
+        }
+    } catch (error) {
+        console.error('좋아요 처리 실패:', error);
     }
-    setIsLiked(!isLiked);
   };
 
-  const handleThumb = () => {
-    if (isThumbed) {
-      setThumbsCount((prev) => prev - 1);
-    } else {
-      setThumbsCount((prev) => prev + 1);
+const handleThumb = async () => {
+    try {
+        const totalCheer = await accountCheer(accessToken, accountId);
+        if (totalCheer !== null) {
+            setThumbsCount(totalCheer);
+        }
+    } catch (error) {
+        console.error('응원 처리 실패:', error);
     }
-    setIsThumbed(!isThumbed);
   };
 
   const Stars = (rate) => {
@@ -29,6 +33,7 @@ const CommunityPost = ({ title, preview, image, satisfaction, like, thumbs }) =>
     const emptyStars = '☆'.repeat(5 - rate); 
     return filledStars + emptyStars; 
   };
+  
   return (
     <S.Container>
       <S.TitleWrapper>
@@ -52,4 +57,4 @@ const CommunityPost = ({ title, preview, image, satisfaction, like, thumbs }) =>
   );
 };
 
-export default CommunityPost;
+export default FinanceCard;

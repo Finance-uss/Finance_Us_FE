@@ -1,20 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as S from "../../../../styles/Community/PostDetail/Content/style";
 import likeIcon from "../../../../assets/icons/common/Community/heart.svg";
 import likeFill from "../../../../assets/icons/common/Community/heartFill.svg";
 import commentIcon from "../../../../assets/icons/common/Community/comment.svg";
 import moreIcon from "../../../../assets/icons/common/Community/more.svg";
-import examIcon from "../../../../assets/icons/common/Community/exam.png";
 import bookmarkIcon from "../../../../assets/icons/common/bookmark.svg";
 import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
 import PostMenuBar from "../MenuBar/PostMenubar";
 import { useNavigate } from "react-router-dom";
 import useComment from "../../../../hooks/useComment";
+import {scrapPost, postLike} from "../../../../api/post";
+import bookmarkFillIcon from "../../../../assets/icons/common/Community/Scrap.svg";
+import { formatDate } from "../../../../utils/dateUtils";
 
-const Content = ({ title, userName, createdAt, image, content, likeCount, currentUser,category, postId, onLikeCount, onCommentCount,isAuth }) => {
+const Content = ({ title, userImg, userName, createdAt, updatedAt, image, content, isOwner,category, postId, isLike, updatedCount, isAuth }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { commentCount } = useComment(postId);
+  const [isScrapped, setIsScrapped] = useState(false); 
 
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
@@ -25,16 +28,33 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, curren
 
   const handleDelete = () => alert("게시글 삭제");
   const handleReport = () => alert("게시글 신고");
-  const handleBookmark = () => alert("게시글 스크랩");
 
-  const [isLiked, setIsLiked] = useState(false); 
 
-  const handleLike = () => {
-    const newLikeCount = isLiked ? likeCount - 1 : likeCount + 1;  
-    setIsLiked(!isLiked);  
-    onLikeCount(newLikeCount);
+  const handleBookmark = async () => {
+    try {
+      const response = await scrapPost(postId); 
+      if (response.isSuccess) {
+        setIsScrapped(response.result.isScraped);
+      }
+    } catch (error) {
+      console.error("스크랩 오류:", error);
+    }
   };
+  const [isLiked, setIsLike] = useState(isLike);
+  const [likesCount, setLikesCount] = useState(updatedCount||0); 
 
+  const handleLike = async () => {
+    try {
+      const updatedCount = await postLike(postId);
+      if (updatedCount !== null) {
+        setIsLike(prev => !prev); 
+        setLikesCount(updatedCount); 
+      }
+    } catch (error) {
+      console.error("좋아요 처리 오류:", error);
+    }
+  };
+  
   return (
     <S.PageContainer>
       <S.PostConatiner>
@@ -45,17 +65,17 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, curren
           </S.TitleContainer>
           <S.Info>
             <S.Profile>
-              <S.UserIcon src={examIcon} alt="유저 아이콘" />
+              <S.UserIcon src={userImg} alt="유저 아이콘" />
               <S.User>{userName}</S.User>
               {isAuth && <S.CheckIcon src={authIcon} alt="인증된 사용자" />}
             </S.Profile>
-            <S.Date>{createdAt}</S.Date>
+            <S.Date>{formatDate(updatedAt || createdAt)}</S.Date>
           </S.Info>
         </S.Header>
 
         <S.PostContent>
-          <S.PostImage src={image} alt="게시글 이미지" />
-          <S.PostText>{content}</S.PostText>
+          {image && <S.PostImage src={image} alt="게시글 이미지" />}
+          {content &&<S.PostText>{content}</S.PostText>}
         </S.PostContent>
 
         <S.Stats>
@@ -63,7 +83,7 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, curren
             <S.Stat>
               <S.StatIcon src={isLiked ? likeFill : likeIcon} alt="좋아요 아이콘"
                 onClick={handleLike} />
-              <S.StatText>{likeCount}</S.StatText>
+              <S.StatText>{likesCount}</S.StatText>
             </S.Stat>
             <S.Stat>
               <S.StatIcon src={commentIcon} alt="댓글 아이콘" />
@@ -71,14 +91,15 @@ const Content = ({ title, userName, createdAt, image, content, likeCount, curren
             </S.Stat>
           </S.StateContainer>
         </S.Stats>
-        <S.BookMark src={bookmarkIcon} alt="북마크 아이콘" onClick={handleBookmark} />
+        <S.BookMark src={isScrapped ? bookmarkFillIcon : bookmarkIcon} alt="북마크 아이콘" 
+         onClick= {handleBookmark}/>
       </S.PostConatiner>
 
       {isMenuOpen && (
         <PostMenuBar
     isOpen={isMenuOpen}
     closeModal={closeMenu}
-    isOwner={currentUser}
+    isOwner={isOwner}
     onEdit={() => handleEdit({ title, content, category, image, postId })}
     onDelete={handleDelete}
     onReport={handleReport}
