@@ -1,31 +1,47 @@
-import React, { useState } from 'react';
-import { FormContainer, InputGroup, Label, Input, Row, Select } from '../../../styles/User/ProfileForm/style'; // 스타일 파일 import
+import React, { useState, useEffect } from 'react';
+import { FormContainer, InputGroup, Label, Input, Row, Select, NicknameMessage } from '../../../styles/User/ProfileForm/style'; // 스타일 파일 import
 
-const ProfileForm = ({ initialData }) => {
+const ProfileForm = ({ initialData, onChange, nicknameMessage, isNicknameValid }) => {
     const [formData, setFormData] = useState(initialData);
     const [isCustomJob, setIsCustomJob] = useState(initialData.job === "기타(직접 입력)");
 
+    // `initialData`가 변경될 때 `formData` 업s데이트
+    useEffect(() => {
+        setFormData(initialData);
+        setIsCustomJob(initialData.job === "기타(직접 입력)");
+    }, [initialData]);
+
     const handleJobChange = (e) => {
         const { value } = e.target;
-        
         if (value === "기타(직접 입력)") {
             setIsCustomJob(true);
-            setFormData({ ...formData, job: "" });  // 기존값 유지
+            setFormData({ ...formData, jobCategory: "" });
         } else {
             setIsCustomJob(false);
-            setFormData({ ...formData, job: value }); 
+            setFormData({ ...formData, jobCategory: value });
         }
+        onChange({ target: { name: "jobCategory", value: value === "기타(직접 입력)" ? "" : value } });
     };
 
     const handleCustomJobInput = (e) => {
-        setFormData({ ...formData, job: e.target.value });
+        setFormData({ ...formData, jobCategory: e.target.value });
+        onChange(e);
+    };
+
+    // 입력 필드에서 벗어났을 때 드롭다운으로 복귀
+    const handleBlur = () => {
+        if (formData.jobCategory.trim() !== "") {
+            setIsCustomJob(false); 
+        }
     };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData({ ...formData, [name]: value });
+        const mappedValue = name === "ageGroup" ? `${value}` : value; 
+        setFormData({ ...formData, [name]: mappedValue });
+        onChange(e);
     };
-
+    
     return (
         <FormContainer>
             <InputGroup>
@@ -36,14 +52,15 @@ const ProfileForm = ({ initialData }) => {
                     value={formData.name}
                     onChange={handleChange}
                 />
+                {nicknameMessage && <NicknameMessage isValid={isNicknameValid}>{nicknameMessage}</NicknameMessage>}
             </InputGroup>
 
             <Row>
                 <InputGroup>
                     <Label>나이대</Label>
                     <Select 
-                        name="age" 
-                        value={formData.age} 
+                        name="ageGroup" 
+                        value={formData.ageGroup} 
                         onChange={handleChange}
                     >
                         <option value="10대">10대</option>
@@ -59,15 +76,17 @@ const ProfileForm = ({ initialData }) => {
                     {isCustomJob ? (
                         <Input
                             type="text"
-                            name="job"
+                            name="jobCategory"
                             placeholder="직업을 입력하세요"
-                            value={formData.job}
+                            value={formData.jobCategory}
                             onChange={handleCustomJobInput} // 직접 입력 핸들러 사용
+                            onBlur={handleBlur}
+                            autoFocus
                         />
                     ) : (
                         <Select 
-                            name="job" 
-                            value={formData.job} 
+                            name="jobCategory" 
+                            value={formData.jobCategory} 
                             onChange={handleJobChange} // 드롭다운 선택 핸들러
                         >
                             <option value="학생">학생</option>
@@ -84,6 +103,7 @@ const ProfileForm = ({ initialData }) => {
                             <option value="전문직(의료/법률/회계 등)">전문직(의료/법률/회계 등)</option>
                             <option value="창업/프리랜서">창업/프리랜서</option>
                             <option value="공공/행정직">공공/행정직</option>
+                            <option value={formData.jobCategory}>{formData.jobCategory}</option>
                             <option value="기타(직접 입력)">기타(직접 입력)</option>
                         </Select>
                     )}
@@ -94,8 +114,8 @@ const ProfileForm = ({ initialData }) => {
                 <Label>한 줄 소개</Label>
                 <Input
                     type="text"
-                    name="intro"
-                    value={formData.intro}
+                    name="one_liner"
+                    value={formData.one_liner}
                     onChange={handleChange}
                 />
             </InputGroup>

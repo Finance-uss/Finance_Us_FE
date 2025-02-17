@@ -1,54 +1,66 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
+import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import UserPostCard from '../../../../components/User/UserPostCard';
-import PostImage2 from '../../../../assets/icons/common/User/PostImage2.svg';
-import PostImage3 from '../../../../assets/icons/common/User/PostImage3.svg';
-import PostImage4 from '../../../../assets/icons/common/User/PostImage4.svg';
-
-// 더미 데이터
-const initialPosts = [
-    {
-        id: 1,
-        category: "자유",
-        title: "단기알바 너무 힘들다",
-        preview: "단기알바가 너무 힘들어 하지만 나는 일을 해야 해. 정말 힘들어서 참을 수 없을 만큼 피곤하다.",
-        postImage: PostImage2, 
-        likes: 13,
-        comments: 6,
-    },
-    {
-        id: 2,
-        category: "자유",
-        title: "님들 동아리 뭐 함?",
-        preview: "교내 하나 하고 있는데 대외 추천함? 응응 스펙을 위해서라면 해야지",
-        postImage: PostImage3,
-        likes: 13,
-        comments: 6,
-    },
-    {
-        id: 3,
-        category: "자유",
-        title: "다들 멍청비용 얼마나 줄임?",
-        preview: "난 일본 가서 60만원 나온 거 보고 진짜 충격받아서 그 이후로 돈 아끼려고..",
-        postImage: PostImage4,
-        likes: 13,
-        comments: 6,
-    },
-];
 
 const ScrappedPosts = () => {
     const navigate = useNavigate();
-    const [posts, setPosts] = useState(initialPosts); // 스크랩한 글 상태
+    const [posts, setPosts] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [userId, setUserId] = useState(null);
 
     const handleBackClick = () => {
         navigate('/user');
     };
 
+    useEffect(() => {
+                const storedToken = localStorage.getItem("token");
+                if (!storedToken) {
+                    setErrorMessage("로그인이 필요합니다.");
+                    navigate('/login'); // 로그인 페이지로 이동
+                    return;
+                }
+        
+                try {
+                    const payload = JSON.parse(atob(storedToken.split('.')[1])); // JWT 디코딩
+                    setUserId(payload.userId);
+                } catch (error) {
+                    console.error("토큰 파싱 실패:", error);
+                    setErrorMessage("로그인 정보가 올바르지 않습니다.");
+                    navigate('/login');
+                }
+    }, [navigate]);
+
+    // 스크랩한 글 목록 불러오기
+    const fetchScrappedPosts = async () => {
+        try {
+            if (!userId) return;
+            const response = await axiosInstance.get(`/api/post/scraped-post/${userId}`, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
+            
+            if (response.data.isSuccess) {
+                setPosts(response.data.result);
+                setErrorMessage("");
+            } else {
+                setErrorMessage("스크랩한 글을 불러올 수 없습니다.");
+            }
+        } catch (error) {
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.");
+            console.error("스크랩한 글 조회 실패:", error);
+        }
+    };
+
     const handleUnscrap = (id) => {
         setPosts(posts.filter((post) => post.id !== id)); // 해당 포스트 삭제
     };
+    
+    // 페이지 진입 시 API 호출
+    useEffect(() => {
+        fetchScrappedPosts();
+    }, [userId]);
     
     return (
         <ScrappedPostsContainer>
@@ -56,19 +68,24 @@ const ScrappedPosts = () => {
                 <BackHeader title="스크랩 한 글" onBackClick={handleBackClick} />
             </BackHeaderWrapper>
             <ContentWrapper>
-                {posts.map((post) => (
-                    <UserPostCard
-                        key={post.id}
-                        category={post.category}
-                        title={post.title}
-                        preview={post.preview}
-                        postImage={post.postImage}
-                        likes={post.likes}
-                        comments={post.comments}
-                        isScrapped={true} 
-                        onScrapClick={() => handleUnscrap(post.id)} 
-                    />
-                ))}
+                {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
+                {posts.length > 0 ? (
+                    posts.map((post, index) => (
+                        <UserPostCard
+                            key={index} // id가 없으므로 index 사용
+                            category={post.category}
+                            title={post.title}
+                            preview={post.content} // API에서 preview가 content
+                            postImage={post.imgUrl} // API에서 postImage가 imgUrl
+                            likes={post.likeCnt} // 좋아요 수 추가
+                            comments={post.commentCnt} // 댓글 수 추가
+                            isScrapped={true} 
+                            onScrapClick={() => handleUnscrap(index)} // UI에서 제거
+                        />
+                    ))
+                ) : (
+                    <NoPostsText>스크랩한 글이 없습니다.</NoPostsText>
+                )}
             </ContentWrapper>
         </ScrappedPostsContainer>
     );
@@ -97,4 +114,18 @@ const ContentWrapper = styled.div`
 
 const BackHeaderWrapper = styled.div`
     padding: 0 20px;
+`;
+
+const ErrorText = styled.p`
+    color: red;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+`;
+
+const NoPostsText = styled.p`
+    text-align: center;
+    font-size: 16px;
+    color: gray;
+    margin-top: 20px;
 `;

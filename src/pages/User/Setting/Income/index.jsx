@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import CompleteButtonComponent from '../../../../components/User/CompleteButton';
 import PlusCateButton from '../../../../components/User/PlusCateButton';
@@ -9,62 +10,93 @@ import AmountInput from '../../../../components/User/AmountInput';
 
 const IncomePage = () => {
     const navigate = useNavigate();
-
-    const [totalExpense, setTotalExpense] = useState('');
+    const [totalIncome, setTotalIncome] = useState('');
     const [categories, setCategories] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    // API 호출을 통해 카테고리 데이터 가져오기
-    const loadCategories = async () => {
+    // 수익 목표 금액 조회 API (GET)
+    const loadIncomeGoals = async () => {
         try {
-        // API 호출 로직 (더미 데이터 사용)
-        const response = [
-            { id: 0, category: '급여', subcategories: ['월급', '상여금', '수당'] },
-            { id: 1, category: '투자 수익', subcategories: ['주식', '예금 이자', '부동산'] },
-            { id: 2, category: '기타 수익', subcategories: ['중고 거래', '용돈', '환불/환급'] },
-        ];
-
-        setCategories(response); 
+            const response = await axiosInstance.get(`/api/mypage/goal-asset`, {
+                params: { type: "income" },
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+    
+            if (!response.data.isSuccess) {
+                setErrorMessage("목표 금액 데이터를 불러올 수 없습니다.");
+                return;
+            }
+    
+            const goalData = response.data.result;
+    
+            setTotalIncome(goalData.monthlyGoal || ""); 
+            setCategories(goalData.subCategories || []); 
         } catch (error) {
-        console.error('카테고리 로드 실패:', error);
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.");
+            console.error("목표 금액 조회 실패:", error);
         }
     };
 
+    // 페이지 처음 로드 시 목표 금액 데이터 불러오기
     useEffect(() => {
-        loadCategories(); 
+        loadIncomeGoals(); 
       }, []);
 
+    // 새로운 카테고리 추가
     const addCategory = () => {
-        const newId = categories.length;
-        setCategories([
-        ...categories,
-        {
+        const newId = categories.length + 1; 
+        const newCategory = {
             id: newId,
-            category: '대분류',
-            subcategories: ['소분류'], // 기본값으로 소분류 추가
-            amount: '',
-        },
-        ]);
+            name: `새 카테고리 ${newId}`,
+            subCategories: [{ id: `${newId}-1`, name: "소분류 없음", goal: 0 }], // ✅ 기본 소분류 추가
+        };
+        setCategories((prev) => [...prev, newCategory]);
     };
 
-    const updateTotalExpense = (value) => {
+    // 총 목표 금액 업데이트
+    const updateTotalIncome = (value) => {
         if (!/^\d*$/.test(value)) return; // 숫자 이외의 값은 무시
-        setTotalExpense(value);
+        setTotalIncome(value);
       };
 
+    // 카테고리별 목표 금액 업데이트
     const updateCategoryAmount = (id, value) => {
         if (!/^\d*$/.test(value)) return; 
         setCategories((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, amount: value } : item))
+          prev.map((item) => (item.id === id ? { ...item, goal: value } : item))
         );
     };
 
+    // 특정 카테고리 삭제 
     const removeCategory = (id) => {
         setCategories((prev) => prev.filter((item) => item.id !== id));
     };
 
-    const handleSave = () => {
-        console.log('수익 설정 저장:', categories);
-        // 저장 로직 추가
+    // 목표 금액 저장
+    const saveChanges = async () => {
+        try {
+            const payload = {
+                type: "expense",
+                subGoals: categories.map((item) => ({
+                    id: item.id,
+                    goal: item.goal || 0,
+                })),
+            };
+
+            const response = await axiosInstance.patch(`/api/mypage/goal-asset`, payload, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+
+            if (response.data.isSuccess) {
+                alert("지출 목표 금액이 저장되었습니다.");
+                navigate("/user");
+            } else {
+                setErrorMessage("목표 금액 저장에 실패했습니다.");
+            }
+        } catch (error) {
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.");
+            console.error("목표 금액 저장 실패:", error);
+        }
     };
 
     return (
@@ -75,22 +107,23 @@ const IncomePage = () => {
                 </BackHeaderWrapper>
             </HeaderWrapper>
             <ContentWrapper>
+                {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
                 <SectionTitle>이번 달 총 수익 목표 금액</SectionTitle>
                 <AmountInputWrapper>
                     <AmountInput
-                        value={totalExpense}
-                        onChange={updateTotalExpense} 
+                        value={totalIncome}
+                        onChange={updateTotalIncome} 
                     />
                 </AmountInputWrapper>
                 <SectionTitle style={{ marginTop: '40px' }}>이번 달 카테고리 별 수익 목표 금액</SectionTitle>
                 <CategoryList>
-                    {categories.map((item, index) => (
+                    {categories.map((item) => (
                         <AmountInputContainer
-                            key={item.id}
-                            category={`${item.category}/${item.subcategories[0] || ''}`} 
-                            value={item.amount || ''} // amount 초기값 처리
-                            onChange={(value) => updateCategoryAmount(item.id, value)}
-                            onRemove={() => removeCategory(item.id)}
+                          key={item.id}
+                          category={`${item.mainCategory}/${item.subCategory}`} 
+                          value={item.goal || ""} 
+                          onChange={(value) => updateCategoryAmount(item.id, value)}
+                          onRemove={() => removeCategory(item.id)}
                         />
                     ))}
                 </CategoryList>
@@ -98,7 +131,7 @@ const IncomePage = () => {
                     <PlusCateButton onClick={addCategory} />
                 </PlusCateButtonWrapper>
             </ContentWrapper>
-            <CompleteButtonComponent label="수익 목표 금액 설정 완료" onSave={handleSave} />
+            <CompleteButtonComponent label="수익 목표 금액 설정 완료" onSave={saveChanges} />
         </PageContainer>
     );
 };
@@ -154,4 +187,11 @@ const PlusCateButtonWrapper = styled.div`
   margin-top: 40px;
   display: flex;
   justify-content: center;
+`;
+
+const ErrorText = styled.p`
+    color: red;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
 `;
