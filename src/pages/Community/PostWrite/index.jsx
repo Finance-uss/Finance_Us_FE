@@ -3,17 +3,22 @@ import { useNavigate, useParams } from 'react-router-dom';
 import * as S from '../../../styles/Community/PostWrite/style';
 import BeforeHeader from '../../../components/common/BeforeHeader';
 import SubmitButton from '../../../components/common/SubmitButton';
-import CameraIconSrc from '../../../assets/icons/common/Camera.svg';
+import ImageUploader from "../../../components/User/ImageUploader";
 import CateSelect from '../../../components/Community/Category/CateSelect';
 import { createPost, updatePost, getPost } from '../../../api/post';
+import useApi from "../../../hooks/useApi.js";
+import { postS3, deleteS3 } from "../../../api/s3API.js";
 
 const PostWrite = () => {
-  const navigate = useNavigate();
   const { postId } = useParams(); // URL에서 postId 가져오기
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('');
-  const [imageFile, setImageFile] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null); 
+  const [deletedImage, setDeletedImage] = useState(null); // 삭제된 이미지 이름 저장
+
+  const navigate = useNavigate();
+  const { request } = useApi();
 
   useEffect(() => {
     if (postId) { // postId가 있을 때만 호출
@@ -25,7 +30,11 @@ const PostWrite = () => {
           setTitle(postData.title);
           setContent(postData.content);
           setSelectedCategory(postData.category);  // 카테고리 값을 받아옴
-          setImageFile(postData.imageUrl);
+          
+          if (postData.imageUrl) {
+            setSelectedFile(postData.imageUrl);
+          }
+
         } catch (error) {
           console.error('게시글 불러오기 실패:', error);
         }
@@ -50,13 +59,6 @@ const PostWrite = () => {
     setSelectedCategory(category); // 카테고리 값 업데이트
   };
 
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setImageFile(file);
-    }
-  };
-
   const handleSubmit = async () => {
     if (!title || !content || !selectedCategory) {
       alert('모든 항목을 입력해주세요.');
@@ -65,6 +67,15 @@ const PostWrite = () => {
 
     let postType = 'FREE';
     let category = '';
+    let imgUrl = null;
+    let imgName = null;
+            
+    // 이미지 업로드 진행 (선택한 파일이 있는 경우)
+    if (selectedFile) {
+        const response = await request(postS3(selectedFile));
+        imgUrl = response.result.imageUrl;
+        imgName = response.result.imageName;
+    }
 
     switch (selectedCategory) {
       case '자유': category = 'FREE'; break;
@@ -82,7 +93,8 @@ const PostWrite = () => {
       content,
       postType,
       category,
-      imageUrl: '', // TODO: 이미지 업로드 처리 필요
+      imageUrl: imgUrl, 
+      imageName: imgName
     };
 
     try {
@@ -106,6 +118,23 @@ const PostWrite = () => {
     }
   };
 
+    // 이미지 삭제
+  const handleImageDelete= async () => {
+    if (typeof selectedFile === "string") {
+      // 기존 이미지 URL이면 S3에서 삭제 요청
+      const imageName = selectedFile.split("/").pop(); // 이미지 URL에서 파일명 추출
+      try {
+        const response = await request(deleteS3(imageName));
+        console.log(response);
+        setDeletedImage(imageName); // 삭제된 이미지 이름 저장
+      } catch (error) {
+        console.error("이미지 삭제 실패:", error);
+      }
+    }
+    
+      setSelectedFile(null); // 선택한 파일 상태 초기화
+  };
+
   return (
     <S.Container>
       <BeforeHeader text={postId ? '게시글 수정' : '게시글 작성'} />
@@ -122,11 +151,15 @@ const PostWrite = () => {
           maxLength={50}
         />
         <S.Line />
-        {imageFile && (
-          <S.ImagePreview
-            src={imageFile.startsWith('http') ? imageFile : URL.createObjectURL(imageFile)}
-            alt="선택한 이미지"
-          />
+        {selectedFile && (
+          <S.ImagePreviewWrapper>
+            {typeof selectedFile === 'string' ? (
+              <S.ImagePreview src={selectedFile} alt="기존 이미지" />
+            ) : (
+              <S.ImagePreview src={URL.createObjectURL(selectedFile)} alt="선택한 이미지" />
+            )}
+            <S.DeleteButton onClick={handleImageDelete}>삭제</S.DeleteButton>
+          </S.ImagePreviewWrapper>
         )}
         <S.Content
           placeholder="내용 입력"
@@ -136,18 +169,7 @@ const PostWrite = () => {
         />
       </S.Wrapper>
       <S.Footer>
-        <S.CameraButton
-          src={CameraIconSrc}
-          alt="카메라 아이콘"
-          onClick={() => document.getElementById("image-upload").click()}
-        />
-        <input
-          type="file"
-          id="image-upload"
-          onChange={handleImageChange}
-          accept="image/*"
-          style={{ display: 'none' }}
-        />
+      <ImageUploader key={selectedFile ? selectedFile.name : "image-uploader"} onFileSelect={setSelectedFile} /> {/* key 추가 */}
         <SubmitButton
           text={postId ? '수정 완료' : '작성 완료'}
           disabled={!selectedCategory || !title || !content}
