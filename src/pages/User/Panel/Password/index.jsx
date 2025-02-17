@@ -5,7 +5,7 @@ import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader'; 
 import InputWithButton from '../../../../components/User/InputWithButton';
 import SimpleInput from '../../../../components/User/SimpleInput';
-import CompleteButtonComponent from '../../../../components/User/CompleteButton'; 
+import CompleteButtonComponent from '../../../../components/User/CompleteButton';
 
 const ChangePasswordPage = () => {
     const navigate = useNavigate();
@@ -26,9 +26,9 @@ const ChangePasswordPage = () => {
 
     // 비밀번호 유효성 검사
     const validatePassword = (password) => {
-        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+~`\-={}[\]:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_+~`\-={}[\]:;"'<>,.?/]{8,12}$/;
         return regex.test(password);
-    };
+    };    
 
     // 비밀번호 입력 핸들러
     const handlePasswordChange = (e) => {
@@ -55,23 +55,99 @@ const ChangePasswordPage = () => {
 
     // 비밀번호 확인 버튼 클릭
     const handleCheckPassword = async () => {
-        // 실제 API 요청으로 비밀번호 확인 (여기서는 Mock 데이터 사용)
-        const isCorrect = currentPassword === 'hello123'; // Mock 비밀번호
-        setIsPasswordCorrect(isCorrect);
-        if (isCorrect) {
-            setResponseMessage('일치한 비밀번호입니다.');
-            setShowNewPasswordFields(true);
-        } else {
-            setResponseMessage('현재 비밀번호가 일치하지 않습니다.');
-            setShowNewPasswordFields(false);
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("로그인이 필요합니다.");
+                return;
+            }
+    
+            const response = await axiosInstance.get(`/api/user/passwordCheck`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                params: { password: currentPassword }
+            });
+    
+            console.log("[GET 요청] 비밀번호 확인 API 호출");
+            console.log("[응답 데이터]:", response.data);
+    
+            if (response.data.isSuccess) {
+                setIsPasswordCorrect(true);
+                setResponseMessage("비밀번호가 일치합니다.");
+                setShowNewPasswordFields(true);
+            } else {
+                setIsPasswordCorrect(false);
+                setResponseMessage("현재 비밀번호가 일치하지 않습니다.");
+                setShowNewPasswordFields(false);
+            }
+        } catch (error) {
+            console.error("비밀번호 확인 오류:", error);
+            setIsPasswordCorrect(false);
+            setResponseMessage("비밀번호 확인 중 오류가 발생했습니다.");
         }
     };
 
-    // 완료 버튼 클릭 시 저장 로직
-    const handleSave = () => {
-        console.log('비밀번호 변경 완료');
-        console.log('새 비밀번호:', newPassword);
-        console.log('새 비밀번호 확인:', confirmPassword);
+    // 비밀번호 변경 API 요청
+    const handleSave = async () => {
+        if (newPassword !== confirmPassword) {
+            alert("새 비밀번호가 일치하지 않습니다.");
+            return;
+        }
+
+        if (newPassword === currentPassword) {
+            alert("새 비밀번호는 현재 비밀번호와 다르게 설정해야 합니다.");
+            return;
+        }
+
+        try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("로그인이 필요합니다.");
+                return;
+            }
+    
+            console.log("🔹 회원 정보 조회 API 호출 중...");
+    
+            // 회원 정보 조회 API 호출
+            const response = await axiosInstance.get("/api/user", {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+    
+            if (response.data.isSuccess) {
+                const userEmail = response.data.result.email; // API 응답에서 이메일 가져오기
+                console.log("회원 정보 조회 성공! 이메일:", userEmail);
+    
+                if (!userEmail) {
+                    alert("이메일 정보를 찾을 수 없습니다.");
+                    return;
+                }
+                console.log("[PATCH 요청] 비밀번호 변경 API 호출 중...");
+    
+                // 비밀번호 변경 API 호출
+                const updateResponse = await axiosInstance.patch(`/api/user/resetPassword`, null, {
+                    headers: { Authorization: `Bearer ${token}` },
+                    params: {
+                        email: userEmail, // 조회한 이메일 사용
+                        password: newPassword
+                    }
+                });
+    
+                console.log("[비밀번호 변경 응답]:", updateResponse.data);
+    
+                if (updateResponse.data.isSuccess) {
+                    alert("비밀번호가 성공적으로 변경되었습니다.");
+                    navigate('/user');
+                } else {
+                    alert("비밀번호 변경에 실패했습니다. 다시 시도해주세요.");
+                }
+            } else {
+                alert("회원 정보를 가져오지 못했습니다.");
+            }
+        } catch (error) {
+            console.error("비밀번호 변경 오류:", error);
+            alert("비밀번호 변경 중 오류가 발생했습니다.");
+        }
     };
 
     return (
@@ -103,10 +179,10 @@ const ChangePasswordPage = () => {
                         />
                         {isNewPasswordError && (
                             <ErrorMessage>
-                                비밀번호는 영어 대/소문자, 숫자 중 2종류 이상을 조합한<br />8자~12자 이내여야 합니다.
+                                비밀번호는 영어 대/소문자, 숫자, 특수문자를 포함한<br />8자~12자 이내여야 합니다.
                             </ErrorMessage>
                         )}
-
+ 
                         <SimpleInput
                             type="text"
                             placeholder="새 비밀번호 확인"
