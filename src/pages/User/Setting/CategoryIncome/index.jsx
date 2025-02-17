@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axiosInstance from '../../../../api/axiosInstance';
 import styled from 'styled-components';
 import BackHeader from '../../../../components/User/BackHeader';
 import TopBar from '../../../../components/common/TopBar';
@@ -8,54 +9,104 @@ import CompleteButtonComponent from '../../../../components/User/CompleteButton'
 import { useNavigate } from 'react-router-dom';
 
 const CategoryIncomePage = () => {
-    const defaultCategories = [ 
-        {
-        id: 0,
-        title: "급여",
-        subcategories: ["월급", "상여금", "수당"],
-        },
-        {
-        id: 1,
-        title: "투자 수익",
-        subcategories: ["주식", "예금 이자", "부동산"],
-        },
-        {
-        id: 2,
-        title: "기타 수익",
-        subcategories: ["중고 거래", "용돈", "환불/환급"],
-        },
-    ];
     const navigate = useNavigate();
     const [selectedTab, setSelectedTab] = useState(1); 
-    const [cateContainers, setCateContainers] = useState(defaultCategories);
+    const [cateContainers, setCateContainers] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const addCateContainer = () => {
-        const newId = cateContainers.length;
-        setCateContainers((prev) => [
-        ...prev,
-        { id: newId, title: `새 카테고리 ${newId + 1}`, subcategories: [] },
-        ]);
+    useEffect(() => {
+        const storedToken = localStorage.getItem("token"); // 로컬스토리지에서 토큰 가져오기
+        console.log("🟡 현재 저장된 토큰:", storedToken);
+
+        if (!storedToken) {
+            setErrorMessage("로그인이 필요합니다.");
+        } else {
+            console.log("[CategoryIncomePage] fetchCategories 실행됨!");
+            fetchCategories(storedToken);
+        }
+    }, []);
+
+    // API에서 카테고리 데이터 가져오기
+    const fetchCategories = async (storedToken) => {
+        try {
+            console.log("[CategoryIncomePage] 카테고리 불러오기 요청 시작");
+            const response = await axiosInstance.get(`/api/mypage/category`, {
+                headers: { Authorization: `Bearer ${storedToken}` }, // 토큰 추가
+                params: { type: "income" }, // type 추가
+            });
+
+            console.log("[CategoryIncomePage] API 응답:", response.data);
+
+            if (response.data.isSuccess) {
+                console.log("[CategoryIncomePage] 응답 데이터 구조:", response.data.result);
+                setCateContainers(response.data.result);
+                setErrorMessage(""); // 에러 메시지 초기화
+            } else {
+                setErrorMessage("카테고리 데이터를 불러올 수 없습니다.");
+            }
+        } catch (error) {
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.");
+            console.error("카테고리 불러오기 실패:", error);
+        }
     };
 
-    const removeCateContainer = (id) => {
-        setCateContainers((prev) => prev.filter((container) => container.id !== id));
+    // 대분류 추가 API 요청
+    const addCateContainer = async () => {
+        const newCategory = { name: "새 카테고리", categoryType: "INCOME" };
+
+        try {
+            const storedToken = localStorage.getItem("token");
+            const response = await axiosInstance.post("/api/mypage/category/main", newCategory, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+            });
+
+            if (response.data.isSuccess) {
+                const newCategoryData = response.data.result;
+                
+                setCateContainers(prev => [...prev, newCategoryData]); 
+                console.log("새 카테고리 추가됨:", newCategoryData);
+            } else {
+                setErrorMessage("카테고리 추가에 실패했습니다.");
+            }
+        } catch (error) {
+            setErrorMessage("카테고리를 추가하는 중 오류가 발생했습니다.");
+            console.error("카테고리 추가 실패:", error);
+        }
     };
 
-    const handleSave = () => {
-        console.log('수익 카테고리 변경사항 저장:', cateContainers);
-        // 실제 저장 로직 추가
+    // 대분류 삭제 API 요청
+    const handleRemoveMainCategory = async (categoryId) => {
+        const storedToken = localStorage.getItem("token");
+        try {
+            const response = await axiosInstance.delete(`/api/mypage/category/main`, {
+                headers: { Authorization: `Bearer ${storedToken}` },
+                params: { mainId: categoryId },
+            });
+
+            if (response.data.isSuccess) {
+                console.log("대분류 삭제 성공:", categoryId);
+                setCateContainers(prev => prev.filter(category => category.id !== categoryId));
+            } else {
+                console.error("대분류 삭제 실패:", response.data.message);
+            }
+        } catch (error) {
+            console.error("대분류 삭제 요청 실패:", error);
+        }
     };
 
     const handleBackClick = () => {
         navigate('/user');
     };
 
+    // 탭 클릭 이벤트 핸들러
     const handleTabClick = (index) => {
         setSelectedTab(index);
         if (index === 0) {
-            navigate("/user/expense-category"); // 지출 페이지
+            navigate("/user/expense-category");
         } else {
-            navigate("/user/income-category"); // 수익 페이지
+            navigate("/user/income-category");
+            const storedToken = localStorage.getItem("token");
+            fetchCategories(storedToken); 
         }
     };
 
@@ -75,14 +126,18 @@ const CategoryIncomePage = () => {
                 </TopBarWrapper>
             </FixedHeaderWrapper>
             <ContentWrapper>
-                {/* CateContainer 렌더링 */}
+                {/* 에러 메시지 표시 */}
+                {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
+
+                {/* CateContainer 렌더링 (대분류 & 소분류) */}
                 {cateContainers.map((container) => (
                     <CateContainer
                         key={container.id}
                         id={container.id}
-                        title={container.title}
-                        subcategories={container.subcategories}
-                        onRemove={removeCateContainer}
+                        title={container.name} // 대분류 이름
+                        subcategories={container.subCategories} 
+                        onRemove={() => handleRemoveMainCategory(container.id)}
+                        isAssetPage={false} 
                     />
                 ))}
                 {/* PlusCateButton 렌더링 */}
@@ -90,7 +145,7 @@ const CategoryIncomePage = () => {
                     <PlusCateButton onClick={addCateContainer} />
                 </PlusCateButtonWrapper>
             </ContentWrapper>
-            <CompleteButtonComponent label="수익 카테고리 설정 완료" onSave={handleSave} />
+            <CompleteButtonComponent label="수익 카테고리 설정 완료" />
         </CategoryPageContainer>
     );
 };
@@ -140,4 +195,11 @@ const PlusCateButtonWrapper = styled.div`
     display: flex;
     justify-content: center;
     margin-top: 0;
+`;
+
+const ErrorText = styled.p`
+    color: red;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
 `;
