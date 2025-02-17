@@ -1,39 +1,86 @@
-import React from 'react';
-import image from '../../../../assets/icons/common/Community/exam.png';
+import React, { useState, useEffect, useRef } from 'react';
+import { getPostList, getPostCategoryList } from '../../../../api/apiPost';
 import PostCard from '../PostCard';
 
-const posts = [
-    { postId: 1, category: '자유', postName: '멍청비용 또생겼다', preview: '멍청비용 때문에 미치겠음\n이거 진짜 고쳐야 되는데', image, likes: 10, comments: 5 },
-    { postId: 2, category: '정보', postName: '멍청비용 또생겼다', preview: '멍청비용 때문에 미치겠음\n이거 진짜 고쳐야 되는데', image, likes: 15, comments: 8 },
-    { postId: 3, category: '낭비했어요', postName: '멍청비용 또생겼다', preview: '멍청비용 때문에 미치겠음\n이거 진짜 고쳐야 되는데', image, likes: 7, comments: 2 },
-    { postId: 4, category: '절약했어요', postName: '멍청비용 또생겼다', preview: '멍청비용 때문에 미치겠음\n이거 진짜 고쳐야 되는데', image, likes: 12, comments: 4 },
-    { postId: 5, category: '자유', postName: '멍청비용 멍청멍청', preview: '멍청비용 때문에 미치겠음\n이거 진짜 고쳐야 되는데', image, likes: 12, comments: 4 },
-    { postId: 6, category: '칼럼', postName: '멍청비용 멍청멍청', preview: '멍청비용 때문에 미치겠음\n이거 진짜 고쳐야 되는데', image, likes: 12, comments: 4 },
-    { postId: 7, category: '강연', postName: '멍청비용 멍청멍청', preview: '멍청비용 때문에 미치겠음\n이거 진짜 고쳐야 되는데', image, likes: 12, comments: 4 },
-    { postId: 8, category: '홍보', postName: '멍청비용 멍청멍청', preview: '멍청비용 때문에 미치겠음\n이거 진짜 고쳐야 되는데', image, likes: 12, comments: 4 }
-  ];
+const PostList = ({ selectedCategory, postType, onPostClick }) => {
 
-const PostList = ({selectedCategory, onPostClick}) => {
-    const filteredPosts = selectedCategory
-    ? posts.filter(post => post.category === selectedCategory)
-    : posts;
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [cursor, setCursor] = useState(null);
+    const [hasMore, setHasMore] = useState(true);
+    const observerRef = useRef(null);
+    const categoryMap = {
+        'FREE':'자유',
+        'INFO': '정보',
+        'WASTE': '낭비했어요',
+        'SAVE': '절약했어요',
+        'COLUMN': '칼럼',
+        'LECTURE': '강연',
+        'PROMOTION': '홍보',
+    };
+    useEffect(() => {
+        setPosts([]); 
+        setCursor(null);
+        setHasMore(true);
+    }, [selectedCategory, postType]);
+
+    useEffect(() => {
+        const fetchPosts = async () => {
+            if (!hasMore || loading) return;
+            setLoading(true);
+            try {
+                const size = 30; // 한 번에 불러올 게시글 수 임시 설정..
+                let response;
+                if (selectedCategory) {
+                    response = await getPostCategoryList(postType, selectedCategory, cursor, size);
+                } else {
+                    response = await getPostList(postType, cursor, size);
+                }
+                setPosts((prevPosts) => [...prevPosts, ...response.result.posts]);
+                setHasMore(response.result.posts.length === size);
+                if (response.result.posts.length > 0) {
+                    setCursor(response.result.nextCursor);
+                }
+            } catch (error) {
+                console.error('게시글 불러오기 실패:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPosts();
+    }, [cursor, selectedCategory, postType, hasMore, loading]);
+
+    useEffect(() => {
+        if (!hasMore || loading) return;
+        observerRef.current = new IntersectionObserver((entries) => {
+            if (entries[0].isIntersecting) {
+                setCursor(cursor); 
+            }
+        });
+        if (observerRef.current && posts.length > 0) {
+            observerRef.current.observe(document.getElementById('scrollObserver'));
+        }
+        return () => observerRef.current && observerRef.current.disconnect();
+    }, [posts, hasMore, loading, cursor]);
 
     return (
         <>
-          {filteredPosts.map(post => (
-            <PostCard
-              key={post.postId}
-              id={post.postId}
-              category={post.category}
-              postName={post.postName}
-              preview={post.preview}
-              image={post.image}
-              likes={post.likes}
-              comments={post.comments}
-              onPostClick={onPostClick}
-            />
-          ))}
+            {posts.map((post) => (
+                <PostCard
+                    id={post.postId}
+                    category={categoryMap[post.category]||selectedCategory}
+                    postName={post.title}
+                    preview={post.content}
+                    image={post.imageUrl}
+                    likes={post.likes}
+                    comments={post.comments}
+                    onPostClick={onPostClick}
+                />
+            ))}
+            {loading && <p>로딩 중...</p>}
+            <div id="scrollObserver" style={{ height: '20px', visibility: 'hidden' }}></div>
         </>
-      );
+    );
 };
 export default PostList;
