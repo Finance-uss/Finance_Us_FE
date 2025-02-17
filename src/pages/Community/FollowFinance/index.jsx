@@ -5,15 +5,11 @@ import Budget from "../../../components/Community/FollowFinance/Budget";
 import Finance from "../../../components/Community/FollowFinance/FinanceCard";
 import BottomBar from "../../../components/common/BottomBar";
 import { Container, CheerupMessage, Line, FirstMessage, SecondMessage } from "../../../styles/Community/FollowFinance/style";
-import { useAuth } from "../../../contexts/AuthContext";
-import { getFollowFinance } from "../../../api/apiFollow";
+import { getFollowFinance } from "../../../api/followAPI";
 import defaultImage from "../../../assets/icons/common/Community/followfinance.svg";
 
 const FollowFinance = () => {
   const { name, followingId } = useParams(); 
-  const { formData } = useAuth();
-  const accessToken = formData.token;
-  
   const [expenseRate, setExpenseRate] = useState(null);
   const [accounts, setAccounts] = useState([]);
 
@@ -25,22 +21,19 @@ const FollowFinance = () => {
 
     const fetchFinanceData = async () => {
       try {
-        if (accessToken) {
-          const data = await getFollowFinance(accessToken, followingId);
+          const data = await getFollowFinance(followingId);
           if (data) {
             setExpenseRate(data.expenseRate);
             setAccounts(data.accounts);
           }
-        } else {
-          console.error("토큰이 없습니다.");
-        }
+        
       } catch (error) {
         console.error(error);
       }
     };
   
     fetchFinanceData();
-  }, [accessToken, followingId]);
+  }, [followingId]);
 
   return (
     <Container>
