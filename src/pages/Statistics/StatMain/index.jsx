@@ -42,7 +42,7 @@ const StatMain = () => {
         const categoryGoalData = await getCategoryGoalData(formData.token, year, month, type);
         const totalSpentData = await getGoalStatisticsData(formData.token, year, month, type); 
 
-        let totalSpent = 0; // 초기화
+        let totalSpent = 0;
         const updatedCategoryData = {};
 
         // 카테고리 목표 데이터 처리
@@ -53,7 +53,7 @@ const StatMain = () => {
                 updatedCategoryData[category.mainCategory] = {
                     spent: category.totalSpent || 0,
                     goal: category.goal || 0,
-                    percentage: category.percentage || 0 // 목표 달성 비율
+                    percentage: category.percentage || 0 
                 };
             });
         }
@@ -67,9 +67,7 @@ const StatMain = () => {
         const goalAmount = totalSpentData.isSuccess ? (totalSpentData.result.goal || 0) : 0; 
         const progressPercentage = totalSpentData.isSuccess ? (totalSpentData.result.percentage || 0) : 0; 
 
-        // 카테고리별 수익 데이터 업데이트
         Object.keys(updatedCategoryData).forEach(category => {
-            // 수익 데이터를 가져오는 로직 추가
             updatedCategoryData[category].earned = statisticsData.result.categories.find(cat => cat.mainCategory === category)?.totalSpent || 0; // 수익 데이터 추가
         });
 

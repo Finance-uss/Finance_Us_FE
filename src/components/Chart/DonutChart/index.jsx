@@ -16,7 +16,7 @@ const DonutChart = ({ categoryData, activeButton }) => {
       labels: Object.keys(categoryData),
       datasets: [
           {
-              data: Object.values(categoryData).map(data => data.spent || 0), // 수익 데이터 사용
+              data: Object.values(categoryData).map(data => data.spent || 0), 
               backgroundColor: Object.keys(categoryData).map((_, index) => colors[index % colors.length]),
               borderWidth: 0,
           },
