@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
+import useApi from "../../../../hooks/useApi.js";
+import { postS3 } from "../../../../api/s3API.js";
+import { postAccount } from "../../../../api/financeAPI.js";
 import { useAccount } from "../../../../hooks/useAccount.js";
 import { formatFormData } from "../../../../utils/accountUtils.js";
-import { useNavigate } from "react-router-dom";
+import { Form, useNavigate } from "react-router-dom";
 import { isSubmitDisabled } from "../../../../utils/validation.js";
 
 import { Container } from "../../../../styles/Finance/style.js";
@@ -18,24 +21,66 @@ import CategoryModal from "../../../../components/Finance/HandWrite/CategoryModa
 import AssetModal from "../../../../components/Finance/HandWrite/AssetModal/index.jsx";
 import RatingModal from "../../../../components/Finance/HandWrite/RatingModal/index.jsx";
 
+import StateLayer1 from "../../../../assets/icons/finance/StateLayer1.svg";
+
 const HandWriteContent = () => {
     const { formData, setFormField } = useHandWrite();
-    const { handleRequest, loading, error } = useAccount();
-    const requiredFields = ["accountType", "date", "subName", "subAssetName", "amount", "title", "status", "score", "content"];
+    const requiredFields = [
+        "accountType", 
+        "date", 
+        "subName", 
+        "subAssetName", 
+        "amount", 
+        "title", 
+        "status", 
+        "score", 
+        "content"
+    ];
     const navigate = useNavigate();
+    const { request } = useApi();
 
     const [isDisabled, setIsDisabled] = useState(true);
-    
+    const [defaultImageFile, setDefaultImageFile] = useState(null);
+
     useEffect(() => {
-        setIsDisabled(isSubmitDisabled(formData || {}, requiredFields)); // ✅ formData 변경 감지
+        const convertImageToFile = async () => {
+            const response = await fetch(StateLayer1); // URL의 데이터를 가져오기
+            const blob = await response.blob(); // Blob 객체로 변환
+            const file = new File([blob], "default-image.svg", { type: "image/svg+xml" }); // File 객체로 변환
+            setDefaultImageFile(file); // 변환된 파일을 상태로 저장
+        };
+
+        convertImageToFile();
+    }, []);
+
+
+    useEffect(() => {
+        setIsDisabled(isSubmitDisabled(formData || {}, requiredFields)); 
     }, [formData]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const formattedData = formatFormData(formData);
-        console.log("작성 완료 데이터:", formattedData);
-        navigate(-1);
-        await handleRequest("POST", formattedData);
+        if(formData.imageUrl === "") {
+            const defaultImageForm = new FormData();
+            defaultImageForm.append("file", defaultImageFile);        
+            const response = await request(postS3(defaultImageForm));
+            if (response && response.result) {
+                const imageUrl = response.result.imageUrl;
+                const imageName = response.result.imageName;
+                const formattedData = formatFormData({ 
+                    ...formData, 
+                    imageUrl,
+                    imageName,
+                });
+                await request(postAccount(formattedData));
+                navigate(-1);
+            }
+        }
+        else{
+            const formattedData = formatFormData(formData);
+            await request(postAccount(formattedData));
+            navigate(-1);
+        }
     };
 
     return (

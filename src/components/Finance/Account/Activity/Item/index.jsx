@@ -3,9 +3,9 @@ import SwipeableCard from '../../SwipeableCard';
 import styled from 'styled-components';
 
 const ActivityItem = ({ activity, onDeleteSuccess, activeSwipeId, setActiveSwipeId }) => {
-
+    
     const handleSwipeStart = () => {
-        if(activeSwipeId && activeSwipeId !== activity.accountId) {
+        if(activeSwipeId !== activity.accountId) {
             setActiveSwipeId(activity.accountId);
         }
     };
@@ -17,6 +17,7 @@ const ActivityItem = ({ activity, onDeleteSuccess, activeSwipeId, setActiveSwipe
             paddingLeft={'0px'}
             onDeleteSuccess={onDeleteSuccess}
             activeSwipeId={activeSwipeId}
+            imageName={activity.imageName}
         >
             <Image src={activity.imageUrl} alt={activity.title} />
             <Content>
