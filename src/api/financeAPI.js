@@ -1,25 +1,4 @@
-export const postS3 = async (file) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    return {
-        method: "POST",
-        url: "/api/image",
-        data: formData,
-        headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-    };
-};
-
-export const deleteS3 = async (imageName) => {
-    return {
-        method: "DELETE",
-        url: "/api/image",
-        data: { imageName },
-    };
-};
-
-export const postAccount = async (data) => {
+export const postAccount = (data) => {
     return {
         method: "POST",
         url: "/api/account",
@@ -27,7 +6,7 @@ export const postAccount = async (data) => {
     };
 };
 
-export const postAccountReceipt = async (file) => {
+export const postAccountReceipt = (file) => {
     const formData = new FormData();
     formData.append("file", file);
     return {
@@ -40,14 +19,14 @@ export const postAccountReceipt = async (file) => {
     };
 };
 
-export const deleteAccount = async (accountId) => {
+export const deleteAccount = (accountId) => {
     return {
         method: "DELETE",
         url: `/api/account/${accountId}`,
     };
 };
 
-export const patchAccount = async (accountId, data) => {
+export const patchAccount = (accountId, data) => {
     return {
         method: "PATCH",
         url: `/api/account/${accountId}`,
@@ -55,14 +34,14 @@ export const patchAccount = async (accountId, data) => {
     };
 };
 
-export const getCalendarMonth = async (year, month) => {
+export const getCalendarMonth = (year, month) => {
     return {
         method: "GET",
         url: `/api/calendar/${year}/${month}`,
     };
 };
 
-export const getCalendarDay = async (year, month, day) => {
+export const getCalendarDay = (year, month, day) => {
     return {
         method: "GET",
         url: `/api/calendar/${year}/${month}/${day}`,

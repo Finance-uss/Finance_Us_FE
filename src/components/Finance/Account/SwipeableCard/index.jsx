@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSwipe } from '../../../../hooks/useSwipe';
 import useApi from '../../../../hooks/useApi';
-import { deleteS3, deleteAccount } from '../../../../api/financeAPI';
+import { deleteS3 } from '../../../../api/s3API';
+import { deleteAccount } from '../../../../api/financeAPI';
 import DeleteConfirmModal from '../DeleteConfirmModal';
 
 const SwipeableCard = ({ 
@@ -19,7 +20,7 @@ const SwipeableCard = ({
     imageName
 }) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const { request, loading } = useApi();
+    const { request } = useApi();
     const { translateX, isSwiping, handlers, resetSwipe } = useSwipe(onSwipeStart, onSwipeEnd, onClick);
 
     useEffect(() => {

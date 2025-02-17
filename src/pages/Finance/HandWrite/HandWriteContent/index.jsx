@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
 import useApi from "../../../../hooks/useApi.js";
+import { postS3 } from "../../../../api/s3API.js";
+import { postAccount } from "../../../../api/financeAPI.js";
 import { useAccount } from "../../../../hooks/useAccount.js";
 import { formatFormData } from "../../../../utils/accountUtils.js";
 import { Form, useNavigate } from "react-router-dom";
@@ -23,10 +25,19 @@ import StateLayer1 from "../../../../assets/icons/finance/StateLayer1.svg";
 
 const HandWriteContent = () => {
     const { formData, setFormField } = useHandWrite();
-    const { handleRequest, loading, error } = useAccount();
-    const requiredFields = ["accountType", "date", "subName", "subAssetName", "amount", "title", "status", "score", "content"];
+    const requiredFields = [
+        "accountType", 
+        "date", 
+        "subName", 
+        "subAssetName", 
+        "amount", 
+        "title", 
+        "status", 
+        "score", 
+        "content"
+    ];
     const navigate = useNavigate();
-    const { data, request } = useApi();
+    const { request } = useApi();
 
     const [isDisabled, setIsDisabled] = useState(true);
     const [defaultImageFile, setDefaultImageFile] = useState(null);
@@ -52,14 +63,7 @@ const HandWriteContent = () => {
         if(formData.imageUrl === "") {
             const defaultImageForm = new FormData();
             defaultImageForm.append("file", defaultImageFile);        
-            const response = await request({
-                method: "POST",
-                url: "/api/image",
-                body: defaultImageForm,
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                },
-            });
+            const response = await request(postS3(defaultImageForm));
             if (response && response.result) {
                 const imageUrl = response.result.imageUrl;
                 const imageName = response.result.imageName;
@@ -68,14 +72,13 @@ const HandWriteContent = () => {
                     imageUrl,
                     imageName,
                 });
-                await handleRequest("POST", formattedData);
+                await request(postAccount(formattedData));
                 navigate(-1);
             }
         }
         else{
             const formattedData = formatFormData(formData);
-            console.log("작성 완료 데이터:", formattedData);
-            await handleRequest("POST", formattedData);
+            await request(postAccount(formattedData));
             navigate(-1);
         }
     };
