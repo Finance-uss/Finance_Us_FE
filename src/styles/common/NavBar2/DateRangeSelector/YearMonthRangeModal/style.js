@@ -49,7 +49,7 @@ export const ButtonContainer = styled.div`
 
 export const Button = styled.button.attrs(props => ({
     style: {
-        fontWeight: props.isSelected ? 'bold' : 'normal'
+        fontWeight: props.$isSelected ? 'bold' : 'normal' // 변경된 부분
     }
 }))`
     margin-right: 10px;
@@ -58,7 +58,7 @@ export const Button = styled.button.attrs(props => ({
     background: none; 
 
     ${(props) =>
-        props.isSelected &&
+        props.$isSelected && // 변경된 부분
         css`
             font-weight: bold;
         `}
@@ -80,4 +80,5 @@ export const ViewButton = styled.button`
 
     &:focus {
         outline: none; 
+    }
 `;

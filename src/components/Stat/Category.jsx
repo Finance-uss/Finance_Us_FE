@@ -28,13 +28,13 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
             style={{ 
               height: '100%', 
               width: `${progressPercentage}%`, 
-              backgroundColor: '#142755', 
+              backgroundColor: '#ED1B87', 
               borderRadius: '2px' 
             }} 
           />
         </ProgressBar>
         <Amount>
-          <span>{totalAmount.toLocaleString()}원</span> <span>{goalAmount.toLocaleString()}원</span>
+            <span>{(totalAmount || 0).toLocaleString()}원</span> <span>{(goalAmount || 0).toLocaleString()}원</span>
         </Amount>
       </TotalProgressContainer>
 
@@ -45,7 +45,17 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
           {selectedDate.month}월 카테고리 별 목표 {activeButton === 'expense' ? '지출' : '수익'} 현황
         </Title>
         {Object.entries(categoryData).map(([category, data], index) => {
-          const percentage = activeButton === 'expense' ? (data.spent / data.goal) * 100 : (data.earned / data.goal) * 100;
+          const spent = data.spent || 0; 
+          const earned = data.earned || 0; 
+          const goal = data.goal || 0; 
+
+          // 퍼센트 계산
+          const percentage = activeButton === 'expense' 
+            ? (goal > 0 ? (spent / goal) * 100 : 100) // 목표가 없으면 100%
+            : (goal > 0 ? (earned / goal) * 100 : 0);
+
+          // 디버깅을 위한 콘솔 로그
+          console.log(`${category} - Spent: ${spent}, Goal: ${goal}, Percentage: ${percentage}`);
 
           return (
             <CategoryBar key={category}>
@@ -68,7 +78,7 @@ const Category = ({ selectedDate, activeButton, categoryData, totalAmount, goalA
                 />
               </ProgressBar>
               <Amount>
-                <span>{activeButton === 'expense' ? data.spent : data.earned}원</span> <span>{data.goal}원</span>
+                <span>{activeButton === 'expense' ? spent.toLocaleString() : earned.toLocaleString()}원</span> <span>{goal.toLocaleString()}원</span>
               </Amount>
             </CategoryBar>
           );

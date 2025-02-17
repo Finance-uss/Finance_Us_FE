@@ -33,6 +33,6 @@ export const LegendColorBox = styled.div`
   width: 10px;
   height: 10px;
   border-radius: 10px;
-  margin-left: 25px;
+  margin-left: 5px;
   margin-right: 5px;
 `;
