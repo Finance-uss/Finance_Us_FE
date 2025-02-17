@@ -23,7 +23,8 @@ const ProfileSetting = () => {
     const [nicknameError, setNicknameError] = useState("");
     const [nicknameValid, setNicknameValid] = useState("");
     const [introductionError, setIntroductionError] = useState(""); 
-    const [buttonColor, setButtonColor] = useState("#d4d4d4"); 
+    const [buttonColor, setButtonColor] = useState("#d4d4d4");
+    const [submitError, setSubmitError] = useState(""); 
 
     // AgeGroup과 JobCategory 매핑
     const ageGroupMapping = {
@@ -60,7 +61,7 @@ const ProfileSetting = () => {
             setNicknameValid("");
             return;
         }
-
+    
         try {
             const response = await axios.get(`${URL}/api/user/nameCheck`, { 
                 params: { 
@@ -71,12 +72,12 @@ const ProfileSetting = () => {
                 setNicknameValid("사용 가능한 닉네임입니다.");
                 setNicknameError("");
             } else {
-                setNicknameError(response.data.message);
+                setNicknameError(response.data.message); 
                 setNicknameValid("");
             }
         } catch (error) {
             console.error(error);
-            setNicknameError(error);
+            setNicknameError("중복되는 닉네임입니다.");
         }
     };
 
@@ -97,13 +98,12 @@ const ProfileSetting = () => {
             try {
                 console.log("회원가입 시도:", formData);
 
-
                 const requestData = {
                     email: formData.email,
                     username: formData.username,
                     password: formData.password, 
-                    jobCategory: jobCategoryMapping[formData.jobCategory] || formData.jobCategory, // 매핑된 직업 카테고리
-                    ageGroup: ageGroupMapping[formData.ageGroup] || formData.ageGroup, // 매핑된 나이대
+                    jobCategory: jobCategoryMapping[formData.jobCategory] || formData.jobCategory, 
+                    ageGroup: ageGroupMapping[formData.ageGroup] || formData.ageGroup, 
                     one_liner: formData.one_liner
                 };
 
@@ -122,11 +122,11 @@ const ProfileSetting = () => {
                     console.log("사용자 정보:", { email, name, id, role });
                     navigate("/finance");
                 } else {
-                    console.error(response.data.message);
+                    setSubmitError(response.data.message); 
                 }
             } catch (error) {
                 console.error(error);
-                alert("회원가입 중 오류가 발생했습니다. 다시 시도해 주세요.");
+                setSubmitError("이메일이 이미 존재합니다. 다른 이메일로 가입해주세요!"); 
             }
         }
     };
@@ -193,6 +193,7 @@ const ProfileSetting = () => {
                 onChange={handleIntroductionChange}
             />
             {introductionError && <Message $error>{introductionError}</Message>} 
+            {submitError && <Message $error>{submitError}</Message>}
             <ButtonContainer>
                 <SubmitButton
                     text="프로필 완성"

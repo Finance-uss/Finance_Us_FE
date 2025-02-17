@@ -14,10 +14,9 @@ export const Title = styled.h1`
     font-size: 22px;
     font-weight: 700;
     line-height: 16px;
-    margin: 125px 0 40px 0; /* 수평 마진 제거 */
+    margin: 125px 0 40px 0; 
     letter-spacing: 0.2px;
 `;
-
 
 export const Form = styled.form`
     display: flex;
@@ -30,20 +29,17 @@ export const InputContainer = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
-    gap: 0px; /* 버튼과 입력 필드 사이 간격 */
+    gap: 0px; 
 `;
 
 export const Input = styled.input`
-    flex: 1; /* 입력 필드가 가능한 한 넓게 차지 */
+    flex: 1; 
     padding: 5px;
     border: none;
     border-bottom: 1px solid #d9d9d9; 
     outline: none;
-    &:focus {
-        border-bottom: 1px solid #142755;
-    }
     &::placeholder {
-        color: #b4b4b4; /* placeholder 색상 설정 */
+        color: #b4b4b4;
     } 
 `;
 
@@ -82,4 +78,10 @@ export const SubmitButtonStyled = styled.button`
     &:disabled {
         cursor: not-allowed;
     }
+`;
+
+export const ErrorMessage = styled.p`
+    color: #F17357; 
+    margin: 10px 0; 
+    font-size: 12px; 
 `;

@@ -42,10 +42,9 @@ export const LinkContainer = styled.div`
     cursor: pointer;
 `;
 
-// 새로 추가된 Message 컴포넌트
 export const Message = styled.p`
     margin-top: 0px;
     margin-bottom: 40px;
-    color: ${props => (props.$error ? 'red' : '#142755')}; 
+    color: ${props => (props.$error ? '#F17357' : '#142755')}; 
     font-size: 12px; 
 `;
