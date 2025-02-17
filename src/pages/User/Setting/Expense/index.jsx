@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import CompleteButtonComponent from '../../../../components/User/CompleteButton';
 import PlusCateButton from '../../../../components/User/PlusCateButton';
@@ -9,52 +10,64 @@ import AmountInput from '../../../../components/User/AmountInput';
 
 const ExpensePage = () => {
     const navigate = useNavigate();
-
     const [totalExpense, setTotalExpense] = useState('');
     const [categories, setCategories] = useState([]);
+    const [errorMessage, setErrorMessage] = useState("");
 
-    const loadCategories = async () => {
+    // 지출 목표 금액 조회 API (GET)
+    const loadExpenseGoals = async () => {
         try {
-          // API 호출 로직 (더미 데이터 사용)
-          const response = [
-            { id: 0, category: '식비', subcategories: ['외식', '배달', '식재료'] },
-            { id: 1, category: '교통', subcategories: ['대중교통', '택시', '주유'] },
-            { id: 2, category: '여가/취미', subcategories: ['영화/공연', '취미 용품', '여행'] },
-            { id: 3, category: '건강/의료', subcategories: ['병원비', '약국', '건강 식품'] },
-          ];
-    
-          setCategories(response); 
+            const response = await axiosInstance.get(`/api/mypage/goal-asset`, {
+                params: { type: "expense" },
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+
+            if (!response.data.isSuccess) {
+                setErrorMessage("목표 금액 데이터를 불러올 수 없습니다.");
+                return;
+            }
+
+            const goalData = response.data.result;
+
+            setTotalExpense(goalData.monthlyGoal || ""); 
+            setCategories(goalData.subCategories || []); 
         } catch (error) {
-          console.error('카테고리 로드 실패:', error);
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.");
+            console.error("목표 금액 조회 실패:", error);
         }
     };
 
+    // 페이지가 처음 로드될 때 목표 금액 데이터 불러오기
     useEffect(() => {
-        loadCategories(); 
+        loadExpenseGoals();
     }, []);
 
     const addCategory = () => {
-        const newId = categories.length;
-        setCategories([
-        ...categories,
-        {
+        const newId = categories.length + 1; 
+        const newCategory = {
             id: newId,
-            category: '대분류',
-            subcategories: ['소분류'], 
-            amount: '',
-        },
-        ]);
+            name: `새 카테고리 ${newId}`,
+            subCategories: [{ id: `${newId}-1`, name: "소분류 없음", goal: 0 }], // ✅ 기본 소분류 추가
+        };
+        setCategories((prev) => [...prev, newCategory]);
     };
 
+    // 총 목표 금액 업데이트
     const updateTotalExpense = (value) => {
-        if (!/^\d*$/.test(value)) return; // 숫자 이외의 값은 무시
+        if (!/^\d*$/.test(value)) return; // 숫자만 허용
         setTotalExpense(value);
-      };
+    };
 
-    const updateCategoryAmount = (id, value) => {
-        if (!/^\d*$/.test(value)) return; 
+    // 카테고리별 목표 금액 업데이트
+    const updateCategoryAmount = (categoryId, subCategoryId, value) => {
+        if (!/^\d*$/.test(value)) return; // 숫자만 입력 가능
         setCategories((prev) =>
-        prev.map((item) => (item.id === id ? { ...item, amount: value } : item))
+            prev.map((category) => ({
+                ...category,
+                subCategories: category.subCategories.map((sub) =>
+                    sub.id === subCategoryId ? { ...sub, goal: value } : sub
+                ),
+            }))
         );
     };
 
@@ -62,19 +75,32 @@ const ExpensePage = () => {
         setCategories((prev) => prev.filter((item) => item.id !== id));
     };
 
-    const saveChanges = () => {
-        const updatedData = {
-          totalExpense,
-          categories: categories.map((item) => ({
-            category: item.category,
-            subcategory: item.subcategories[0],
-            amount: item.amount,
-          })),
-        };
-    
-        console.log('저장된 데이터:', updatedData);
-        // 실제 저장 로직(API 호출 등) 추가
-      };
+    // 목표 금액 저장 (PATCH 요청)
+    const saveChanges = async () => {
+        try {
+            const payload = {
+                type: "expense",
+                subGoals: categories.map((item) => ({
+                    id: item.id,
+                    goal: item.goal || 0,
+                })),
+            };
+
+            const response = await axiosInstance.patch(`/api/mypage/goal-asset`, payload, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+            });
+
+            if (response.data.isSuccess) {
+                alert("지출 목표 금액이 저장되었습니다.");
+                navigate("/user");
+            } else {
+                setErrorMessage("목표 금액 저장에 실패했습니다.");
+            }
+        } catch (error) {
+            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.");
+            console.error("목표 금액 저장 실패:", error);
+        }
+    };
 
     return (
         <PageContainer>
@@ -84,6 +110,7 @@ const ExpensePage = () => {
                 </BackHeaderWrapper>
             </HeaderWrapper>
             <ContentWrapper>
+                {errorMessage && <ErrorText>{errorMessage}</ErrorText>}
                 <SectionTitle>이번 달 총 지출 목표 금액</SectionTitle>
                 <AmountInputWrapper>
                     <AmountInput
@@ -96,8 +123,8 @@ const ExpensePage = () => {
                     {categories.map((item) => (
                         <AmountInputContainer
                             key={item.id}
-                            category={`${item.category}/${item.subcategories[0] || ''}`} 
-                            value={item.amount || ''} 
+                            category={item.name}
+                            value={item.goal || ""}
                             onChange={(value) => updateCategoryAmount(item.id, value)}
                             onRemove={() => removeCategory(item.id)}
                         />
@@ -163,4 +190,11 @@ const PlusCateButtonWrapper = styled.div`
   margin-top: 40px;
   display: flex;
   justify-content: center;
+`;
+
+const ErrorText = styled.p`
+    color: red;
+    text-align: center;
+    font-size: 14px;
+    margin-bottom: 20px;
 `;

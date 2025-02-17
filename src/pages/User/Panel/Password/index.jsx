@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader'; 
 import InputWithButton from '../../../../components/User/InputWithButton';
 import SimpleInput from '../../../../components/User/SimpleInput';
