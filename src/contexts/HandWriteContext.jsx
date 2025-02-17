@@ -8,16 +8,18 @@ const HandWriteContext = createContext();
 
 export const HandWriteProvider = ({ children }) => {
     const { selectedDate } = useDate();
-    const { imageUrl, handleImageUpload } = useImageUploader();
+    const { imageUrl, imageName, previewImage, handleImageUpload } = useImageUploader();
     const { formData, handleChange, setFormField } = useForm({
             accountType: "expense",
             date: "",
             subName: "",
             subAssetName: "",
+            amount: "",
             title: "",
             status: false,
             score: 0,
             imageUrl: imageUrl,
+            imageName: imageName,
             content: ""
     });
 
@@ -34,7 +36,8 @@ export const HandWriteProvider = ({ children }) => {
     useEffect(() => {
         setFormField("date", selectedDate);
         setFormField("imageUrl", imageUrl);
-    }, [selectedDate, imageUrl]);
+        setFormField("imageName", imageName);
+    }, [selectedDate, imageUrl, imageName]);
 
     return (
         <HandWriteContext.Provider 
@@ -43,7 +46,9 @@ export const HandWriteProvider = ({ children }) => {
                 handleChange, 
                 setFormField, 
                 modals, 
-                imageUrl, 
+                imageUrl,
+                imageName,
+                previewImage,
                 handleImageUpload, 
                 inputFields 
             }}

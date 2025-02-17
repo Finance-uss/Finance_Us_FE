@@ -4,10 +4,10 @@ import likeIcon from "../../../../assets/icons/common/Community/heart.svg";
 import commentIcon from "../../../../assets/icons/common/Community/comment.svg";
 import * as S from "../../../../styles/Community/PostCard/style";
 
-const PostCard = ({ postId , category, postName, preview, image, likes = 0, comments = 0 }) => {
+const PostCard = ({ id , category, postName, preview, image, likes = 0, comments = 0 }) => {
   const navigate = useNavigate();
   const handlePostClick = () => {
-    navigate(`/community/postdetail/${postId}`);
+    navigate(`/community/postdetail/${id}`);
   };
   return (
     <S.CardContainer onClick={handlePostClick}>
@@ -29,8 +29,8 @@ const PostCard = ({ postId , category, postName, preview, image, likes = 0, comm
         </S.TextWrapper>
        
       </S.Content>
-      <S.Thumbnail src={image} alt={postName} />
-    </S.CardContainer>
+      {image && <S.Thumbnail src={image} alt={postName}/>}
+      </S.CardContainer>
   );
 };
 

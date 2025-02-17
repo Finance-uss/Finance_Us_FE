@@ -1,49 +1,58 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import SwipeableCard from '../../SwipeableCard';
 import styled from 'styled-components';
 
-//하나의 아이템
-const AccountItem = ({ activity }) => {
-    const { accountId, score, title, amount, subName, imageUrl } = activity;
-    // 스와이프가 완전히 끝났을 때 별점을 숨길지 여부
+const AccountItem = ({ activity, onDeleteSuccess, activeSwipeId, setActiveSwipeId }) => {
+    const { accountId, score, title, amount, subName, imageUrl, imageName } = activity;
+    const [isImageHidden, setIsImageHidden] = useState(false);
     const [isStarHidden, setIsStarHidden] = useState(false);
     const navigate = useNavigate();
-    // 별점 표시 유틸 함수
     const getStarRating = (score) =>
         '★'.repeat(score) + '☆'.repeat(5 - score);
 
-      // 스와이프 종료 시 별점 상태를 업데이트하는 콜백
+    useEffect(() => {
+        if (activeSwipeId !== accountId) {
+            setIsStarHidden(false);
+            setIsImageHidden(false);
+        }
+    }, [activeSwipeId]);
+    const handleSwipeStart = useCallback(() => {
+        if (activeSwipeId !== accountId) {
+            setActiveSwipeId(accountId);
+        }
+    }, [activeSwipeId, setActiveSwipeId, accountId]);
     const handleSwipeEnd = (finalTranslateX) => {
-        // maxSwipe 값이 -62이므로, -62가 설정되면 별점을 숨기고, 그렇지 않으면 보여줌
-        if (finalTranslateX === -62) {
-        setIsStarHidden(true);
-        } else {
-        setIsStarHidden(false);
+        const isFullySwiped = finalTranslateX === -62;
+        
+        setIsStarHidden(isFullySwiped);
+        setIsImageHidden(isFullySwiped);
+        if(!isFullySwiped) {
+            setActiveSwipeId(null);
         }
     };
-
-    // 클릭(탭) 이벤트 핸들러: 예를 들어 상세 페이지로 이동
-    const handleClick = (event) => {
-        // 스와이프 중이 아닐 때만 클릭 이벤트를 처리하도록 추가 검증 가능
+    const handleClick = () => {
         if (!isStarHidden) {
+            localStorage.setItem("selectedActivity", JSON.stringify(activity));
             navigate(`account/${accountId}`);
         }
     };
 
     return (
         <SwipeableCard 
+            onSwipeStart={handleSwipeStart}
             onSwipeEnd={handleSwipeEnd} 
             onClick={handleClick}
             itemId={accountId}
             boxShadow={'0px 0px 3px 0px rgba(0, 0, 0, 0.25)'}
             borderRadius={'5px'}
+            onDeleteSuccess={onDeleteSuccess}
+            activeSwipeId={activeSwipeId}
+            imageName={imageName}
         >
-            <Image src={imageUrl} alt={title} />
+            <Image src={imageUrl} alt={title} $isHidden={isImageHidden}/>
             <Content>
                 <SubInfo>
-                    {/* ★ 변경: 별점은 isStarHidden=false일 때만 렌더링 */}
                     {!isStarHidden && <div>{getStarRating(score)}</div>}
                     <span>{subName}</span>
                 </SubInfo>
@@ -66,6 +75,7 @@ const Image = styled.img`
     border-radius: 50%;
     object-fit: cover;
     margin-right: 10px;
+    visibility: ${({ $isHidden }) => ($isHidden ? "hidden" : "visible")};
 `;
 
 const Content = styled.div`

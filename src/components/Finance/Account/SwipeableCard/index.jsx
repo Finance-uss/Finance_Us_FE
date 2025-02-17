@@ -1,25 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useSwipe } from '../../../../hooks/useSwipe';
 import useApi from '../../../../hooks/useApi';
+import { deleteS3 } from '../../../../api/s3API';
+import { deleteAccount } from '../../../../api/financeAPI';
 import DeleteConfirmModal from '../DeleteConfirmModal';
 
-
-const SwipeableCard = ({ children, onSwipeEnd, onClick, itemId, boxShadow, borderRadius, paddingLeft }) => {
+const SwipeableCard = ({ 
+    children, 
+    onSwipeStart,
+    onSwipeEnd, 
+    onClick, 
+    itemId, 
+    boxShadow, 
+    borderRadius, 
+    paddingLeft, 
+    onDeleteSuccess,
+    activeSwipeId,
+    imageName
+}) => {
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-    const { request, loading } = useApi();
-    const { translateX, isSwiping, handlers } = useSwipe(onSwipeEnd, onClick);
+    const { request } = useApi();
+    const { translateX, isSwiping, handlers, resetSwipe } = useSwipe(onSwipeStart, onSwipeEnd, onClick);
+
+    useEffect(() => {
+        if (activeSwipeId !== itemId && translateX !== 0) {
+            resetSwipe();
+        }
+    }, [activeSwipeId, itemId, translateX, resetSwipe]);
+
     // 실제 삭제를 처리하는 함수
     const handleDelete = async () => {
         try {
-            await request({
-                method: "DELETE",
-                url: `/api/account/${itemId}`,
-            });
+            await request(deleteS3(imageName));
+            await request(deleteAccount(itemId));
 
-            console.log('삭제 성공');
             setIsDeleteModalOpen(false);
             onSwipeEnd && onSwipeEnd(); // UI 업데이트를 위한 콜백 호출
+            resetSwipe();
+            if (onDeleteSuccess) {
+                onDeleteSuccess();
+            }
         } catch (error) {
             console.error("삭제 중 오류 발생", error);
         }
@@ -40,6 +61,8 @@ const SwipeableCard = ({ children, onSwipeEnd, onClick, itemId, boxShadow, borde
                 $translateX={translateX} 
                 $isSwiping={isSwiping}
                 $paddingLeft={paddingLeft}
+                onMouseDown={onSwipeStart}
+                onTouchStart={onSwipeStart}
                 {...handlers}
             >
                 {children}

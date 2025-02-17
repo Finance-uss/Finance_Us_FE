@@ -13,7 +13,7 @@ const CategoryModal = ({type}) => {
             request({ 
                 method: "GET", 
                 url: "/api/mypage/category",
-                params: { type },
+                params: { type: type },
             });
         }
     }, [modals.categoryModal.isOpen, request]);

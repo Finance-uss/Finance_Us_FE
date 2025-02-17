@@ -7,11 +7,9 @@ const useComment = (postId) => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ["comments", postId], 
     queryFn: () => getComment(postId),
-    select: (data) => data.result.commentsList,
+    select: (data) => data.result,
   });
-  
-  const getCommentCount = data?.result?.commentCount || 0;  
-  
+  const commentCount = data?.commentCount || 0;     
   const addCommentMutation = useMutation({
     mutationFn: (newComment) => addComment(postId, newComment),
     onSuccess: () => {
@@ -44,8 +42,8 @@ const useComment = (postId) => {
   });
 
   return {
-    comments: data || [], 
-    commentCount: getCommentCount,
+    comments: data?.commentsList || [],
+    commentCount,
     isLoading,
     isError,
     addComment: addCommentMutation.mutate, 
