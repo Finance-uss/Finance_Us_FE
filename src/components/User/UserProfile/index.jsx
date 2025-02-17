@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState }from 'react';
+import axiosInstance from "../../../api/axiosInstance";
 import {
   ProfileContainer,
   ProfileImage,
@@ -10,24 +11,49 @@ import {
 import profileImage from '../../../assets/icons/common/User/profile.svg';
 
 const UserProfile = () => {
-  const profileData = {
-    image: profileImage,
-    name: "김우원",
-    age: "20대",
-    job: "대학생",
-    intro: "멍청소비 그만!",
-  };
+  const [profileData, setProfileData] = useState({
+    name: '',
+    ageGroup: '',
+    jobCategory: '',
+    one_liner: '',
+    imgUrl: ''
+  });
+
+  useEffect(() => {
+    const fetchProfileData = async () => {
+        try {
+            const token = localStorage.getItem("token"); // Bearer 토큰 가져오기
+            if (!token) {
+                throw new Error("토큰이 없습니다.");
+            }
+
+            const response = await axiosInstance.get('/api/user', {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+
+            if (response.data.isSuccess) {
+                setProfileData(response.data.result);
+            }
+        } catch (error) {
+            console.error('회원 정보 조회 실패:', error);
+        }
+    };
+
+    fetchProfileData();
+  }, []);
 
   return (
     <ProfileContainer>
-      <ProfileImage src={profileData.image} alt="Profile" />
+      <ProfileImage src={profileData.imgUrl || profileImage} alt="Profile" />
       <ProfileInfo>
         <ProfileName>{profileData.name}</ProfileName>
         <ProfileAgeJob>
           <span>{profileData.age}</span>
           <span>{profileData.job}</span>
         </ProfileAgeJob>
-        <ProfileIntro>{profileData.intro}</ProfileIntro>
+        <ProfileIntro>{profileData.one_liner || "한 줄 소개 없음"}</ProfileIntro>
       </ProfileInfo>
     </ProfileContainer>
   );

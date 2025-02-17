@@ -17,11 +17,11 @@ const UserPostCard = ({ category, title, preview, postImage, likes = 0, comments
         <S.Footer>
           <S.Stat>
             <S.StatIcon src={like} alt="좋아요 아이콘" />
-            <S.StatText>{likes}</S.StatText>
+            <S.StatText>{likes ?? 0}</S.StatText>
           </S.Stat>
           <S.Stat>
             <S.StatIcon src={comment} alt="댓글 아이콘" />
-            <S.StatText>{comments}</S.StatText>
+            <S.StatText>{comments ?? 0}</S.StatText>
           </S.Stat>
         </S.Footer>
       </S.Content>

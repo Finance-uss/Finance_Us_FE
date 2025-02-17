@@ -68,7 +68,7 @@ const SettingPanel = () => {
 
             {/* 계정 정보 섹션 */}
             <SectionTitle>계정 정보</SectionTitle>
-            <Item onClick={() => handleOutNavigation('https://www.notion.so/1888467e978880fcbad7ce9eb1a77627?pvs=4')}>
+            <Item onClick={() => handleOutNavigation('/user/auth')}>
                 인증 뱃지 신청하기
             </Item>
             <Item onClick={handleLogout}>로그아웃</Item>

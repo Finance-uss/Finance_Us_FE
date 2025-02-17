@@ -56,3 +56,10 @@ export const Select = styled.select`
     overflow-y: auto;
     max-height: 150px;
 `;
+
+export const NicknameMessage = styled.p`
+    font-size: 14px;
+    color: ${({ isValid }) => (isValid ? '#142755' : '#F17357')};
+    margin-top: 10px;
+    margin-bottom: 0;
+`;
