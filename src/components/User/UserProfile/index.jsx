@@ -8,7 +8,7 @@ import {
   ProfileAgeJob,
   ProfileIntro,
 } from '../../../styles/User/UserProfile/style';
-import profileImage from '../../../assets/icons/common/User/profile.svg';
+import ProfileImageUploader from "./ProfileImageUploader"
 
 const UserProfile = () => {
   const [profileData, setProfileData] = useState({
@@ -32,6 +32,7 @@ const UserProfile = () => {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            console.log("회원 정보 조회: ", response);
 
             if (response.data.isSuccess) {
                 setProfileData(response.data.result);
@@ -44,9 +45,16 @@ const UserProfile = () => {
     fetchProfileData();
   }, []);
 
+  const handleImageUpdate = (newImageUrl) => {
+    setProfileData((prev) => ({
+      ...prev,
+      imgUrl: newImageUrl,
+    }));
+  };
+
   return (
     <ProfileContainer>
-      <ProfileImage src={profileData.imgUrl || profileImage} alt="Profile" />
+     <ProfileImageUploader imgUrl={profileData.imgUrl} onUpdateImage={handleImageUpdate} />
       <ProfileInfo>
         <ProfileName>{profileData.name}</ProfileName>
         <ProfileAgeJob>
