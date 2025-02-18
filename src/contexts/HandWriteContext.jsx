@@ -8,7 +8,7 @@ const HandWriteContext = createContext();
 
 export const HandWriteProvider = ({ children }) => {
     const { selectedDate } = useDate();
-    const { imageUrl, imageName, previewImage, handleImageUpload } = useImageUploader();
+    const { imageUrl, imageName, handleImageUpload } = useImageUploader();
     const { formData, handleChange, setFormField } = useForm({
             accountType: "expense",
             date: "",
@@ -18,10 +18,9 @@ export const HandWriteProvider = ({ children }) => {
             title: "",
             status: false,
             score: 0,
-            imageUrl: imageUrl,
-            imageName: imageName,
+            imageUrl: "",
+            imageName: "",
             content: "",
-            previewImage: previewImage
     });
 
     const modals = useModalManager(["calendarModal", "categoryModal", "assetModal", "ratingModal"]);
@@ -35,10 +34,13 @@ export const HandWriteProvider = ({ children }) => {
     ];
 
     useEffect(() => {
-        setFormField("date", selectedDate);
-        setFormField("imageUrl", imageUrl);
-        setFormField("imageName", imageName);
-        setFormField("previewImage", previewImage);
+        if(selectedDate){
+            setFormField("date", selectedDate);
+        }
+        if(imageUrl && imageName){
+            setFormField("imageUrl", imageUrl);
+            setFormField("imageName", imageName);
+        }
     }, [selectedDate, imageUrl, imageName]);
 
     return (
@@ -50,7 +52,6 @@ export const HandWriteProvider = ({ children }) => {
                 modals, 
                 imageUrl,
                 imageName,
-                previewImage,
                 handleImageUpload, 
                 inputFields 
             }}

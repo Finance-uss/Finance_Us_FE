@@ -75,8 +75,7 @@ const Camera = () => {
                 if(response.data.isSuccess){
                     const imageUrl = response.data.result.imageUrl;
                     const imageName = response.data.result.imageName;
-                    const previewImage = URL.createObjectURL(file);
-                    const formData = { imageUrl, imageName, previewImage };
+                    const formData = { imageUrl, imageName };
                     localStorage.setItem("handwriteData", JSON.stringify(formData));
                 }
             }
@@ -88,9 +87,16 @@ const Camera = () => {
                 const formData = new FormData();
                 formData.append("file", file);
 
-                const response = await axiosInstance(postAccountReceipt(formData));
-                if(response.data.isSuccess){
-                    localStorage.setItem("handwriteData", JSON.stringify(response.data.result));
+                const receiptResponse = await axiosInstance(postAccountReceipt(formData));
+                if(receiptResponse.data.isSuccess){
+                    const storedData = localStorage.getItem("handwriteData") || {};
+
+                    const finalData = {
+                        ...storedData,
+                        ...receiptResponse.data.result,
+                    }
+
+                    localStorage.setItem("handwriteData", JSON.stringify(finalData));
                     navigate("/finance/handwrite");
                 }
                 else{

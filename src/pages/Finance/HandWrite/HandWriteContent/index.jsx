@@ -41,6 +41,7 @@ const HandWriteContent = () => {
 
     const [isDisabled, setIsDisabled] = useState(true);
     const [defaultImageFile, setDefaultImageFile] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const convertImageToFile = async () => {
@@ -50,24 +51,30 @@ const HandWriteContent = () => {
             setDefaultImageFile(file); // 변환된 파일을 상태로 저장
         };
 
-        convertImageToFile();
-
-        const storedData = localStorage.getItem("handwriteData");
-        if (storedData) {
-            try {
-                const parsedData = JSON.parse(storedData);
-
-                // 🔹 formData의 모든 필드를 업데이트
-                Object.keys(parsedData).forEach((key) => {
-                    if (parsedData[key]) {
-                        setFormField(key, parsedData[key]);
-                    }
-                });
-
-            } catch (error) {
-                console.error("로컬스토리지 데이터 파싱 오류:", error);
+        
+        const fetchData = async () => {
+            const storedData = localStorage.getItem("handwriteData");
+            if (storedData) {
+                try {
+                    const parsedData = JSON.parse(storedData);
+                    // 🔹 formData의 모든 필드를 업데이트
+                    Object.keys(parsedData).forEach((key) => {
+                        if (parsedData[key]) {
+                            setFormField(key, parsedData[key]);
+                        }
+                    });                    
+                } catch (error) {
+                    console.error("로컬스토리지 데이터 파싱 오류:", error);
+                } finally {
+                    setIsLoading(false);
+                }
+            } else {
+                setIsLoading(false);
             }
-        }
+        };
+
+        convertImageToFile();
+        fetchData();
     }, []);
 
 
@@ -90,15 +97,19 @@ const HandWriteContent = () => {
                     imageName,
                 });
                 await request(postAccount(formattedData));
-                navigate(-1);
+                navigate("/finance");
             }
         }
         else{
             const formattedData = formatFormData(formData);
             await request(postAccount(formattedData));
-            navigate(-1);
+            navigate("/finance");
         }
     };
+
+    if (isLoading) {
+        return <></>; 
+    }
 
     return (
         <Container>

@@ -33,8 +33,8 @@ const OtherSection = () => {
 
             <S.ImageUpload>
                 <label htmlFor="image-upload">
-                    {formData.previewImage ? (
-                        <S.UploadImage src={formData.previewImage} alt="업로드 이미지" />
+                    {formData.imageUrl ? (
+                        <S.UploadImage src={formData.imageUrl} alt="업로드 이미지" />
                     ) : (
                         <img src={AddPhotoAlternate} alt="업로드 아이콘" />
                     )}

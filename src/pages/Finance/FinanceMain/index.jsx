@@ -53,7 +53,10 @@ const FinanceMain = () => {
         <Container>
             <NavBar icon={Bell} modalTop="75px"/>
             <Satisfaction score={monthData.totalScore}/>
-            <Calendar header={`지출 ${monthData.totalExpense.toLocaleString()}원 수익 ${monthData.totalIncome.toLocaleString()}원`} />
+            <Calendar 
+                header={`지출 ${monthData.totalExpense.toLocaleString()}원 수익 ${monthData.totalIncome.toLocaleString()}원`} 
+                highlightData={monthData.calendar}
+            />
             <FinancePlusButton />
             {selectedDate.day && <Today>{selectedDate.day}일</Today>}
             {selectedDate.day && accountData && (
