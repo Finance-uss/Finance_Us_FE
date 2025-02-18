@@ -66,7 +66,7 @@ const SetPW = () => {
                 />
                 {passwordMessage && (
                     <Message 
-                        style={{ color: isError ? 'red' : '#142755' }} 
+                        style={{ color: isError ? '#F17357' : '#142755' }} 
                     >
                         {passwordMessage}
                     </Message>

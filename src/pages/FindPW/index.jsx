@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Title, InputContainer, Input, VerifyButton, ButtonContainer } from "../../styles/FindPW/style";
+import { Container, Title, InputContainer, Input, VerifyButton, ButtonContainer, ErrorMessage } from "../../styles/FindPW/style"; // ErrorMessage 추가
 import SubmitButton from '../../components/common/SubmitButton'; 
 import { useAuth } from '../../contexts/AuthContext';
 import { useNavigate } from 'react-router-dom'; 
@@ -74,18 +74,17 @@ const FindPW = () => {
                 if (responese.data.isSuccess) {
                     setEmailMessage("이메일이 전송되었습니다. 이메일을 확인해주세요.");
                     setTimer(180); 
-                    setIsResend(true); // 인증 버튼을 재전송으로 변경
-                    setFormField('Authorization', ''); // 이메일 재전송 시 인증코드 초기화
-                    setAuthCodeMessage(''); // 인증 메시지 초기화
+                    setIsResend(true); 
+                    setFormField('Authorization', ''); 
+                    setAuthCodeMessage(''); 
                 } else {
                     setEmailMessage("존재하지 않는 계정입니다.");
                 }
             } catch (error) {
                 setEmailMessage('서버 에러가 발생했습니다. 나중에 다시 시도해주세요.');
+            }
         }
-    }
-};
-
+    };
 
     useEffect(() => {
         let countdown;
@@ -129,11 +128,11 @@ const FindPW = () => {
                 </VerifyButton>
             </InputContainer>
             {emailMessage && (
-                <p style={{ 
+                <ErrorMessage style={{ 
                     color: emailMessage.includes("이메일이 전송") ? '#142755' : 'red'
                 }}>
                     {emailMessage}
-                </p>
+                </ErrorMessage>
             )}
             <InputContainer>
                 <Input
@@ -154,11 +153,9 @@ const FindPW = () => {
                 )}
             </InputContainer>
             {authCodeMessage && (
-                <p style={{ 
-                    color: 'red'
-                }}>
+                <ErrorMessage>
                     {authCodeMessage}
-                </p>
+                </ErrorMessage>
             )}
             <ButtonContainer>
                 <SubmitButton 

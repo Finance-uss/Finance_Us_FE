@@ -26,7 +26,7 @@ export const Form = styled.form`
 
 
 export const Input = styled.input`
-    flex: 1; /* 입력 필드가 가능한 한 넓게 차지 */
+    flex: 1; 
     padding: 5px;
     border: none;
     border-bottom: 1px solid #d9d9d9;
@@ -35,7 +35,7 @@ export const Input = styled.input`
         border-bottom: 1px solid #142755;
     }
     &::placeholder {
-        color: #b4b4b4; /* placeholder 색상 설정 */
+        color: #b4b4b4; 
     } 
 `;
 
@@ -44,7 +44,7 @@ export const ButtonContainer = styled.div`
 `;
 
 export const Message = styled.p`
-    color: ${({ $isValid }) => ($isValid ? '#142755' : 'red')}; 
-    margin-top: 8px; 
-    font-size: 14px; 
+    color: ${({ $isValid }) => ($isValid ? '#142755' : '#F17357')}; 
+    margin: 10px 0; 
+    font-size: 12px; 
 `;
