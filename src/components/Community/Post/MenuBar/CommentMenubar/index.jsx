@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import * as S from '../../../../../styles/Community/MenuBar/style';
 import closeIcon from '../../../../../assets/icons/common/X.svg';
 import useComment from '../../../../../hooks/useComment';
+import ConfirmModal from '../../../../User/ConfirmModal';
 
 const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport, index }) => {
   if (!isOpen) return null;
-  const { handleEditComment, handleDeleteComment, comments, setComments } = useComment(); 
+  const { handleEditComment, deleteComment } = useComment(); 
   const [editContent, setEditContent] = useState('');
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleClick = (e) => {
     e.stopPropagation();
@@ -14,18 +16,19 @@ const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport, inde
 
   const handleEdit = () => {
     if (editContent.trim()) {
-      handleEditComment(commentId, content);
+      handleEditComment({ commentId, content: editContent });
       closeModal();
     }
   };
 
   const handleDelete = async () => {
     console.log('삭제 댓글 ID:', commentId);
-    await handleDeleteComment(commentId); 
-    setComments((prevComments) => prevComments.filter((comment) => comment.id !== commentId)); 
+    await deleteComment(commentId); 
     closeModal(); 
   };
+
   const topPosition = `${300 + index * 50}px`;
+
   return (
     <S.ModalOverlay onClick={closeModal} top={topPosition}>
       <S.ModalContent onClick={handleClick}>
@@ -33,7 +36,7 @@ const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport, inde
           {isOwner ? (
             <>
               <S.MenuItem onClick={handleEdit}>댓글 수정</S.MenuItem>
-              <S.MenuItem onClick={handleDelete}>댓글 삭제</S.MenuItem>
+              <S.MenuItem onClick={() => setDeleteModalOpen(true)}>댓글 삭제</S.MenuItem>
             </>
           ) : (
             <S.MenuItem onClick={onReport}>댓글 신고</S.MenuItem>
@@ -41,6 +44,15 @@ const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport, inde
         </S.Menu>
         <S.CloseButton onClick={closeModal} src={closeIcon} alt="창닫기" />
       </S.ModalContent>
+      {isDeleteModalOpen && (
+        <ConfirmModal
+          message="삭제하시겠습니까?"
+          confirmText="확인"
+          cancelText="취소"
+          onConfirm={handleDelete}
+          onCancel={() => setDeleteModalOpen(false)}
+        />
+      )}
     </S.ModalOverlay>
   );
 };

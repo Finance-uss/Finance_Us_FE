@@ -35,15 +35,15 @@ const CommentList = () => {
         .slice()
         .sort((a, b) => a.commentId - b.commentId)  // commentId로 오름차순 정렬
         .map((comment) => (
-        <S.CommentListContainer key={comment.id}>
+        <S.CommentListContainer key={comment.commentId}>
           <Comment
             comment={comment}
-            onLike={() => likeComment(comment.id)}
+            onLike={() => likeComment(comment.commentId)}
             onEditClick={() => {
-              setEditingCommentId(comment.id);
+              setEditingCommentId(comment.commentId);
               setEditingContent(comment.comment);
             }}
-            onDelete={() => deleteComment(comment.id)}
+            onDelete={() => deleteComment(comment.commentId)}
             onReplyClick={(parentId, userName) => setReplyingTo({ parentId, userName })}
             
           />
@@ -52,9 +52,9 @@ const CommentList = () => {
             <S.Replies>
               {comment.replies.map((reply) => (
                 <Reply
-                  key={reply.id}
+                  key={reply.commentId}
                   reply={reply}
-                  onLike={() => likeComment(reply.id)}
+                  onLike={() => likeComment(reply.commentId)}
                 />
               ))}
             </S.Replies>
