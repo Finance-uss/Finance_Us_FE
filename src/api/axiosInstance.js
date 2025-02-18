@@ -1,13 +1,8 @@
 import axios from "axios";
 
-const host = window.location.hostname === "localhost" 
-  ? 'http://13.209.210.46:8080'
-  : "/api";  
-
 // Axios 인스턴스 생성
 const axiosInstance = axios.create({
-    baseURL: host,
-    // baseURL: import.meta.env.VITE_API_URL, // API의 기본 URL
+    baseURL: import.meta.env.VITE_API_URL, // API의 기본 URL
 });
 
 // 요청 인터셉터 설정
