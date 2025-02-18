@@ -39,7 +39,7 @@ export const Input = styled.input`
     }
 
     &::placeholder {
-        color: #b4b4b4; /* placeholder 색상 설정 */
+        color: #b4b4b4; 
     }    
 `;
 
@@ -58,9 +58,9 @@ export const Select = styled.select`
 `;
 
 export const Message = styled.p`
-    margin: 5px 0;
+    margin: 10px 0;
     font-size: 14px;
-    color: ${({ $error }) => ($error ? "red" : "#142577")};
+    color: ${({ $error }) => ($error ? "#F17357" : "#142577")};
     color: ${({ $valid }) => ($valid ? "#142577" : "")}; 
 `;
 

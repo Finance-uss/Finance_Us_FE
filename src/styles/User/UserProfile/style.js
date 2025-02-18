@@ -11,7 +11,7 @@ export const ProfileContainer = styled.div`
 export const ProfileImage = styled.img`
     width: 90px;
     height: 90px;
-    border-radius: 5px;
+    border-radius: 50%;
     object-fit: cover;
 `;
 

@@ -25,6 +25,8 @@ const FindMail = () => {
 
     const handleEmailFind = async () => {
         try {
+            console.log("Authorization Token:", authorization); // 토큰 출력
+    
             const response = await axios.get(`${URL}/api/user/findMail`, {
                 headers: {
                     'Authorization': `Bearer ${authorization}`, 
@@ -33,18 +35,25 @@ const FindMail = () => {
                     name: nickname
                 }
             });
-
+    
             if (response.data.isSuccess) {
                 setEmail(response.data.result.Email); 
                 setErrorMessage(""); 
             } else {
-                setErrorMessage("가입되지 않은 닉네임입니다."); 
+                setErrorMessage(response.data.message); 
                 setEmail(""); 
             }
         } catch (error) {
-            setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요."); 
+            if (error.response && error.response.data) {
+                setErrorMessage("가입되지 않은 닉네임입니다."); 
+            } else {
+                setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요."); 
+            }
         }
     };
+    
+    
+    
 
     return (
         <Container>

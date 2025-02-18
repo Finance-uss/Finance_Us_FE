@@ -40,3 +40,15 @@ export const Input = styled.input`
 export const ButtonWrapper = styled.div`
     margin-top: 40px; 
 `;
+
+export const ErrorMessage = styled.p`
+    color: #F17357; 
+    margin: 10px 0; 
+    font-size: 12px; 
+`;
+
+export const InfoMessage = styled.p`
+    color: #142755; 
+    margin: 10px 0; 
+    font-size: 12px;
+`;
