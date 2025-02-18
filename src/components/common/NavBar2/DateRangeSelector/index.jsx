@@ -1,25 +1,31 @@
 import React, { useState } from "react";
-import * as S from "../../../../styles/common/NavBar2/DateRangeSelector/style.js"; // 스타일 경로
+import * as S from "../../../../styles/common/NavBar2/DateRangeSelector/style.js"; 
 import YearMonthRangeModal from "./YearMonthRangeModal/index.jsx";
 import CaretDown from "../../../../assets/icons/common/NavBar/CaretDown.svg";
-import { useDate } from "../../../../contexts/DateContext.jsx";
 import { useModal } from "../../../../hooks/useModal.js";
 
-const DateRangeSelector = () => {
-    const { selectedDate, setSelectedDate } = useDate();
+const DateRangeSelector = ({ onPeriodChange }) => {
     const { isOpen, toggleModal } = useModal();
-
     const currentYear = new Date().getFullYear();
     const currentMonth = new Date().getMonth() + 1;
 
-    const [startYear, setStartYear] = useState(selectedDate.startYear || currentYear);
-    const [startMonth, setStartMonth] = useState(selectedDate.startMonth || currentMonth);
-    const [endYear, setEndYear] = useState(selectedDate.endYear || currentYear);
-    const [endMonth, setEndMonth] = useState(selectedDate.endMonth || currentMonth);
+    const [startYear, setStartYear] = useState(currentYear);
+    const [startMonth, setStartMonth] = useState(currentMonth);
+    const [endYear, setEndYear] = useState(currentYear);
+    const [endMonth, setEndMonth] = useState(currentMonth);
 
     const handleOpenModal = () => {
         toggleModal();
     };
+
+    const handleConfirm = () => {
+        console.log("확인 버튼이 클릭되었습니다."); // 추가된 로그
+        console.log("Selected Period:", startYear, startMonth, endYear, endMonth);
+        onPeriodChange(startYear, startMonth, endYear, endMonth);
+        toggleModal();
+    };
+    
+    
 
     return (
         <>
@@ -35,8 +41,9 @@ const DateRangeSelector = () => {
             </S.DateSelectContainer>
             {isOpen && (
                 <YearMonthRangeModal 
-                    modalTop={0} // 적절한 값으로 설정
-                    onClose={toggleModal}
+                    modalTop={0} 
+                    onClose={toggleModal} // 모달 닫기
+                    onConfirm={handleConfirm} 
                     startYear={startYear}
                     startMonth={startMonth}
                     endYear={endYear}
@@ -44,7 +51,7 @@ const DateRangeSelector = () => {
                     setStartYear={setStartYear}
                     setStartMonth={setStartMonth}
                     setEndYear={setEndYear}
-                    setEndMonth={setEndMonth}
+                    setEndMonth={setEndMonth} // 확인 버튼 클릭 시 호출
                 />
             )}
         </>

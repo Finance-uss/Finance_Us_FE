@@ -7,13 +7,13 @@ export const Container = styled.div`
     flex-direction: column;
     width: calc(100% - 40px);
     height: auto;
-    padding: 44px 20px 60px 20px; // top right bottom left;
+    padding: 44px 20px 60px 20px;
 `;
 
 export const IconContainer = styled.div`
   display: flex;
   justify-content: flex-end; 
-  margin-bottom: 10px;
+  margin-bottom: 8px;
   
 `;
 
@@ -53,7 +53,7 @@ export const Amount = styled.div`
 `;
 
 export const Icon = styled.img`
-  height: 24px;
+  height: 25px;
   margin-left: 16px; 
   cursor: pointer; 
 `;
@@ -87,6 +87,8 @@ export const Title = styled.h3`
 export const HistoryContainer = styled.div`
   margin-top: 20px;
   padding: 10px;
+  max-height: 900px; /* 높이를 늘려서 더 많은 내용을 표시 */
+  overflow-y: auto; /* 세로 스크롤 활성화 */
 `;
 
 export const HistoryItem = styled.div`
