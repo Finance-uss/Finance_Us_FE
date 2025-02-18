@@ -35,7 +35,7 @@ const SearchProfile = ({ profiles = [] }) => {
             />
             <S.TextContainer>
               <S.ProfileName>{profile.username}</S.ProfileName>
-              <S.StateMessage>{profile.message}</S.StateMessage>
+              <S.StateMessage>{profile.one_liner}</S.StateMessage>
             </S.TextContainer>
             <S.FollowButton
               followed={followStates[index]}
