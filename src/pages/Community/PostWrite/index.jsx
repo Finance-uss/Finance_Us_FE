@@ -141,7 +141,6 @@ const PostWrite = () => {
       <S.Wrapper>
         <CateSelect
           onCategoryChange={handleCategoryChange} 
-          isAuth={true} 
           selectedCategory={selectedCategory} // 부모에서 받아온 selectedCategory 값 전달
         />
         <S.Title
