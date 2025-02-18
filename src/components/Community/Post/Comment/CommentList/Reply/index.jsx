@@ -2,19 +2,19 @@ import React, { useState } from 'react';
 import * as S from '../../../../../../styles/Community/PostDetail/Comment/style';
 import commentIcon from '../../../../../../assets/icons/common/Community/comment.svg';
 import likeIcon from '../../../../../../assets/icons/common/Community/heart.svg';
+import authIcon from '../../../../../../assets/icons/common/Community/CheckCircle.svg';
 import likeFill from '../../../../../../assets/icons/common/Community/heartFill.svg';
 import moreIcon from '../../../../../../assets/icons/common/Community/more.svg';
 import userDefaultImg from '../../../../../../assets/icons/common/Community/commentProfile.svg';
 import CommentMenuBar from '../../../MenuBar/CommentMenubar';
+import { formatDate } from '../../../../../../utils/dateUtils';
 
-const Reply = ({ reply, onReplyClick, onLike }) => {
+const Reply = ({ reply, onReplyClick, onLike, onDelete, onEditClick, likesCount }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
-
-  const handleEdit = () => alert(`답글 수정: ${reply.id}`);
-  const handleDelete = () => alert(`답글 삭제: ${reply.id}`);
+  const isDeleted = reply.content === "삭제된 댓글입니다.";
   const handleReport = () => alert(`답글 신고: ${reply.id}`);
 
   return (
@@ -22,16 +22,19 @@ const Reply = ({ reply, onReplyClick, onLike }) => {
       <S.Header>
         <S.User>
           <S.UserIcon
-            src={reply.userImage || userDefaultImg}
+            src={reply.userImageUrl || userDefaultImg}
             alt="유저 프로필 사진"
           />
           <S.UserWrapper>
-            <S.UserName>{reply.userName}</S.UserName>
-            <S.CommentDate>{reply.commentDate}</S.CommentDate>
+            <S.UserContainer>
+                          <S.UserName style={{ color: isDeleted ? '#B4B4B4' : '#000'}}>{isDeleted ? "(삭제)" : reply.name}</S.UserName>
+                          {reply.isAuthenticated && <S.CheckIcon src={authIcon} alt="인증된 사용자" />}
+                        </S.UserContainer>
+            <S.CommentDate>{formatDate(reply.updatedAt || reply.createdAt)}</S.CommentDate>
           </S.UserWrapper>
         </S.User>
         <S.Active>
-          <S.Recomment onClick={() => onReplyClick(reply.id, reply.userName)}>
+          <S.Recomment onClick={() => onReplyClick(reply.commentId, reply.name)}>
             <S.RecommentIcon src={commentIcon} alt="답글 아이콘" />
             <S.RecommentText>답글쓰기</S.RecommentText>
           </S.Recomment>
@@ -50,14 +53,16 @@ const Reply = ({ reply, onReplyClick, onLike }) => {
         <CommentMenuBar
           isOpen={isMenuOpen}
           closeModal={closeMenu}
-          isOwner={reply.isOwner}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          isOwner={reply.isMine}
+          onEditClick={() => onEditClick(reply.commentId, reply.content)} 
+          onDelete={onDelete}
           onReport={handleReport}
-          commentId={reply.id}
+          commentId={reply.commentId}
         />
       )}
-      <S.CommentText>{reply.comment}</S.CommentText>
+      <S.CommentText style={{
+              color: isDeleted ? '#B4B4B4' : '#000',
+            }}>{reply.content}</S.CommentText>
     </S.CommentListContainer>
   );
 };

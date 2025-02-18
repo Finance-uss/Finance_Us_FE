@@ -9,7 +9,8 @@ export const CommentInputContainer = styled.div`
     position:fixed;
     bottom:77px;
     left:0px;
-    
+    height:16px;
+
 `;
 
 export const CommentInputBar = styled.input`
@@ -17,14 +18,19 @@ export const CommentInputBar = styled.input`
     border: none;
     background-color:#f7f7f7;
     width: 100%;
-    height:16px;
+    // height:16px;
     box-sizing: border-box;
 
     &:placeholder {
         color:#B4B4B4;
     }
 `;
-
+export const CancelButton = styled.img`
+    width:24px;
+    height:16px;
+    cursor:pointer;
+    float:right;
+`;
 export const SubmitButton = styled.img`
     width:24px;
     height:16px;
