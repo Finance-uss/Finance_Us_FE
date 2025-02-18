@@ -9,7 +9,8 @@ import {
     Input, 
     VerifyButton, 
     ButtonContainer, 
-    SubmitButtonStyled 
+    SubmitButtonStyled, 
+    ErrorMessage 
 } from '../../styles/SignUp/style'; 
 import SubmitButton from '../../components/common/SubmitButton'; 
 import { useNavigate } from 'react-router-dom'; 
@@ -34,8 +35,10 @@ const SignUp = () => {
     };
 
     const handleAuthCodeChange = (e) => {
-        setAuthCode(e.target.value); 
+        const code = e.target.value;
+        setAuthCode(code); 
         setAuthCodeMessage(''); 
+        validateAuthCode(code); 
     };
 
     const handleSubmit = (e) => {
@@ -51,14 +54,14 @@ const SignUp = () => {
         }
     };
 
-    const validateAuthCode =  async () => {
+    const validateAuthCode =  async (code) => {
         try {
-            console.log("email: " + formData.email + " authcode: " + authCode);
+            console.log("email: " + formData.email + " authcode: " + code);
 
             const response = await axios.get(`${URL}/api/auth/numberCheck`, { 
                 params: {
                     email: formData.email, 
-                    number: authCode
+                    number: code
                 }
             });
 
@@ -86,7 +89,7 @@ const SignUp = () => {
         if (isValidEmail(formData.email)) {
             try {
                 console.log('이메일 인증 요청:', formData.email);
-                const response = await axios.post(`${URL}/api/auth/mailSend`, formData.email, { headers: { 'Content-Type': 'text/plain' } }); // 요청 보낼 경로와 데이터
+                const response = await axios.post(`${URL}/api/auth/mailSend`, formData.email, { headers: { 'Content-Type': 'text/plain' } });
                 if (response.data.isSuccess) {
                     setEmailMessage("이메일이 전송되었습니다. 이메일을 확인해주세요.");
                     setIsEmailValid(true);
@@ -137,10 +140,6 @@ const SignUp = () => {
                         value={formData.email}
                         onChange={handleEmailChange}
                         required
-                        style={{
-                            borderBottom: '1px solid #ccc', 
-                            boxShadow: 'none',
-                        }}
                     />
                     <VerifyButton 
                         type="button" 
@@ -155,7 +154,9 @@ const SignUp = () => {
                 </InputContainer>
                 {emailMessage && (
                     <p style={{ 
-                        color: isEmailValid ? '#142755' : 'red' , marginTop: '0px', fontSize: '14px'
+                        color: isEmailValid ? '#142755' : 'red', 
+                        marginTop: '0px', 
+                        fontSize: '14px' 
                     }}>
                         {emailMessage}
                     </p>
@@ -166,12 +167,7 @@ const SignUp = () => {
                         placeholder="인증번호"
                         value={authCode}
                         onChange={handleAuthCodeChange}
-                        onBlur={validateAuthCode} 
                         required
-                        style={{
-                            borderBottom: '1px solid #ccc', 
-                            boxShadow: 'none',
-                        }}
                     />
                     {timer > 0 && (
                         <span style={{ 
@@ -184,10 +180,9 @@ const SignUp = () => {
                     )}
                 </InputContainer>
                 {authCodeMessage && (
-                    <p style={{ 
-                        color: 'red', marginTop: '0px', fontSize: '14px'}}>
+                    <ErrorMessage>
                         {authCodeMessage}
-                    </p>
+                    </ErrorMessage>
                 )}
                 <ButtonContainer>
                     <SubmitButtonStyled 

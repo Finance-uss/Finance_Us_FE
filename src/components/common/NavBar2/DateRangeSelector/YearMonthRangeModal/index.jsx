@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from "react";
-import * as S from "../../../../../styles/common/NavBar2/DateRangeSelector/YearMonthRangeModal/style.js"; // style.js 경로 수정
+import * as S from "../../../../../styles/common/NavBar2/DateRangeSelector/YearMonthRangeModal/style.js"; 
 import YearSelector from "./YearSelector/index.jsx";
 import MonthSelector from "./MonthSelector/index.jsx";
 
 const YearMonthRangeModal = ({ 
     modalTop, 
     onClose, 
+    onConfirm, // 추가된 부분
     startYear, 
     startMonth, 
     endYear, 
@@ -51,13 +52,13 @@ const YearMonthRangeModal = ({
                 <S.ButtonContainer>
                     <S.Button 
                         onClick={() => setIsStartSelected(true)} 
-                        isSelected={isStartSelected}
+                        $isSelected={isStartSelected} 
                     >
                         시작: {startYear}년 {startMonth}월
                     </S.Button>
                     <S.Button 
                         onClick={() => setIsStartSelected(false)} 
-                        isSelected={!isStartSelected}
+                        $isSelected={!isStartSelected} 
                     >
                         종료: {endYear}년 {endMonth}월
                     </S.Button>
@@ -72,7 +73,10 @@ const YearMonthRangeModal = ({
                         selectedMonth={isStartSelected ? startMonth : endMonth} 
                     />
                 </div>
-                <S.ViewButton onClick={onClose}>확인</S.ViewButton>
+                <S.ViewButton onClick={() => {
+                    onConfirm(); // 추가된 부분
+                    onClose(); // 모달 닫기
+                }}>확인</S.ViewButton>
             </S.ModalContent>
         </S.ModalWrapper>
     );

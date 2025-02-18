@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import SubmitIcon from '../../../../../assets/icons/common/Community/commentSubmit.svg';
+import SubmitIcon from '../../../../../assets/icons/common/Community/CommentSubmit.svg';
 import * as S from "../../../../../styles/Community/PostDetail/CommentInput/style";
 
 const CommentInput = ({ onSubmit, replyTo, content = '', isEditing = false, onCancel }) => {

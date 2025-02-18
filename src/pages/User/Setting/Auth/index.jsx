@@ -2,11 +2,10 @@ import React, { useState, useEffect } from 'react';
 import * as S from '../../../../styles/User/Auth/style';
 import BeforeHeader from '../../../../components/common/BeforeHeader';
 import SubmitButton from '../../../../components/common/SubmitButton';
-import CameraIconSrc from '../../../../assets/icons/common/Camera.svg';
-import axiosInstance from '../../../../api/axiosInstance'; 
 import ImageUploader from "../../../../components/User/ImageUploader";
 import { authAPI } from "../../../../api/authAPI";
-import { uploadImageToS3 } from "../../../../utils/uploadImage"
+import useApi from "../../../../hooks/useApi.js";
+import { postS3 } from "../../../../api/s3API.js";
 
 const UserAuthWrite = () => {
     const [title, setTitle] = useState("");
@@ -14,6 +13,8 @@ const UserAuthWrite = () => {
     const [selectedFile, setSelectedFile] = useState(null); 
     const [loading, setLoading] = useState(false);
     const [hasApplied, setHasApplied] = useState(false); // 인증 신청 여부 상태
+
+    const request = useApi();
 
     // 페이지 로드 시 이미 신청 여부 확인
     useEffect(() => {
@@ -53,10 +54,8 @@ const UserAuthWrite = () => {
             
             // 이미지 업로드 진행 (선택한 파일이 있는 경우)
             if (selectedFile) {
-                const uploadResponse = await uploadImageToS3(selectedFile);
-                console.log(uploadResponse);
-                imgUrl = uploadResponse.result.imageUrl;
-                console.log("imageUrl", imgUrl);
+                const response = await request(postS3(selectedFile));
+                imgUrl = response.result.imageUrl;
             }
 
             await authAPI.sendAuthRequest({ content, imgUrl });

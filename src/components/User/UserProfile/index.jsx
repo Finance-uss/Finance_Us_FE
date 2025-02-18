@@ -1,4 +1,5 @@
-import React, { useEffect, useState }from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom'; 
 import axiosInstance from "../../../api/axiosInstance";
 import {
   ProfileContainer,
@@ -8,7 +9,7 @@ import {
   ProfileAgeJob,
   ProfileIntro,
 } from '../../../styles/User/UserProfile/style';
-import profileImage from '../../../assets/icons/common/User/profile.svg';
+import defaultImage from "../../../assets/icons/common/Community/commentProfile.svg";
 
 const UserProfile = () => {
   const [profileData, setProfileData] = useState({
@@ -18,6 +19,18 @@ const UserProfile = () => {
     one_liner: '',
     imgUrl: ''
   });
+
+  const location = useLocation();
+  const updatedProfile = location.state?.updatedProfile || null;
+
+  useEffect(() => {
+      if (updatedProfile) {
+          // console.log("✅ 새 프로필 데이터 반영:", updatedProfile);
+          setProfileData(updatedProfile);
+      }
+  }, [updatedProfile]);
+
+
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -46,7 +59,7 @@ const UserProfile = () => {
 
   return (
     <ProfileContainer>
-      <ProfileImage src={profileData.imgUrl || profileImage} alt="Profile" />
+     <ProfileImage src={profileData.imgUrl || defaultImage} alt="Profile" />
       <ProfileInfo>
         <ProfileName>{profileData.name}</ProfileName>
         <ProfileAgeJob>

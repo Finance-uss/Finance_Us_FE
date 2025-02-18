@@ -1,13 +1,5 @@
 import axiosInstance from "./axiosInstance";
 
-/**
- * 사용자가 팔로우한 목록을 조회하는 함수 (GET 요청)
- * @param {string} accessToken - Authorization 헤더에 사용할 토큰
- * @param {number} [lastfollowingId=null] 
- * @param {number} [size=10] - 한 번에 조회할 데이터 개수
- * @returns {Promise<Array>} - 팔로우한 사용자 목록 배열
- */
-
 export const getFollowList = async (accessToken, lastfollowingId = null, size = 10) => {
     try {
         const response = await axiosInstance.get(`/api/follows`, {
@@ -23,11 +15,10 @@ export const getFollowList = async (accessToken, lastfollowingId = null, size = 
     }
 };
 
-export const followUser = async (accessToken, followingId) => {
+export const followUser = async (followingId) => {
     try {
         const response = await axiosInstance.post(
-            `/api/follows/${followingId}`,
-            {}, { headers: { Authorization: `Bearer ${accessToken}` } } 
+            `/api/follows/${followingId}`,{}
         );
         console.log("API 응답 데이터:", response.data);
         return response.data.isSuccess;
@@ -38,11 +29,9 @@ export const followUser = async (accessToken, followingId) => {
 };
 
 
-export const unfollowUser = async (accessToken, followingId) => {
+export const unfollowUser = async (followingId) => {
     try {
-        const response = await axiosInstance.delete(`/api/follows/${followingId}`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const response = await axiosInstance.delete(`/api/follows/${followingId}`, );
         console.log("API 응답 데이터:", response.data);
         return response.data.isSuccess;
     } catch (error) {
@@ -51,17 +40,9 @@ export const unfollowUser = async (accessToken, followingId) => {
     }
 };
 
-/**
- * 특정 가계부 조회
- * @param {string} accessToken - Authorization 헤더에 사용할 토큰
- * @param {number} followId - 조회할 사용자의 followId
- * @returns {Promise<Object>} - 팔로우 사용자 가계부 데이터
- */
-export const getFollowFinance = async (accessToken, followingId) => {
+export const getFollowFinance = async (followingId) => {
     try {
-        const response = await axiosInstance.get(`/api/account/follow/${followingId}`, {
-            headers: { Authorization: `Bearer ${accessToken}` },
-        });
+        const response = await axiosInstance.get(`/api/account/follow/${followingId}`,);
 
         console.log("API 응답 데이터:", response.data);
         return response.data.isSuccess ? response.data.result : null;

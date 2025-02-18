@@ -1,28 +1,21 @@
 import React, { useState } from "react";
 import * as S from '../../../../styles/Community/SearchProfile/style';
 import defaultImage from '../../../../assets/icons/common/Community/defaultProfile.svg';
-import { followUser, unfollowUser } from "../../../../api/apiFollow";
-import { useAuth } from "../../../../contexts/AuthContext";
+import { followUser, unfollowUser } from "../../../../api/followAPI";
+
 
 const SearchProfile = ({ profiles = [] }) => {
-  const { formData } = useAuth();
-  const accessToken = formData.token;
-
    const [followStates, setFollowStates] = useState(
     profiles.map(profile => profile.isFollowing) 
   );
 
   const toggleFollow = async (index, userId) => {
     try {
-      if (!accessToken) {
-        console.error("로그인이 필요합니다.");
-        return;
-      }
-
+      
       if (followStates[index]) {
-        await unfollowUser(accessToken, userId);
+        await unfollowUser(userId);
       } else {
-        await followUser(accessToken, userId);
+        await followUser(userId);
       }
 
       setFollowStates(prev =>
@@ -35,18 +28,18 @@ const SearchProfile = ({ profiles = [] }) => {
   return (
     <>
       {profiles.map((profile, index) => (
-          <S.ProfileContainer key={profile.id}>
+          <S.ProfileContainer key={profile.userId}>
             <S.ProfileImage
-              src={profile.image || defaultImage}
-              alt={`${profile.name}`}
+              src={profile.profileImageUrl || defaultImage}
+              alt={`${profile.username}`}
             />
             <S.TextContainer>
-              <S.ProfileName>{profile.name}</S.ProfileName>
-              <S.StateMessage>{profile.message}</S.StateMessage>
+              <S.ProfileName>{profile.username}</S.ProfileName>
+              <S.StateMessage>{profile.one_liner}</S.StateMessage>
             </S.TextContainer>
             <S.FollowButton
               followed={followStates[index]}
-              onClick={() => toggleFollow(index,profile.id)}
+              onClick={() => toggleFollow(index,profile.userId)}
             >
               {followStates[index] ? "팔로잉" : "팔로우"}
             </S.FollowButton>

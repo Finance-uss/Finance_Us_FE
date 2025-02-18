@@ -5,7 +5,9 @@ import {
     Title, 
     InputContainer, 
     Input, 
-    ButtonWrapper 
+    ButtonWrapper, 
+    ErrorMessage, 
+    InfoMessage 
 } from "../../styles/NewPW/style"; 
 import { useAuth } from "../../contexts/AuthContext";
 import SubmitButton from "../../components/common/SubmitButton"; 
@@ -97,13 +99,13 @@ const NewPW = () => {
             {isPasswordInputFocused && (
                 <>
                     {formData.password && !isPasswordValid ? (
-                        <p style={{ color: 'red' }}>
+                        <ErrorMessage>
                             비밀번호는 영어 대/소문자, 숫자 중 2종류 이상을 조합한 8자~12자 이내여야 합니다.
-                        </p>
+                        </ErrorMessage>
                     ) : (
-                        <p style={{ color: '#142755' }}>
+                        <InfoMessage>
                             영어 대/소문자, 숫자 중 2종류 이상을 조합하여 8자~12자로 구성해야 합니다.
-                        </p>
+                        </InfoMessage>
                     )}
                 </>
             )}
@@ -117,9 +119,9 @@ const NewPW = () => {
                 />
             </InputContainer>
             {confirmPassword && formData.password !== confirmPassword && (
-                <p style={{ color: 'red' }}>
+                <ErrorMessage>
                     비밀번호가 일치하지 않습니다.
-                </p>
+                </ErrorMessage>
             )}
             <ButtonWrapper>
                 <SubmitButton 
