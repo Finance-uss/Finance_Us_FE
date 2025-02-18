@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const host = window.location.hostname === "localhost" 
-  ? import.meta.env.VITE_API_URL  
+  ? 'http://13.209.210.46:8080'
   : "/api";  
 
 // Axios 인스턴스 생성
