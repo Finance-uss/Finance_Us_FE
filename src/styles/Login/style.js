@@ -29,7 +29,7 @@ export const Input = styled.input`
         outline: none; 
     }
     &::placeholder {
-        color: #b4b4b4; /* placeholder 색상 설정 */
+        color: #b4b4b4;
     }
 `;
 
@@ -43,4 +43,10 @@ export const LinkContainer = styled.div`
     margin-top: 40px;
     cursor: pointer;
     color: #b4b4b4;
+`;
+
+export const ErrorMessage = styled.p`
+    color: #F17357; 
+    margin: 10px 0;
+    font-size: 12px; 
 `;

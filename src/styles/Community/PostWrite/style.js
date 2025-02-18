@@ -74,3 +74,25 @@ export const Footer = styled.div`
     width: calc(100% - 40px);
     margin-bottom:20px;
 `;
+
+export const DeleteButton = styled.button`
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #F17357;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+
+    &:hover {
+        background-color: #F17357;
+    }
+`;
+
+export const ImagePreviewWrapper = styled.div`
+    position: relative;
+    display: inline-block;
+`;

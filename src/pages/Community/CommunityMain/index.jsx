@@ -6,7 +6,7 @@ import BottomBar from '../../../components/common/BottomBar';
 import TopBar from '../../../components/common/TopBar';
 import FloatingButton from '../../../components/common/FloatingButton/CommunityWriteButton';
 import CateButton from '../../../components/Community/Category/CateButton';
-import { getFollowList } from "../../../api/apiFollow"; 
+import { getFollowList } from "../../../api/followAPI"; 
 import defaultImage from "../../../assets/icons/common/Community/commentProfile.svg";
 import PostList from '../../../components/Community/Board/PostList';
 

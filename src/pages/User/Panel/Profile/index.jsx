@@ -6,6 +6,8 @@ import ChangeProfile from '../../../../components/User/ChangeProfile';
 import ProfileForm from '../../../../components/User/ProfileForm';
 import CompleteButtonComponent from '../../../../components/User/CompleteButton';
 import { useNavigate } from 'react-router-dom';
+import useApi from '../../../../hooks/useApi';
+import { imageUpload, userDeleteImage } from "../../../../api/userImageAPI";
 
 const ChangeProfilePage = () => {
     const navigate = useNavigate();
@@ -19,6 +21,7 @@ const ChangeProfilePage = () => {
     const [nicknameMessage, setNicknameMessage] = useState('');
     const [isNicknameValid, setIsNicknameValid] = useState(false);
     const [originalName, setOriginalName] = useState("");
+    const { request }= useApi();
 
     const handleBackClick = () => {
         navigate('/user');
@@ -34,10 +37,9 @@ const ChangeProfilePage = () => {
                     console.log("회원 정보 조회 성공:", userData);
 
                     setProfileData({
-                        id: userData.id || "",
                         name: userData.name || "",
-                        ageGroup: userData.age || "", 
                         jobCategory: userData.job || "", 
+                        ageGroup: userData.age || "", 
                         one_liner: userData.one_liner || "",
                         imgUrl: userData.imgUrl || "",
                     });
@@ -89,35 +91,47 @@ const ChangeProfilePage = () => {
         }
     };
     
-    const handleImageUpload = async (file) => {
-        const formData = new FormData();
-        formData.append('file', file);
-    
+    const handleImageUpload = async (newImageUrl, newImageName) => {
         try {
-            const token = localStorage.getItem("token"); // Bearer 토큰 가져오기
+            const token = localStorage.getItem("token");
             if (!token) {
                 throw new Error("토큰이 없습니다.");
             }
-
-            const response = await axiosInstance.post('/api/user/image', formData, {
+    
+            const response = await axiosInstance.patch('/api/user/image', {
+                imageUrl: newImageUrl,  // 🔥 API 요구사항에 맞게 imgUrl 전송
+                imageName: newImageName // 🔥 imgName 전송
+            }, {
                 headers: {
-                    Authorization: `Bearer ${token}`, // 토큰을 실제 값으로 변경
+                    Authorization: `Bearer ${token}`,
                 },
             });
     
             if (response.data.isSuccess) {
-                setProfileData((prev) => ({ ...prev, imgUrl: response.data.result.imageUrl }));
-                alert('프로필 사진이 성공적으로 업로드되었습니다.');
+                // profileData 업데이트
+                setProfileData((prev) => ({
+                    ...prev,
+                    imgUrl: newImageUrl,
+                    imageName: newImageName, // 🔥 이미지 이름 저장
+                }));
+    
+                // alert('프로필 사진이 성공적으로 업로드되었습니다.');
             }
         } catch (error) {
             console.error('이미지 업로드 오류:', error);
             alert('이미지 업로드에 실패했습니다.');
         }
     };
+    
+    
 
     // 프로필 이미지 선택 핸들러
-    const handleImageSelect = (file) => {
-        handleImageUpload(file);
+    const handleImageSelect = (newImageUrl, newImageName) => {
+        setProfileData((prev) => ({
+            ...prev,
+            imgUrl: newImageUrl || "", // 🔥 비어있으면 빈 값 저장
+            imageName: newImageName || "",
+        }));
     };
 
     // 프로필 저장
@@ -162,23 +176,17 @@ const ChangeProfilePage = () => {
                 "기타 (직접 입력)": "OTHERS"
             };
 
-            const sendData = {
-                id: profileData.id || "",
-                name: profileData.name || "",
-                ageGroup: ageGroupMap[profileData.ageGroup],
-                jobCategory: jobCategoryMap[profileData.jobCategory],
-                one_liner: profileData.one_liner || "",
-                imgUrl: profileData.imgUrl || "",
-            };
-
             console.log("[PATCH 요청] 회원 정보 수정 API 호출");
-            console.log("보낼 데이터 구조 확인:", JSON.stringify(sendData, null, 2));
 
-            const response = await axiosInstance.patch('/api/user', sendData, {
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${token}`,
-                },
+            const response = await axiosInstance.patch('/api/user', null, {
+                headers: { Authorization: `Bearer ${token}` },
+                params: {
+                    name: profileData.name || "",
+                    ageGroup: ageGroupMap[profileData.ageGroup],
+                    jobCategory: jobCategoryMap[profileData.jobCategory],
+                    one_liner: profileData.one_liner || "",
+                    imgUrl: profileData.imgUrl || ""
+                }
             });
 
             console.log("[PATCH 응답] 서버 응답:", response);
@@ -201,15 +209,30 @@ const ChangeProfilePage = () => {
     };
     
     const handleComplete = async () => {
-        await handleSave();
-        navigate('/user'); // 완료 후 User 페이지로 이동
-    };
+        try {
+            // 이미지 업로드 실행 후 profileData에 반영
+            if (profileData.imgUrl) {
+                await handleImageUpload(profileData.imgUrl);
+            }
+            else{
+                await request(userDeleteImage());
+            }
+    
+            // 프로필 저장 실행
+            await handleSave();
 
+            navigate('/user', { state: { updatedProfile: profileData } });
+        } catch (error) {
+            console.error("프로필 저장 중 오류 발생:", error);
+            alert("프로필 저장에 실패했습니다.");
+        }
+    };
+    
     return (
         <Container>
             <BackHeader title="프로필 변경" onBackClick={handleBackClick} />
             <ChangeProfileSection>
-                <ChangeProfile onImageSelect={handleImageSelect} />
+                <ChangeProfile imgUrl={profileData.imgUrl} onImageSelect={handleImageSelect} />
             </ChangeProfileSection>
             <ProfileFormSection>
                 <ProfileForm 

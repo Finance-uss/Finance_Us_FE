@@ -1,8 +1,27 @@
 import React, { useState, useEffect } from 'react';
 import { RadioGroup, RadioButton } from '../../../../styles/Community/Category/CateSelect/style';
-
-const CateSelect = ({ isAuth, onCategoryChange, selectedCategory }) => {
+import axiosInstance from "../../../../api/axiosInstance";
+const CateSelect = ({ onCategoryChange, selectedCategory }) => {
   const [selected, setSelected] = useState('');
+  const [isAuth, setIsAuth] = useState(false);
+
+  const checkAuthStatus = async () => {
+    try {
+      const response = await axiosInstance.get('/api/auth/user');
+      if (response.data.isSuccess) {
+        setIsAuth(true);
+      } else {
+        setIsAuth(false); 
+      }
+    } catch (error) {
+      console.error("미인증 유저:", error);
+      setIsAuth(false); 
+    }
+  };
+
+  useEffect(() => {
+    checkAuthStatus();
+  }, []);
 
   useEffect(() => {
     let categoryName = '';
