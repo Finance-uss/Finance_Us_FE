@@ -20,7 +20,8 @@ export const HandWriteProvider = ({ children }) => {
             score: 0,
             imageUrl: imageUrl,
             imageName: imageName,
-            content: ""
+            content: "",
+            previewImage: previewImage
     });
 
     const modals = useModalManager(["calendarModal", "categoryModal", "assetModal", "ratingModal"]);
@@ -37,6 +38,7 @@ export const HandWriteProvider = ({ children }) => {
         setFormField("date", selectedDate);
         setFormField("imageUrl", imageUrl);
         setFormField("imageName", imageName);
+        setFormField("previewImage", previewImage);
     }, [selectedDate, imageUrl, imageName]);
 
     return (

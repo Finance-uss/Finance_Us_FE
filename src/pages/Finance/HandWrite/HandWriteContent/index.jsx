@@ -51,6 +51,23 @@ const HandWriteContent = () => {
         };
 
         convertImageToFile();
+
+        const storedData = localStorage.getItem("handwriteData");
+        if (storedData) {
+            try {
+                const parsedData = JSON.parse(storedData);
+
+                // 🔹 formData의 모든 필드를 업데이트
+                Object.keys(parsedData).forEach((key) => {
+                    if (parsedData[key]) {
+                        setFormField(key, parsedData[key]);
+                    }
+                });
+
+            } catch (error) {
+                console.error("로컬스토리지 데이터 파싱 오류:", error);
+            }
+        }
     }, []);
 
 
