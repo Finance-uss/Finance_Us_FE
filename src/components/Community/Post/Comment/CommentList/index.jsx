@@ -20,7 +20,7 @@ const CommentList = () => {
 
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingContent, setEditingContent] = useState("");
-  const [replyingTo, setReplyingTo] = useState(null); 
+  const [replyingTo, setReplyingTo] = useState(null);
 
   if (isLoading) return <p>댓글을 불러오는 중...</p>;
   if (isError) return <p>댓글을 불러오는 데 실패했습니다.</p>;
@@ -29,25 +29,26 @@ const CommentList = () => {
     console.log("Replying to comment ID:", parentCommentId);
     setReplyingTo({ parentCommentId, userName });
   };
+  const handleEditClick = (commentId, content) => {
+    console.log("편집할 댓글 ID:", commentId);
+    setEditingCommentId(commentId);
+    setEditingContent(content);
+  };
 
   return (
     <>
       {comments
         .slice()
-        .sort((a, b) => a.commentId - b.commentId)  // commentId로 오름차순 정렬
+        .sort((a, b) => a.commentId - b.commentId)
         .map((comment) => (
           <S.CommentListContainer key={comment.commentId}>
             <Comment
               comment={comment}
               onLike={() => likeComment(comment.commentId)}
-              onEditClick={() => {
-                setEditingCommentId(comment.commentId);
-                setEditingContent(comment.comment);
-              }}
+              onEditClick={handleEditClick} 
               onDelete={() => deleteComment(comment.commentId)}
-              onReplyClick={handleReplyClick} 
+              onReplyClick={handleReplyClick}
             />
-
             {comment.replies?.length > 0 && (
               <S.Replies>
                 {comment.replies.map((reply) => (
@@ -55,6 +56,8 @@ const CommentList = () => {
                     key={reply.commentId}
                     reply={reply}
                     onLike={() => likeComment(reply.commentId)}
+                    onEditClick={handleEditClick}
+                    onDelete={() => deleteComment(comment.commentId)}
                   />
                 ))}
               </S.Replies>
@@ -62,18 +65,22 @@ const CommentList = () => {
           </S.CommentListContainer>
         ))}
 
-        <CommentInput 
-          onSubmit={(content) => {
-            console.log("댓글 작성 요청:", { content, parentCommentId: replyingTo?.parentCommentId });
-            addComment({ content, parentCommentId: replyingTo?.parentCommentId }); 
-            setReplyingTo(null);
-          }}
-          content={editingContent}
-          isEditing={editingCommentId !== null}
-          onCancel={() => setEditingCommentId(null)}
-          replyTo={replyingTo} 
-        />
-
+      <CommentInput
+        onSubmit={({content,commentId}) => {
+          if (editingCommentId) {
+            editComment({commentId:editingCommentId, content});
+            setEditingCommentId(null);
+          } else {
+            addComment({ content, parentCommentId: replyingTo?.parentCommentId });
+          }
+          setReplyingTo(null);
+        }}
+        content={editingContent}
+        isEditing={editingCommentId !== null}
+        onCancel={() => setEditingCommentId(null)}
+        replyTo={replyingTo}
+        commentId={editingCommentId} 
+      />
     </>
   );
 };

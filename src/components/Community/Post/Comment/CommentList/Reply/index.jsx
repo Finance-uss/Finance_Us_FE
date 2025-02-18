@@ -9,14 +9,12 @@ import userDefaultImg from '../../../../../../assets/icons/common/Community/comm
 import CommentMenuBar from '../../../MenuBar/CommentMenubar';
 import { formatDate } from '../../../../../../utils/dateUtils';
 
-const Reply = ({ reply, onReplyClick, onLike }) => {
+const Reply = ({ reply, onReplyClick, onLike, onDelete, onEditClick, likesCount }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
   const isDeleted = reply.content === "삭제된 댓글입니다.";
-  const handleEdit = () => alert(`답글 수정: ${reply.id}`);
-  const handleDelete = () => alert(`답글 삭제: ${reply.id}`);
   const handleReport = () => alert(`답글 신고: ${reply.id}`);
 
   return (
@@ -56,8 +54,8 @@ const Reply = ({ reply, onReplyClick, onLike }) => {
           isOpen={isMenuOpen}
           closeModal={closeMenu}
           isOwner={reply.isMine}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
+          onEditClick={() => onEditClick(reply.commentId, reply.content)} 
+          onDelete={onDelete}
           onReport={handleReport}
           commentId={reply.commentId}
         />

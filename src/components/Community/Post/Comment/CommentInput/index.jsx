@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import SubmitIcon from '../../../../../assets/icons/common/Community/CommentSubmit.svg';
 import * as S from "../../../../../styles/Community/PostDetail/CommentInput/style";
+import closeIcon from '../../../../../assets/icons/common/X.svg';
 
-const CommentInput = ({ onSubmit, replyTo, content = '', isEditing = false, onCancel }) => {
+const CommentInput = ({ onSubmit, replyTo, content = '', isEditing = false, onCancel, commentId }) => {
   const [comment, setComment] = useState(content);
 
   useEffect(() => {
@@ -15,11 +16,10 @@ const CommentInput = ({ onSubmit, replyTo, content = '', isEditing = false, onCa
 
   const handleSubmit = () => {
     if (!comment.trim()) return; 
-    console.log("댓글 입력 값:", comment);
-    onSubmit(comment, replyTo?.parentCommentId); 
+    onSubmit({content:comment, commentId}); 
     setComment(""); 
   };
-  
+
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -36,8 +36,8 @@ const CommentInput = ({ onSubmit, replyTo, content = '', isEditing = false, onCa
         onKeyDown={handleKeyPress}
         placeholder={replyTo ? `@${replyTo.userName}님에게 답글 남기는 중..` : "Message"}  
       />
+      {isEditing && <S.CancelButton src={closeIcon} alt="취소" onClick={onCancel}/>}
       <S.SubmitButton src={SubmitIcon} alt="댓글작성버튼" onClick={handleSubmit} />
-      {isEditing && <button onClick={onCancel}>취소</button>}
     </S.CommentInputContainer>
   );
 };
