@@ -11,14 +11,16 @@ const useComment = (postId) => {
   });
   const commentCount = data?.commentCount || 0;     
   const addCommentMutation = useMutation({
-    mutationFn: (newComment) => addComment(postId, newComment),
+    mutationFn: ({ content, parentCommentId = null }) =>
+      addComment(postId, content, parentCommentId), // 부모 댓글 ID 전달
     onSuccess: () => {
       queryClient.invalidateQueries(["comments", postId]); 
     },
     onError: (error) => {
-      console.error(error);
+      console.error("댓글 추가 오류:", error);
     },
   });
+  
 
   const editCommentMutation = useMutation({
     mutationFn: ({ commentId, content }) => editComment(commentId, content),

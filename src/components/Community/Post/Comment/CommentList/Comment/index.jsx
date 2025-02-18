@@ -9,7 +9,7 @@ import userDefaultImg from '../../../../../../assets/icons/common/Community/comm
 import CommentMenuBar from '../../../MenuBar/CommentMenubar';
 import { formatDate } from '../../../../../../utils/dateUtils';
 
-const Comment = ({ comment, onReplyClick, onLike, index }) => {
+const Comment = ({ comment, onReplyClick, onLike, index, likesCount }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const openMenu = () => setIsMenuOpen(true);
@@ -65,8 +65,8 @@ const Comment = ({ comment, onReplyClick, onLike, index }) => {
         />
       )}
       <S.CommentText style={{
-          color: isDeleted ? '#B4B4B4' : '#000',
-        }}>{comment.content}</S.CommentText>
+        color: isDeleted ? '#B4B4B4' : '#000',
+      }}>{comment.content}</S.CommentText>
     </S.CommentListContainer>
   );
 };
