@@ -1,7 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 
-// https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
   base: "./",
@@ -9,13 +8,13 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: process.env.VITE_API_URL,  // .env 파일의 VITE_API_URL 변수를 사용
+        target: 'https://13.209.210.46:8080',  // HTTPS URL로 변경
         changeOrigin: true,
-        secure: false, // 서버가 HTTPS가 아니라면 `false`로 설정
+        secure: true, // HTTPS로 요청이 처리되도록 설정
       }
     }
   },
   build: {
-    outDir: "dist", 
+    outDir: "dist",
   },
 });
