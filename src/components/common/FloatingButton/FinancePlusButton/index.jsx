@@ -28,7 +28,7 @@ const FloatingButton = () => {
           </FloatingButtonWrapper>
         </Link>
         {/* 카메라로.. */}
-        <Link to="/"> 
+        <Link to="camera"> 
           <FloatingButtonWrapper style={{ transform: "translateY(3em)" }}>
               <Icon src={Camera} alt="카메라 아이콘" />
           </FloatingButtonWrapper>
