@@ -3,13 +3,16 @@ import * as S from "../../../styles/common/NavBar/style.js";
 import DateSelector from "./DateSelector/index.jsx";
 import AlarmIconComponent from "../SearchHeader/Alarm/index.jsx";
 
-const NavBar = ({ icon, marginTop, modalTop }) => {
+const NavBar = ({ icon, marginTop, modalTop, position }) => {
 
     return (
-        <S.NavBarWrapper $marginTop={marginTop}>
-            <DateSelector modalTop={modalTop}/>
-            {icon && <AlarmIconComponent />}
-        </S.NavBarWrapper>
+        <>
+            {position === "fixed" && <S.Blank/>}
+            <S.NavBarWrapper $marginTop={marginTop} $position={position}>
+                <DateSelector modalTop={modalTop} position={position}/>
+                {icon && <AlarmIconComponent />}
+            </S.NavBarWrapper>
+        </>
     );
 };
 

@@ -51,7 +51,8 @@ const FinanceMain = () => {
     }
     return (
         <Container>
-            <NavBar icon={Bell} modalTop="75px"/>
+            <NavBar icon={Bell} modalTop="75px" position="fixed"/>
+            <Blank />
             <Satisfaction score={monthData.totalScore}/>
             <Calendar header={`지출 ${monthData.totalExpense.toLocaleString()}원 수익 ${monthData.totalIncome.toLocaleString()}원`} />
             <FinancePlusButton />
@@ -69,6 +70,10 @@ const FinanceMain = () => {
 };
 
 export default FinanceMain;
+
+const Blank = styled.div`
+    height: 24px;
+`;
 
 const BottomMargin = styled.div`
     height: 77px;
