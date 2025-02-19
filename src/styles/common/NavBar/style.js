@@ -6,7 +6,7 @@ export const NavBarWrapper = styled.div`
     justify-content: space-between;
     align-items: center;
     background-color: white;
-    width: ${(props) => (props.$position === "fixed" ? "100%" : "calc(100% - 40px)")};
+    width: ${(props) => (props.$position === "fixed" ? "calc(100% - 40px)" : "100%")};
     height: 24px; /* ✅ 높이 지정 */
     z-index: 1000;
     margin-top: ${(props) => props.$marginTop || "0px"}

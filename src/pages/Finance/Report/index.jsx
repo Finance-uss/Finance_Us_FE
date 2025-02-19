@@ -20,7 +20,7 @@ const Report = () => {
         <Container>
             <BeforeHeader text="경제 활동 만족도 레포트" />
             <Blank />
-            <NavBar modalTop="68px" />
+            <NavBar />
             {/* 아쉬운 활동 줄이기 (★1~2점) */}
             {activities?.reduceActivity?.length > 0 && (
                 <Activity 

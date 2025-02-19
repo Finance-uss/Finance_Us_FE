@@ -3,17 +3,10 @@ import * as S from "../../../../../styles/common/NavBar/DateSelector/YearMonthMo
 import YearSelector from "./YearSelector/index.jsx";
 import MonthSelector from "./MonthSelector/index.jsx";
 
-const YearMonthModal = ({ modalTop, toggleModal, position }) => {
-    const [curModalTop, setCurModalTop] = useState(modalTop);
-    
-    useEffect(() => {
-        const scrollY = window.scrollY;
-        setCurModalTop(scrollY + modalTop);
-    }, []);
-
+const YearMonthModal = ({ toggleModal }) => {
     return (
         <S.ModalWrapper onClick={toggleModal}>
-            <S.ModalContent $modalTop={curModalTop} onClick={(e) => e.stopPropagation()}>
+            <S.ModalContent onClick={(e) => e.stopPropagation()}>
                 <YearSelector />
                 <MonthSelector />
             </S.ModalContent>
