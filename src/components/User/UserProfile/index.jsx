@@ -7,8 +7,11 @@ import {
   ProfileName,
   ProfileAgeJob,
   ProfileIntro,
+  VerifiedBadge,
+  ProfileNameWrapper
 } from '../../../styles/User/UserProfile/style';
 import profileImage from '../../../assets/icons/common/User/profile.svg';
+import verifiedBadgeIcon from '../../../assets/icons/common/User/CheckCircle.svg';
 
 const UserProfile = () => {
   const [profileData, setProfileData] = useState({
@@ -18,6 +21,8 @@ const UserProfile = () => {
     one_liner: '',
     imgUrl: ''
   });
+
+  const [isVerified, setIsVerified] = useState(false);
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -36,6 +41,16 @@ const UserProfile = () => {
             if (response.data.isSuccess) {
                 setProfileData(response.data.result);
             }
+
+            const authResponse = await axiosInstance.get('/api/auth/user', {
+              headers: {
+                  Authorization: `Bearer ${token}`,
+              },
+            });
+
+            if (authResponse.data.isSuccess && authResponse.data.result === "인증된 사용자입니다.") {
+              setIsVerified(true);
+            }
         } catch (error) {
             console.error('회원 정보 조회 실패:', error);
         }
@@ -48,7 +63,10 @@ const UserProfile = () => {
     <ProfileContainer>
       <ProfileImage src={profileData.imgUrl || profileImage} alt="Profile" />
       <ProfileInfo>
-        <ProfileName>{profileData.name}</ProfileName>
+        <ProfileNameWrapper>
+          <ProfileName>{profileData.name}</ProfileName>
+          {isVerified && <VerifiedBadge src={verifiedBadgeIcon} alt="인증된 사용자" />}
+        </ProfileNameWrapper>
         <ProfileAgeJob>
           <span>{profileData.age}</span>
           <span>{profileData.job}</span>
