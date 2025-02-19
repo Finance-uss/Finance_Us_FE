@@ -29,6 +29,7 @@ export const UserIcon = styled.img`
     height: 40px;
     border: none;
     margin-right: 7.1px;
+    border-radius:50%;
 `;
 
 export const UserWrapper = styled.div`
@@ -96,4 +97,14 @@ export const Replies = styled.div`
 
 export const Reply = styled.div`
   margin-bottom: 12px;
+`;
+
+export const CheckIcon = styled.img`
+    width:20px;
+    height:20px;
+`;
+
+export const UserContainer = styled.div`    
+    display:flex;
+    align-items:center;
 `;

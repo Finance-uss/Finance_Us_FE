@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import * as S from '../../../../styles/Community/FollowFinance/FinanceCard/style';
-import { accountLike, accountCheer } from '../../../../api/apiFollow';
+import { accountLike, accountCheer } from '../../../../api/followAPI';
 
 const FinanceCard = ({ title, preview, image, satisfaction, like, thumbs, accountId, accessToken }) => {
   const [likesCount, setLikesCount] = useState(like);

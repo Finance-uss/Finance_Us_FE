@@ -1,4 +1,5 @@
-import React, { useEffect, useState }from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom'; 
 import axiosInstance from "../../../api/axiosInstance";
 import {
   ProfileContainer,
@@ -12,6 +13,8 @@ import {
 } from '../../../styles/User/UserProfile/style';
 import profileImage from '../../../assets/icons/common/User/profile.svg';
 import verifiedBadgeIcon from '../../../assets/icons/common/User/CheckCircle.svg';
+import defaultImage from "../../../assets/icons/common/Community/commentProfile.svg";
+
 
 const UserProfile = () => {
   const [profileData, setProfileData] = useState({
@@ -22,7 +25,19 @@ const UserProfile = () => {
     imgUrl: ''
   });
 
+
   const [isVerified, setIsVerified] = useState(false);
+  const location = useLocation();
+  const updatedProfile = location.state?.updatedProfile || null;
+
+  useEffect(() => {
+      if (updatedProfile) {
+          // console.log("✅ 새 프로필 데이터 반영:", updatedProfile);
+          setProfileData(updatedProfile);
+      }
+  }, [updatedProfile]);
+
+
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -61,7 +76,7 @@ const UserProfile = () => {
 
   return (
     <ProfileContainer>
-      <ProfileImage src={profileData.imgUrl || profileImage} alt="Profile" />
+     <ProfileImage src={profileData.imgUrl || defaultImage} alt="Profile" />
       <ProfileInfo>
         <ProfileNameWrapper>
           <ProfileName>{profileData.name}</ProfileName>
