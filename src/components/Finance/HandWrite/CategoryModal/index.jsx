@@ -35,11 +35,11 @@ const CategoryModal = ({type}) => {
     }, [isLoading, offset]);
 
     useEffect(() => {
-        if (!modals.assetModal.isOpen) {
+        if (!modals.categoryModal.isOpen) {
             setIsLoading(true);
             setOffset({ top: 0 });
         }
-    }, [modals.assetModal.isOpen]);
+    }, [modals.categoryModal.isOpen]);
 
     if (!modals.categoryModal.isOpen) return null;
     
