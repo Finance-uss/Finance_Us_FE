@@ -29,7 +29,9 @@ const UserMain = () => {
         <UserMainContainer>
             <HeaderWrapper>
                 <PageTitle>마이 페이지</PageTitle>
-                <SearchHeader />
+                <SearchHeaderWrapper>
+                    <SearchHeader />
+                </SearchHeaderWrapper>
             </HeaderWrapper>
             <ContentContainer>
                 <UserProfileWrapper>
@@ -68,9 +70,9 @@ const HeaderWrapper = styled.div`
     top: 0;
     left: 0;
     width: 100%;
-    height: 80px;
+    height: 15vh; 
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: space-between;
     background: #ffffff;
     z-index: 100;
@@ -78,7 +80,7 @@ const HeaderWrapper = styled.div`
 
 const PageTitle = styled.div`
     position: absolute;
-    top: 50%;
+    top: 60px;
     left: 50%;
     transform: translate(-50%, -50%);
     font-size: 22px;
@@ -90,13 +92,19 @@ const PageTitle = styled.div`
     margin: 0;
 `;
 
+const SearchHeaderWrapper = styled.div`
+    position: absolute;
+    top: 45px; /* 원하는 위치로 조정 */
+    right: 20px;
+`;
+
 const ContentContainer = styled.div`
     display: flex;
     flex-direction: column;
     width: calc(100% - 40px);
     padding: 20px;
     align-items: center;
-    margin-top: 20px;
+    margin-top: 50px;
 `;
 
 const UserProfileWrapper = styled.div`
