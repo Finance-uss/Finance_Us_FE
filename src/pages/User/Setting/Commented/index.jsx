@@ -5,6 +5,16 @@ import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import UserPostCard from '../../../../components/User/UserPostCard';
 
+const categoryMapping = {
+    FREE: "자유",
+    INFO: "정보",
+    WASTE: "낭비했어요",
+    SAVE: "절약했어요",
+    COLUMN: "칼럼",
+    LECTURE: "강연",
+    PROMOTION: "홍보",
+};
+
 const CommentedPosts = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
@@ -58,6 +68,10 @@ const CommentedPosts = () => {
         fetchCommentedPosts();
     }, [userId]);
 
+    const handlePostClick = (postId) => {
+        navigate(`/community/postdetail/${postId}`);
+    };
+
     return (
         <CommentedPostsContainer>
             <BackHeaderWrapper>
@@ -69,12 +83,13 @@ const CommentedPosts = () => {
                     posts.map((post, index) => (
                         <UserPostCard
                             key={index} // id가 없으므로 index 사용
-                            category={post.category}
+                            category={categoryMapping[post.category]}
                             title={post.title}
                             preview={post.content} 
                             postImage={post.imgUrl} 
                             likes={post.likeCnt} // 좋아요 수 추가
                             comments={post.commentCnt} // 댓글 수 추가
+                            onClick={() => handlePostClick(post.postId)}
                         />
                     ))
                 ) : (

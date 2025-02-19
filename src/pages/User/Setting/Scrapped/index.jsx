@@ -5,6 +5,16 @@ import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import UserPostCard from '../../../../components/User/UserPostCard';
 
+const categoryMapping = {
+    FREE: "자유",
+    INFO: "정보",
+    WASTE: "낭비했어요",
+    SAVE: "절약했어요",
+    COLUMN: "칼럼",
+    LECTURE: "강연",
+    PROMOTION: "홍보",
+};
+
 const ScrappedPosts = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
@@ -62,6 +72,10 @@ const ScrappedPosts = () => {
         fetchScrappedPosts();
     }, [userId]);
     
+    const handlePostClick = (postId) => {
+        navigate(`/community/postdetail/${postId}`);
+    };
+
     return (
         <ScrappedPostsContainer>
             <BackHeaderWrapper>
@@ -73,7 +87,7 @@ const ScrappedPosts = () => {
                     posts.map((post, index) => (
                         <UserPostCard
                             key={index} // id가 없으므로 index 사용
-                            category={post.category}
+                            category={categoryMapping[post.category]}
                             title={post.title}
                             preview={post.content} // API에서 preview가 content
                             postImage={post.imgUrl} // API에서 postImage가 imgUrl
@@ -81,6 +95,7 @@ const ScrappedPosts = () => {
                             comments={post.commentCnt} // 댓글 수 추가
                             isScrapped={true} 
                             onScrapClick={() => handleUnscrap(index)} // UI에서 제거
+                            onClick={() => handlePostClick(post.postId)}
                         />
                     ))
                 ) : (
