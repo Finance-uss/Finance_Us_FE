@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axiosInstance from "../../../../api/axiosInstance.js";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
 import useApi from "../../../../hooks/useApi.js";
 import { postS3 } from "../../../../api/s3API.js";
@@ -67,6 +68,7 @@ const HandWriteContent = () => {
                     console.error("로컬스토리지 데이터 파싱 오류:", error);
                 } finally {
                     setIsLoading(false);
+                    localStorage.removeItem("handwriteData");
                 }
             } else {
                 setIsLoading(false);
@@ -84,20 +86,24 @@ const HandWriteContent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(isDisabled) return;
         if(formData.imageUrl === "") {
-            const defaultImageForm = new FormData();
-            defaultImageForm.append("file", defaultImageFile);        
-            const response = await request(postS3(defaultImageForm));
-            if (response && response.result) {
-                const imageUrl = response.result.imageUrl;
-                const imageName = response.result.imageName;
-                const formattedData = formatFormData({ 
-                    ...formData, 
-                    imageUrl,
-                    imageName,
-                });
-                await request(postAccount(formattedData));
-                navigate("/finance");
+            try {
+                const response = await axiosInstance(postS3(defaultImageFile));
+                if(response.data.isSuccess) {
+                    const imageUrl = response.data.result.imageUrl;
+                    const imageName = response.data.result.imageName;
+                    const formattedData = formatFormData({ 
+                        ...formData, 
+                        imageUrl,
+                        imageName,
+                    });
+                    console.log(formattedData);
+                    await axiosInstance(postAccount(formattedData));
+                    navigate("/finance");
+                }
+            } catch (error) {
+                console.error(error);
             }
         }
         else{
