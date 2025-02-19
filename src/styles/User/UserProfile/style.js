@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ProfileContainer = styled.div`
     position: absolute;
-    top: 79px;
+    top: 109px;
     left: 20px;
     display: flex;
     align-items: center;
