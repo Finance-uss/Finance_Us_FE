@@ -1,6 +1,5 @@
 import axiosInstance from "./axiosInstance";
 
-// 전체 게시글 목록 조회
 export const getPostList = async (postType, cursor, size) => {
     try {
         const response = await axiosInstance.get(`/api/post/${postType}?cursor=${cursor||''}&size=${size}`);
@@ -11,7 +10,6 @@ export const getPostList = async (postType, cursor, size) => {
     }
 };
 
-// 특정 카테고리 게시글 목록 조회
 export const getPostCategoryList = async (postType, category, cursor, size) => {
     try {
         let engCategory = category;

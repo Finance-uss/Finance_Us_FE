@@ -5,7 +5,7 @@ import BottomBar from "../../../components/common/BottomBar";
 import Content from "../../../components/Community/Post/Content";
 import CommentList from "../../../components/Community/Post/Comment/CommentList";
 import * as S from '../../../styles/Community/PostDetail/style';
-import { getPost, getLike } from "../../../api/post";
+import { getPost, getLike } from "../../../api/postAPI";
 import defaultUserImg from "../../../assets/icons/common/Community/commentProfile.svg";
 
 const PostDetail = () => {

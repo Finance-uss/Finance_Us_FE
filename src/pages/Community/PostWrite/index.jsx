@@ -5,7 +5,7 @@ import BeforeHeader from '../../../components/common/BeforeHeader';
 import SubmitButton from '../../../components/common/SubmitButton';
 import ImageUploader from "../../../components/User/ImageUploader";
 import CateSelect from '../../../components/Community/Category/CateSelect';
-import { createPost, updatePost, getPost } from '../../../api/post';
+import { createPost, updatePost, getPost } from '../../../api/postAPI';
 import useApi from "../../../hooks/useApi.js";
 import { postS3, deleteS3 } from "../../../api/s3API.js";
 

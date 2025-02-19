@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getComment, addComment, editComment, deleteComment, addLikeComment } from "../api/apiComment";
+import { getComment, addComment, editComment, deleteComment, addLikeComment } from "../api/commentAPI";
 
 const useComment = (postId) => {
   const queryClient = useQueryClient(); 
