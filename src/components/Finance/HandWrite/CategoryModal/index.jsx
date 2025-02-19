@@ -5,17 +5,18 @@ import * as S from "../../../../styles/Finance/HandWrite/style.js";
 
 const CategoryModal = ({type}) => {
     const parentRef = useRef();
+    const [isLoading, setIsLoading] = useState(true);
     const [offset, setOffset] = useState({ top: 0 });
     const { formData, setFormField, modals } = useHandWrite();
-    const { data, loading, error, request } = useApi();
+    const { data, request } = useApi();
 
     useEffect(() => {
         if(parentRef.current) {
             const rect = parentRef.current.getBoundingClientRect();
-            console.log(rect.top);
             setOffset({ top: rect.top });
+            
         }
-    }, [modals.categoryModal.isOpen]);
+    }, [modals.assetModal.isOpen]);
 
     useEffect(() => {
         if(modals.categoryModal.isOpen) {
@@ -27,8 +28,16 @@ const CategoryModal = ({type}) => {
         }
     }, [modals.categoryModal.isOpen, request]);
 
-    if (!modals.categoryModal.isOpen) return null;
+    useEffect(() => {
+        setIsLoading(false);
+    }, [offset.top]);
 
+    if (!modals.categoryModal.isOpen) return null;
+    if (isLoading) {
+        return (
+            <S.ModalOverlay onClick={modals.categoryModal.closeModal}/>
+        );
+    } 
     return (
         <S.ModalOverlay onClick={modals.categoryModal.closeModal}>
             <S.ContentWrapper>

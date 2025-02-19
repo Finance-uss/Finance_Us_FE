@@ -5,14 +5,14 @@ import * as S from "../../../../styles/Finance/HandWrite/style.js";
 
 const AssetModal = () => {
     const parentRef = useRef();
+    const [isLoading, setIsLoading] = useState(true);
     const [offset, setOffset] = useState({ top: 0 });
     const { formData, setFormField, modals } = useHandWrite();
-    const { data, loading, error, request } = useApi();
+    const { data, request } = useApi();
 
     useEffect(() => {
         if(parentRef.current) {
             const rect = parentRef.current.getBoundingClientRect();
-            console.log(rect.top);
             setOffset({ top: rect.top });
         }
     }, [modals.assetModal.isOpen]);
@@ -26,8 +26,16 @@ const AssetModal = () => {
         }
     }, [modals.assetModal.isOpen, request]);
 
-    if (!modals.assetModal.isOpen) return null;
+    useEffect(() => {
+        setIsLoading(false);
+    }, [offset.top]);
 
+    if (!modals.assetModal.isOpen) return null;
+    if (isLoading) {
+        return (
+            <S.ModalOverlay onClick={modals.assetModal.closeModal}/>
+        );
+    } 
     return (
         <S.ModalOverlay onClick={modals.assetModal.closeModal}>
             <S.ContentWrapper>
