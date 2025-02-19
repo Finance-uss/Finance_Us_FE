@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosInstance";
+import axiosInstance from "../axiosInstance";
 
 export const getComment = async (postId) => {
   const response = await axiosInstance.get(`/api/comment/${postId}`);
@@ -29,10 +29,24 @@ export const deleteComment = async (commentId) => {
 };
 
 export const addLikeComment = async (commentId) => {
-  const response = await axiosInstance.post(
-    `/api/like/comment/${commentId}`
-  );
+  try {
+    const response = await axiosInstance.post(
+      `/api/like/comment/${commentId}`
+    );
+    return response.data.result;
+  } catch (error) {
+    if (error.response) {
+      const errorMessage = error.response.data.result;
+      if (errorMessage === "Cannot like a deleted comment.") {
+        alert("삭제된 댓글에 좋아요를 누를 수 없습니다.");
+      } else if (errorMessage === "You already liked this comment") {
+        alert("이미 좋아요한 댓글입니다.");
+      } else {
+        alert("좋아요 요청 중 오류가 발생했습니다.");
+      }
+    }
   return response.data.result; 
+  };
 };
 
 export const getLikeComment = async (commentId) => {

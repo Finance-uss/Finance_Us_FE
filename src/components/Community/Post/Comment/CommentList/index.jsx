@@ -3,20 +3,11 @@ import { useParams } from "react-router-dom";
 import CommentInput from "../CommentInput";
 import * as S from "../../../../../styles/Community/PostDetail/Comment/style";
 import Comment from "./Comment";
-import Reply from "./Reply";
-import useComment from "../../../../../hooks/useComment";
+import useComment from "../../../../../api/Comment/useCommentAPI";
 
 const CommentList = () => {
   const {postId} = useParams();
-  const {
-    comments,
-    isLoading,
-    isError,
-    addComment,
-    editComment,
-    deleteComment,
-    likeComment,
-  } = useComment(postId);
+  const { comments, isLoading, isError, addComment, editComment, deleteComment } = useComment(postId);
 
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingContent, setEditingContent] = useState("");
@@ -37,31 +28,18 @@ const CommentList = () => {
 
   return (
     <>
-      {comments
-        .slice()
-        .sort((a, b) => a.commentId - b.commentId)
-        .map((comment) => (
+      {comments.slice().sort((a, b) => a.commentId - b.commentId).map((comment) => (
           <S.CommentListContainer key={comment.commentId}>
             <Comment
-              comment={comment}
-              onLike={() => likeComment(comment.commentId)}
+              commentId={comment.commentId}
+              data={comment}
+              onLike={() => likeComment(comment.commentId||comment.replies.commentId)}
               onEditClick={handleEditClick} 
               onDelete={() => deleteComment(comment.commentId)}
               onReplyClick={handleReplyClick}
+              isReply={false}
+              depth={0}
             />
-            {comment.replies?.length > 0 && (
-              <S.Replies>
-                {comment.replies.map((reply) => (
-                  <Reply
-                    key={reply.commentId}
-                    reply={reply}
-                    onLike={() => likeComment(reply.commentId)}
-                    onEditClick={handleEditClick}
-                    onDelete={() => deleteComment(comment.commentId)}
-                  />
-                ))}
-              </S.Replies>
-            )}
           </S.CommentListContainer>
         ))}
 

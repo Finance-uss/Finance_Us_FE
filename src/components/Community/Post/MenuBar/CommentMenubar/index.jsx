@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import * as S from '../../../../../styles/Community/MenuBar/style';
 import closeIcon from '../../../../../assets/icons/common/X.svg';
-import useComment from '../../../../../hooks/useComment';
+import useComment from '../../../../../api/Comment/useCommentAPI';
 import ConfirmModal from '../../../../User/ConfirmModal';
 
 const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport, onEditClick, onDelete, index }) => {
@@ -31,7 +31,7 @@ const CommentMenuBar = ({ isOpen, closeModal, isOwner, commentId, onReport, onEd
             <>
               <S.MenuItem onClick={() => {
                 console.log("수정 버튼 클릭됨. commentID:",commentId);
-                onEditClick(commentId, editContent);  // 부모 컴포넌트에서 수정 모드로 전환
+                onEditClick(commentId, editContent); 
                 closeModal();
               }}>댓글 수정</S.MenuItem>
               <S.MenuItem onClick={() => setDeleteModalOpen(true)}>댓글 삭제</S.MenuItem>
