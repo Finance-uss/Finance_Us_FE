@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
 import useApi from "../../../../hooks/useApi.js";
 import * as S from "../../../../styles/Finance/HandWrite/style.js";
@@ -11,14 +11,6 @@ const CategoryModal = ({type}) => {
     const { data, request } = useApi();
 
     useEffect(() => {
-        if(parentRef.current) {
-            const rect = parentRef.current.getBoundingClientRect();
-            setOffset({ top: rect.top });
-            
-        }
-    }, [modals.assetModal.isOpen]);
-
-    useEffect(() => {
         if(modals.categoryModal.isOpen) {
             request({ 
                 method: "GET", 
@@ -28,21 +20,34 @@ const CategoryModal = ({type}) => {
         }
     }, [modals.categoryModal.isOpen, request]);
 
+    useLayoutEffect(() => {
+        if(parentRef.current && data) {
+            const rect = parentRef.current.getBoundingClientRect();
+            setOffset({ top: rect.top });
+            setIsLoading(false);            
+        }
+    }, [modals.categoryModal.isOpen, data]);
+
     useEffect(() => {
-        setIsLoading(false);
-    }, [offset.top]);
+        if(!isLoading) {
+            console.log("isLoading: false");
+        }
+    }, [isLoading, offset]);
+
+    useEffect(() => {
+        if (!modals.assetModal.isOpen) {
+            setIsLoading(true);
+            setOffset({ top: 0 });
+        }
+    }, [modals.assetModal.isOpen]);
 
     if (!modals.categoryModal.isOpen) return null;
-    if (isLoading) {
-        return (
-            <S.ModalOverlay onClick={modals.categoryModal.closeModal}/>
-        );
-    } 
+    
     return (
         <S.ModalOverlay onClick={modals.categoryModal.closeModal}>
-            <S.ContentWrapper>
-                <S.ModalContent onClick={(e) => e.stopPropagation()} ref={parentRef}>
-                    <S.Blank1 $top={offset.top}/>
+            <S.ContentWrapper ref={parentRef}>
+                <S.ModalContent onClick={(e) => e.stopPropagation()} >
+                    {!isLoading && offset.top != 0 && <S.Blank1 $top={offset.top}/>}
                     <S.Blank2/>
                     <S.ModalLine onClick={modals.categoryModal.closeModal} $top={offset.top}/>
                     {data && data.result.map((mainCategory) => (
