@@ -84,9 +84,6 @@ const Camera = () => {
             }
 
             try {
-                const formData = new FormData();
-                formData.append("file", file);
-
                 const receiptResponse = await axiosInstance(postAccountReceipt(formData));
                 if(receiptResponse.data.isSuccess){
                     const storedData = localStorage.getItem("handwriteData") || {};
