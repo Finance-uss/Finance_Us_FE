@@ -21,6 +21,18 @@ export const ProfileInfo = styled.div`
     margin-left: 16px;
 `;
 
+export const ProfileNameWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+export const VerifiedBadge = styled.img`
+    width: 24px;
+    height: 24px;
+    margin-left: 8px;
+    margin-top: 4px;
+`;
+
 export const ProfileName = styled.p`
     font-size: 16px;
     margin-bottom: 8px;
