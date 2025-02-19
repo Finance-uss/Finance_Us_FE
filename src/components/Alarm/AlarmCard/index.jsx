@@ -14,7 +14,7 @@ const getCategory = (type, resourceTitle, user, message) => {
     case "FOLLOW":
       return (
         <>
-          <S.ContentText>{user}님이 팔로우했습니다.</S.ContentText>
+          <S.ContentText>{message}</S.ContentText>
         </>
       );
     default:
