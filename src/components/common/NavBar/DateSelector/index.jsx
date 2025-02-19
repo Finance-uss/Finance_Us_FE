@@ -5,7 +5,7 @@ import YearMonthModal from "./YearMonthModal/index.jsx";
 import { useDate } from "../../../../contexts/DateContext.jsx";
 import { useModal } from "../../../../hooks/useModal.js";
 
-const DateSelector = ({modalTop}) => {
+const DateSelector = ({}) => {
     const { selectedDate } = useDate();
     const { isOpen, toggleModal } = useModal();
 
@@ -21,7 +21,7 @@ const DateSelector = ({modalTop}) => {
                     onClick={toggleModal} 
                 />
             </S.DateSelectContiner>
-            {isOpen && <YearMonthModal modalTop={modalTop}/>}
+            {isOpen && <YearMonthModal toggleModal={toggleModal} />}
         </>
     )
 }
