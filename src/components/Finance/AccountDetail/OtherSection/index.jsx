@@ -6,7 +6,7 @@ import AddPhotoAlternate from "../../../../assets/icons/finance/AddPhotoAlternat
 const satisfactionTexts = ["아쉬워요", "그저 그래요", "괜찮아요", "만족해요", "좋아요"];
 
 const OtherSection = () => {
-    const { formData, setFormField, modals, previewImage, handleImageUpload, handleChange } = useAccountDetail();
+    const { formData, setFormField, modals, handleImageUpload, handleChange } = useAccountDetail();
 
     return (
         <S.OtherSection>
@@ -33,8 +33,8 @@ const OtherSection = () => {
 
             <S.ImageUpload>
                 <label htmlFor="image-upload">
-                    {previewImage ? (
-                        <S.UploadImage src={previewImage1} alt="업로드 이미지" />
+                    {formData.imageUrl ? (
+                        <S.UploadImage src={formData.imageUrl} alt="업로드 이미지" />
                     ) : (
                         <img src={AddPhotoAlternate} alt="업로드 아이콘" />
                     )}

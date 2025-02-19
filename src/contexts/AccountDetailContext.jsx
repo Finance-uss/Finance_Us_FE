@@ -8,7 +8,7 @@ const AccountDetailContext = createContext();
 
 export const AccountDetailProvider = ({ children }) => {
     const { selectedDate } = useDate();
-    const { imageUrl, handleImageUpload } = useImageUploader();
+    const { imageUrl, imageName, handleImageUpload } = useImageUploader();
     const { formData, handleChange, setFormField } = useForm({
             accountType: "expense",
             date: "",
@@ -18,7 +18,8 @@ export const AccountDetailProvider = ({ children }) => {
             title: "",
             status: false,
             score: 0,
-            imageUrl: imageUrl,
+            imageUrl: "",
+            imageName: "",
             content: ""
     });
 
@@ -33,9 +34,14 @@ export const AccountDetailProvider = ({ children }) => {
     ];
 
     useEffect(() => {
-        setFormField("date", selectedDate);
-        setFormField("imageUrl", imageUrl);
-    }, [selectedDate, imageUrl]);
+        if(selectedDate){
+            setFormField("date", selectedDate);
+        }
+        if(imageUrl && imageName){
+            setFormField("imageUrl", imageUrl);
+            setFormField("imageName", imageName);
+        }
+    }, [selectedDate, imageUrl, imageName]);
 
     return (
         <AccountDetailContext.Provider 
@@ -44,7 +50,8 @@ export const AccountDetailProvider = ({ children }) => {
                 handleChange, 
                 setFormField, 
                 modals, 
-                imageUrl, 
+                imageUrl,
+                imageName, 
                 handleImageUpload, 
                 inputFields 
             }}
