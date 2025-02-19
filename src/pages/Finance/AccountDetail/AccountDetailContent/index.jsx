@@ -44,6 +44,7 @@ const AccountDetailContent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(isDisabled) return;
         const formattedData = formatFormData(formData);
         try {
             await request({

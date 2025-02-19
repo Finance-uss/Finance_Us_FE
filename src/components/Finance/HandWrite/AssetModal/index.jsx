@@ -1,19 +1,21 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
 import useApi from "../../../../hooks/useApi.js";
 import * as S from "../../../../styles/Finance/HandWrite/style.js";
 
-
-const assetData = [
-    { main: "체크카드", sub: ["국민카드", "삼성카드", "우리카드"] },
-    { main: "현금", sub: ["지갑", "은행", "세이프박스"] },
-    { main: "대분류", sub: ["적금", "투자", "기타"] },
-];
-
 const AssetModal = () => {
+    const parentRef = useRef();
+    const [isLoading, setIsLoading] = useState(true);
+    const [offset, setOffset] = useState({ top: 0 });
     const { formData, setFormField, modals } = useHandWrite();
+    const { data, request } = useApi();
 
-    const { data, loading, error, request } = useApi();
+    useEffect(() => {
+        if(parentRef.current) {
+            const rect = parentRef.current.getBoundingClientRect();
+            setOffset({ top: rect.top });
+        }
+    }, [modals.assetModal.isOpen]);
 
     useEffect(() => {
         if(modals.assetModal.isOpen) {
@@ -24,29 +26,41 @@ const AssetModal = () => {
         }
     }, [modals.assetModal.isOpen, request]);
 
-    if (!modals.assetModal.isOpen) return null;
+    useEffect(() => {
+        setIsLoading(false);
+    }, [offset.top]);
 
+    if (!modals.assetModal.isOpen) return null;
+    if (isLoading) {
+        return (
+            <S.ModalOverlay onClick={modals.assetModal.closeModal}/>
+        );
+    } 
     return (
         <S.ModalOverlay onClick={modals.assetModal.closeModal}>
-            <S.ModalContent onClick={(e) => e.stopPropagation()}>
-                <S.ModalLine onClick={modals.assetModal.closeModal}/>
-                {data && data.result.map((mainAsset) => (
-                    <S.CategoryContainer key={mainAsset.id}>
-                        <S.MainCategory>{mainAsset.name}</S.MainCategory>
-                        <S.SubCategoryContainer>
-                            {mainAsset.subAssets.map((subAsset) => (
-                                <S.SubCategoryButton
-                                    key={subAsset.id}
-                                    onClick={() => setFormField("subAssetName", subAsset.name)}
-                                    $selected={formData.subAssetName === subAsset.name}
-                                >
-                                    {subAsset.name}
-                                </S.SubCategoryButton>
-                            ))}
-                        </S.SubCategoryContainer>
-                    </S.CategoryContainer>
-                ))}
-            </S.ModalContent>
+            <S.ContentWrapper>
+                <S.ModalContent onClick={(e) => e.stopPropagation()} ref={parentRef}>
+                    <S.Blank1 $top={offset.top}/>
+                    <S.Blank2/>
+                    <S.ModalLine onClick={modals.assetModal.closeModal} $top={offset.top}/>
+                    {data && data.result.map((mainAsset) => (
+                        <S.CategoryContainer key={mainAsset.id}>
+                            <S.MainCategory>{mainAsset.name}</S.MainCategory>
+                            <S.SubCategoryContainer>
+                                {mainAsset.subAssets.map((subAsset) => (
+                                    <S.SubCategoryButton
+                                        key={subAsset.id}
+                                        onClick={() => setFormField("subAssetName", subAsset.name)}
+                                        $selected={formData.subAssetName === subAsset.name}
+                                    >
+                                        {subAsset.name}
+                                    </S.SubCategoryButton>
+                                ))}
+                            </S.SubCategoryContainer>
+                        </S.CategoryContainer>
+                    ))}
+                </S.ModalContent> 
+            </S.ContentWrapper>
         </S.ModalOverlay>
     );
 };
