@@ -48,4 +48,5 @@ export const FollowButton = styled.button`
     border: none;
     cursor:pointer;
     margin-left: auto; 
+    font-size:16px;
 `;
