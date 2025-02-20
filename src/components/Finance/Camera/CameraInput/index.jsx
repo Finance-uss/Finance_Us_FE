@@ -18,9 +18,10 @@ const CameraInput = () => {
         try {
             const s3Response = await axiosInstance(postS3(file));
             if (s3Response.data.isSuccess) {
-                const imageUrl = response.data.result.imageUrl;
-                const imageName = response.data.result.imageName;
+                const imageUrl = s3Response.data.result.imageUrl;
+                const imageName = s3Response.data.result.imageName;
                 const formData = { imageUrl, imageName };
+
                 localStorage.setItem("handwriteData", JSON.stringify(formData));
 
                 const receiptResponse = await axiosInstance(postAccountReceipt(file));
@@ -31,7 +32,7 @@ const CameraInput = () => {
                     localStorage.setItem("handwriteData", JSON.stringify(finalData));
                     navigate("/finance/handwrite");
                 }
-                else {
+                else{
                     navigate("/finance/handwrite");
                 }
             }
