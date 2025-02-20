@@ -84,8 +84,20 @@ const Camera = () => {
             }
 
             try {
-                const receiptResponse = await axiosInstance(postAccountReceipt(formData));
+                console.log("API 호출 시작");
+                const byteString = atob(capturedImage.split(',')[1]);
+                const arrayBuffer = new ArrayBuffer(byteString.length);
+                const uint8Array = new Uint8Array(arrayBuffer);
+                for (let i = 0; i < byteString.length; i++) {
+                    uint8Array[i] = byteString.charCodeAt(i);
+                }
+                const blob = new Blob([uint8Array], { type: 'image/png' });
+
+                const file = new File([blob], "captured_image.png", { type: "image/png" });
+
+                const receiptResponse = await axiosInstance(postAccountReceipt(file));
                 if(receiptResponse.data.isSuccess){
+                    console.log("API 호출 성공:", receiptResponse.data.result);
                     const storedData = localStorage.getItem("handwriteData") || {};
 
                     const finalData = {
@@ -100,6 +112,7 @@ const Camera = () => {
                     navigate("/finance/handwrite");
                 }
             } catch (error) {
+                console.error("API 호출 실패:", error);
                 navigate("/finance/handwrite");
             }
         }
