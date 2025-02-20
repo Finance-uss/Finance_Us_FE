@@ -27,7 +27,7 @@ const CameraInput = () => {
                 const receiptResponse = await axiosInstance(postAccountReceipt(file));
                 if (receiptResponse.data.isSuccess) {
                     console.log("API 호출 성공:", receiptResponse.data.result);
-                    const storedData = JSON.parse(localStorage.getItem("handwriteData") || "{}");
+                    const storedData = localStorage.getItem("handwriteData") || {};
                     const finalData = { ...storedData, ...receiptResponse.data.result };
                     localStorage.setItem("handwriteData", JSON.stringify(finalData));
                 }
