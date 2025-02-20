@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import TopBar from '../../../components/common/TopBar'; 
 import Preview from '../../../components/Community/Search/Preview';
@@ -13,28 +13,32 @@ const SearchResult = () => {
   const [selectedTab, setSelectedTab] = useState(0);
   const [resultPost, setResultPost] = useState([]);
   const [resultProfile, setResultProfile] = useState([]);
+  const [page, setPage] = useState(1); 
   const navigate = useNavigate();
 
   const onPostClick = (postId) => {
     navigate(`/community/postdetail/${postId}`);
   };
 
-  const fetchPosts = async () => {
+  const fetchPosts = useCallback(async () => {
     try {
-      const response = await axiosInstance.get('/api/search/posts', {
-        params: {
-          keyword: query,
-          boardType: 'FREE',
-          size: 10,
-        },
-      });
-      if (response.data.isSuccess) {
-        setResultPost(response.data.result.posts);
+      const [freeResponse, infoResponse] = await Promise.all([
+        axiosInstance.get('/api/search/posts', {
+          params: { keyword: query, boardType: 'FREE', size: 10, page },
+        }),
+        axiosInstance.get('/api/search/posts', {
+          params: { keyword: query, boardType: 'INFO', size: 10, page },
+        }),
+      ]);
+
+      if (freeResponse.data.isSuccess && infoResponse.data.isSuccess) {
+        const mergedPosts = [...freeResponse.data.result.posts, ...infoResponse.data.result.posts];
+        setResultPost(prevPosts => [...prevPosts, ...mergedPosts]); 
       }
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
-  };
+  }, [query, page]);
 
   const fetchProfiles = async () => {
     try {
@@ -52,16 +56,23 @@ const SearchResult = () => {
     }
   };
 
+  const loadMorePostsOnScroll = (e) => {
+    const bottom = e.target.scrollHeight === e.target.scrollTop + e.target.clientHeight;
+    if (bottom) {
+      setPage(prevPage => prevPage + 1); 
+    }
+  };
+
   useEffect(() => {
     if (query) {
-      fetchPosts();
-      fetchProfiles();
+      if (selectedTab === 0) fetchPosts();
+      else fetchProfiles();
     }
-  }, [query]);
+  }, [query, selectedTab, page, fetchPosts]);
 
   return (
-    <Container>
-      <SearchBar/>
+    <Container onScroll={loadMorePostsOnScroll}>
+      <SearchBar />
       <TopBar 
         leftText="제목·내용"
         rightText="프로필"
@@ -71,7 +82,7 @@ const SearchResult = () => {
       <Wrapper>
         {selectedTab === 0 ? (
           resultPost.length > 0 ? (
-            <Preview posts={resultPost} onPostClick={onPostClick}/>
+            <Preview posts={resultPost} onPostClick={onPostClick} />
           ) : (
             <p>검색 결과가 없습니다.</p>
           )
@@ -80,7 +91,6 @@ const SearchResult = () => {
         ) : (
           <p>검색 결과가 없습니다.</p>
         )}
-        
       </Wrapper>
     </Container>
   );

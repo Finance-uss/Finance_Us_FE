@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import * as S from '../../../../../styles/Community/MenuBar/style';
 import closeIcon from '../../../../../assets/icons/common/X.svg';
 import { useNavigate } from 'react-router-dom';
-import { deletePost, getPost } from '../../../../../api/post';
+import { deletePost, getPost } from '../../../../../api/postAPI';
 import ConfirmModal from '../../../../User/ConfirmModal';
 
 const PostMenuBar = ({ isOpen, closeModal, isOwner, onReport, postId }) => {

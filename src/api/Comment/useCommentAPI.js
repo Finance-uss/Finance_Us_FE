@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getComment, addComment, editComment, deleteComment, addLikeComment } from "../api/apiComment";
+import { getComment, addComment, editComment, deleteComment, addLikeComment } from "../Comment/commentAPI";
 
 const useComment = (postId) => {
   const queryClient = useQueryClient(); 
@@ -23,10 +23,6 @@ const useComment = (postId) => {
   
   const editCommentMutation = useMutation({
     mutationFn: ({ commentId, content }) => {
-      if (!commentId) {
-        console.error("댓글 수정 오류: commentId가 없습니다.");
-        return;
-      }
       return editComment(commentId, content); 
     },
     onSuccess: () => {
@@ -40,13 +36,7 @@ const useComment = (postId) => {
       queryClient.invalidateQueries(["comments", postId]); 
     },
   });
-
-  const likeCommentMutation = useMutation({
-    mutationFn: (commentId) => addLikeComment(commentId),
-    onSuccess: () => {
-      queryClient.invalidateQueries(["comments", postId]); 
-    },
-  });
+ 
 
   return {
     comments: data?.commentsList || [],
@@ -56,7 +46,6 @@ const useComment = (postId) => {
     addComment: addCommentMutation.mutate, 
     editComment: editCommentMutation.mutate,
     deleteComment: deleteCommentMutation.mutate,
-    likeComment: likeCommentMutation.mutate,
   };
 };
 

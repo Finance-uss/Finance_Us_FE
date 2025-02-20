@@ -8,8 +8,8 @@ import bookmarkIcon from "../../../../assets/icons/common/bookmark.svg";
 import authIcon from "../../../../assets/icons/common/Community/CheckCircle.svg"
 import PostMenuBar from "../MenuBar/PostMenubar";
 import { useNavigate } from "react-router-dom";
-import useComment from "../../../../hooks/useComment";
-import {scrapPost, postLike} from "../../../../api/post";
+import useComment from "../../../../api/Comment/useCommentAPI";
+import {scrapPost, postLike} from "../../../../api/postAPI";
 import bookmarkFillIcon from "../../../../assets/icons/common/Community/Scrap.svg";
 import { formatDate } from "../../../../utils/dateUtils";
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { getPostList, getPostCategoryList } from '../../../../api/apiPost';
+import { getPostList, getPostCategoryList } from '../../../../api/postListAPI';
 import PostCard from '../PostCard';
 
 const PostList = ({ selectedCategory, postType, onPostClick }) => {
