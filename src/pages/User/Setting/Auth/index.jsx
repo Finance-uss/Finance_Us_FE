@@ -14,7 +14,7 @@ const UserAuthWrite = () => {
     const [loading, setLoading] = useState(false);
     const [hasApplied, setHasApplied] = useState(false); // 인증 신청 여부 상태
 
-    const request = useApi();
+    const { request} = useApi();
 
     // 페이지 로드 시 이미 신청 여부 확인
     useEffect(() => {
@@ -67,6 +67,7 @@ const UserAuthWrite = () => {
             alert("인증 요청이 완료되었습니다!");
             window.history.back(); // 이전 페이지로 돌아가기
         } catch (error) {
+            console.log(error);
             alert("인증 요청에 실패했습니다.");
         } finally {
             setLoading(false);
