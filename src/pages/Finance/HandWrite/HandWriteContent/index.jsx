@@ -65,6 +65,7 @@ const HandWriteContent = () => {
                         }
                     });                    
                 } catch (error) {
+                    alert("로컬스토리지 데이터 파싱 오류: " + error.message);
                     console.error("로컬스토리지 데이터 파싱 오류:", error);
                 } finally {
                     setIsLoading(false);
