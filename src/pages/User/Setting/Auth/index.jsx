@@ -7,6 +7,8 @@ import { authAPI } from "../../../../api/authAPI";
 import useApi from "../../../../hooks/useApi.js";
 import { postS3 } from "../../../../api/s3API.js";
 
+import java.util.UUID;
+
 const UserAuthWrite = () => {
     const [title, setTitle] = useState("");
     const [content, setContent] = useState("");
