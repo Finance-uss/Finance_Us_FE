@@ -16,13 +16,31 @@ const CateContainer = ({ id, title, subcategories, onRemove, isAssetPage }) => {
     // 대분류 제목 수정 API
     const updateCategoryName = async () => {
         try {
-            const endpoint = isAssetPage ? "/api/mypage/asset/main" : "/api/mypage/category/main";
-            await axiosInstance.patch(endpoint, 
-                isAssetPage ? { mainId: id, subName: editedTitle } : { id, name: editedTitle },
-                { headers: { Authorization: `Bearer ${storedToken}` } }
-            );
+            if (isAssetPage) {
+                const endpoint = "/api/mypage/asset/main";
+    
+                const response = await axiosInstance.patch(endpoint, null, {
+                    headers: { Authorization: `Bearer ${storedToken}` },
+                    params: { mainId: id, mainName: editedTitle } 
+                });
+    
+                console.log("메인 자산 수정 성공:", response.data);
+            } else {
+                const endpoint = "/api/mypage/category/main";
+    
+                const response = await axiosInstance.patch(endpoint, { id, name: editedTitle }, {
+                    headers: { Authorization: `Bearer ${storedToken}` }
+                });
+    
+                console.log("메인 카테고리 수정 성공:", response.data);
+            }
         } catch (error) {
-            console.error("대분류 수정 실패:", error);
+            console.error(`${isAssetPage ? "메인 자산" : "메인 카테고리"} 수정 실패:`, error);
+    
+            if (error.response) {
+                console.error("서버 응답 코드:", error.response.status);
+                console.error("서버 응답 데이터:", error.response.data);
+            }
         }
     };
 
@@ -64,38 +82,30 @@ const CateContainer = ({ id, title, subcategories, onRemove, isAssetPage }) => {
     // 서브 수정 (카테고리 & 자산 분리)
     const updateSubCategory = async (subId, newName) => {
         try {
-            const endpoint = isAssetPage ? "/api/mypage/asset/sub" : "/api/mypage/category/sub";
-            // 요청 데이터
-            const requestData = isAssetPage 
-            ? { id: Number(subId), name: newName }  
-            : { id: subId, name: newName };
-            
-            console.log("📌 서브 수정 요청 데이터:", requestData);
-            console.log("📌 서브 수정 요청 URL:", endpoint);
-            console.log("📌 서브 수정 요청 데이터 타입 확인:", typeof requestData.id, typeof requestData.name);
-            
-            const response = await axiosInstance.patch(endpoint, requestData, {
-                headers: { 
-                    Authorization: `Bearer ${storedToken}`,
-                    "Content-Type": "application/json"  // JSON 형식 명시
-                }
-            });
-            console.log("📌 서브 수정 응답:", response.data);
-
-            if (response.data.isSuccess) {
-                setButtons(prev => prev.map(sub => (sub.id === subId ? { ...sub, name: newName } : sub)));
-                console.log("서브 수정 성공:", response.data.result);
+            if (isAssetPage) {
+                const endpoint = "/api/mypage/asset/sub";
+    
+                const response = await axiosInstance.patch(endpoint, null, {
+                    headers: { Authorization: `Bearer ${storedToken}` },
+                    params: { subId: subId, subName: newName } 
+                });
+    
+                console.log("서브 자산 수정 성공:", response.data);
             } else {
-                console.error("서브 수정 실패 (서버 응답 오류):", response.data.message);
+                const endpoint = "/api/mypage/category/sub";
+    
+                const response = await axiosInstance.patch(endpoint, { id: subId, name: newName }, {
+                    headers: { Authorization: `Bearer ${storedToken}` }
+                });
+    
+                console.log("서브 카테고리 수정 성공:", response.data);
             }
         } catch (error) {
-            console.error("서브 수정 실패 (네트워크 오류):", error);
-
+            console.error(`${isAssetPage ? "서브 자산" : "서브 카테고리"} 수정 실패:`, error);
+    
             if (error.response) {
-                console.error("⚠️ 서버 응답 데이터:", error.response.data);
-                console.error("⚠️ 서버 상태 코드:", error.response.status);
-            } else {
-                console.error("❌ 서버 응답 없음 (네트워크 오류 가능)");
+                console.error("서버 응답 코드:", error.response.status);
+                console.error("서버 응답 데이터:", error.response.data);
             }
         }
     };
@@ -106,7 +116,7 @@ const CateContainer = ({ id, title, subcategories, onRemove, isAssetPage }) => {
             const endpoint = isAssetPage ? "/api/mypage/asset/sub" : "/api/mypage/category/sub";
             const params = isAssetPage ? { subId } : { subId };
 
-            console.log("📌 서브 삭제 요청 params:", params);
+            console.log("서브 삭제 요청 params:", params);
 
             const response = await axiosInstance.delete(endpoint, {
                 headers: { Authorization: `Bearer ${storedToken}` },
