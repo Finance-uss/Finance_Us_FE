@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 
 export const Container = styled.div`
     // padding: 20px;
@@ -25,12 +25,21 @@ export const BarText = styled.div`
     line-height: 19.09px;
 
 `;
+const fillAnimation = (percentage) => keyframes`
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: ${percentage}%;
+  }
+`;
 
 export const Fill = styled.div`
     width: ${(props) => props.percentage || 0}%;
     height: 100%;
     background-color: #142755;
     border-radius: 4px;
+    animation: ${(props) => fillAnimation(props.percentage)} 1s ease-out forwards;
 `;
 
 export const Content = styled.div`
