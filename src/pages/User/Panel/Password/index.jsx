@@ -26,7 +26,7 @@ const ChangePasswordPage = () => {
 
     // 비밀번호 유효성 검사
     const validatePassword = (password) => {
-        const regex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+~`\-={}[\]:;"'<>,.?/])[A-Za-z\d!@#$%^&*()_+~`\-={}[\]:;"'<>,.?/]{8,12}$/;
+        const regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,12}$/;
         return regex.test(password);
     };    
 
@@ -179,7 +179,7 @@ const ChangePasswordPage = () => {
                         />
                         {isNewPasswordError && (
                             <ErrorMessage>
-                                비밀번호는 영어 대/소문자, 숫자, 특수문자를 포함한<br />8자~12자 이내여야 합니다.
+                                비밀번호는 영어 대/소문자, 숫자를 포함한 8자~12자 이내여야 합니다.
                             </ErrorMessage>
                         )}
  
