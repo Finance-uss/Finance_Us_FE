@@ -1,18 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useAccountDetail } from "../../../../contexts/AccountDetailContext.jsx";
 import useApi from "../../../../hooks/useApi.js";
 import * as S from "../../../../styles/Finance/HandWrite/style.js";
 
-
-const assetData = [
-    { main: "체크카드", sub: ["국민카드", "삼성카드", "우리카드"] },
-    { main: "현금", sub: ["지갑", "은행", "세이프박스"] },
-    { main: "대분류", sub: ["적금", "투자", "기타"] },
-];
-
 const AssetModal = () => {
+    const parentRef = useRef();
+    const [isLoading, setIsLoading] = useState(true);
+    const [offset, setOffset] = useState({ top: 0 });
     const { formData, setFormField, modals } = useAccountDetail();
-
     const { data, loading, error, request } = useApi();
 
     useEffect(() => {
@@ -24,29 +19,54 @@ const AssetModal = () => {
         }
     }, [modals.assetModal.isOpen, request]);
 
+    useLayoutEffect(() => {
+        if(parentRef.current && data) {
+            const rect = parentRef.current.getBoundingClientRect();
+            setOffset({ top: rect.top });    
+            setIsLoading(false);
+        }
+    }, [modals.assetModal.isOpen, data]);
+
+    useEffect(() => {
+        if(!isLoading) {
+            console.log("isLoading: false");
+        }
+    }, [isLoading, offset]);
+
+    useEffect(() => {
+        if (!modals.assetModal.isOpen) {
+            setIsLoading(true);
+            setOffset({ top: 0 });
+        }
+    }, [modals.assetModal.isOpen]);
+
     if (!modals.assetModal.isOpen) return null;
 
     return (
         <S.ModalOverlay onClick={modals.assetModal.closeModal}>
-            <S.ModalContent onClick={(e) => e.stopPropagation()}>
-                <S.ModalLine onClick={modals.assetModal.closeModal}/>
-                {data && data.result.map((mainAsset) => (
-                    <S.CategoryContainer key={mainAsset.id}>
-                        <S.MainCategory>{mainAsset.name}</S.MainCategory>
-                        <S.SubCategoryContainer>
-                            {mainAsset.subAssets.map((subAsset) => (
-                                <S.SubCategoryButton
-                                    key={subAsset.id}
-                                    onClick={() => setFormField("subAssetName", subAsset.name)}
-                                    $selected={formData.subAssetName === subAsset.name}
-                                >
-                                    {subAsset.name}
-                                </S.SubCategoryButton>
-                            ))}
-                        </S.SubCategoryContainer>
-                    </S.CategoryContainer>
-                ))}
-            </S.ModalContent>
+            <S.ContentWrapper>
+                <S.ModalContent onClick={(e) => e.stopPropagation()} ref={parentRef}>
+                    {!isLoading && offset.top != 0 && <S.Blank1 $top={offset.top}/>}
+                    <S.Blank2/>
+                    <S.ModalLine onClick={modals.assetModal.closeModal} $top={offset.top}/>
+                    {data && data.result.map((mainAsset) => (
+                        <S.CategoryContainer key={mainAsset.id}>
+                            <S.MainCategory>{mainAsset.name}</S.MainCategory>
+                            <S.SubCategoryContainer>
+                                {mainAsset.subAssets.map((subAsset) => (
+                                    <S.SubCategoryButton
+                                        key={subAsset.id}
+                                        onClick={() => setFormField("subAssetName", subAsset.name)}
+                                        $selected={formData.subAssetName === subAsset.name}
+                                    >
+                                        {subAsset.name}
+                                    </S.SubCategoryButton>
+                                ))}
+                            </S.SubCategoryContainer>
+                        </S.CategoryContainer>
+                    ))}
+                </S.ModalContent>
+            </S.ContentWrapper>
         </S.ModalOverlay>
     );
 };

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
 import useApi from "../../../../hooks/useApi.js";
 import * as S from "../../../../styles/Finance/HandWrite/style.js";
@@ -11,13 +11,6 @@ const AssetModal = () => {
     const { data, request } = useApi();
 
     useEffect(() => {
-        if(parentRef.current) {
-            const rect = parentRef.current.getBoundingClientRect();
-            setOffset({ top: rect.top });
-        }
-    }, [modals.assetModal.isOpen]);
-
-    useEffect(() => {
         if(modals.assetModal.isOpen) {
             request({ 
                 method: "GET", 
@@ -26,21 +19,34 @@ const AssetModal = () => {
         }
     }, [modals.assetModal.isOpen, request]);
 
+    useLayoutEffect(() => {
+        if(parentRef.current && data) {
+            const rect = parentRef.current.getBoundingClientRect();
+            setOffset({ top: rect.top });    
+            setIsLoading(false);
+        }
+    }, [modals.assetModal.isOpen, data]);
+
     useEffect(() => {
-        setIsLoading(false);
-    }, [offset.top]);
+        if(!isLoading) {
+            console.log("isLoading: false");
+        }
+    }, [isLoading, offset]);
+
+    useEffect(() => {
+        if (!modals.assetModal.isOpen) {
+            setIsLoading(true);
+            setOffset({ top: 0 });
+        }
+    }, [modals.assetModal.isOpen]);
 
     if (!modals.assetModal.isOpen) return null;
-    if (isLoading) {
-        return (
-            <S.ModalOverlay onClick={modals.assetModal.closeModal}/>
-        );
-    } 
+    
     return (
         <S.ModalOverlay onClick={modals.assetModal.closeModal}>
             <S.ContentWrapper>
                 <S.ModalContent onClick={(e) => e.stopPropagation()} ref={parentRef}>
-                    <S.Blank1 $top={offset.top}/>
+                    {!isLoading && offset.top != 0 && <S.Blank1 $top={offset.top}/>}
                     <S.Blank2/>
                     <S.ModalLine onClick={modals.assetModal.closeModal} $top={offset.top}/>
                     {data && data.result.map((mainAsset) => (
