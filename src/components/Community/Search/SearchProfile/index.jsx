@@ -6,7 +6,7 @@ import { followUser, unfollowUser } from "../../../../api/followAPI";
 
 const SearchProfile = ({ profiles = [] }) => {
    const [followStates, setFollowStates] = useState(
-    profiles.map(profile => profile.isFollowing) 
+    profiles.map(profile => profile.followed) 
   );
 
   const toggleFollow = async (index, userId) => {
