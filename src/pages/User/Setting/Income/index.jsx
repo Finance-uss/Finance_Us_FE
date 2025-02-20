@@ -4,13 +4,12 @@ import styled from 'styled-components';
 import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import CompleteButtonComponent from '../../../../components/User/CompleteButton';
-import PlusCateButton from '../../../../components/User/PlusCateButton';
 import AmountInputContainer from '../../../../components/User/AmountInputContainer';
 import AmountInput from '../../../../components/User/AmountInput';
 
 const IncomePage = () => {
     const navigate = useNavigate();
-    const [totalIncome, setTotalIncome] = useState('');
+    const [totalIncome, setTotalIncome] = useState(0);
     const [categories, setCategories] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
 
@@ -25,7 +24,7 @@ const IncomePage = () => {
 
             const response = await axiosInstance.get(`/api/mypage/goal-asset`, {
                 headers: { Authorization: `Bearer ${token}` },
-                params: { type: "income" },
+                params: { type: "INCOME" },
             });
 
             console.log("서버에서 불러온 데이터:", response.data.result);
@@ -64,7 +63,7 @@ const IncomePage = () => {
                 (sum, sub) => sum + Number(sub.goal || 0),
                 0
             );
-            setTotalExpense(updatedTotal);
+            setTotalIncome(updatedTotal);
     
             return updatedCategories;
         });
@@ -138,11 +137,11 @@ const IncomePage = () => {
                 </AmountInputWrapper>
                 <SectionTitle style={{ marginTop: '40px' }}>이번 달 카테고리 별 수익 목표 금액</SectionTitle>
                 <CategoryList>
-                    {categories.map((item) => (
+                    {categories.map((sub) => (
                         <AmountInputContainer
                             key={sub.id}
-                            mainName={sub.mainCategory} // 대분류 전달
-                            name={sub.subCategory} // 소분류 전달
+                            mainName={sub.mainName} // 대분류 전달
+                            name={sub.name} // 소분류 전달
                             value={sub.goal || ""}
                             onChange={(value) => updateCategoryAmount(sub.id, value)}
                         />
