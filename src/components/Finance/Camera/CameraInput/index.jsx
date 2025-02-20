@@ -30,6 +30,10 @@ const CameraInput = () => {
                     const storedData = localStorage.getItem("handwriteData") || {};
                     const finalData = { ...storedData, ...receiptResponse.data.result };
                     localStorage.setItem("handwriteData", JSON.stringify(finalData));
+                    navigate("/finance/handwrite");
+                }
+                else{
+                    navigate("/finance/handwrite");
                 }
             }
         } catch (error) {
