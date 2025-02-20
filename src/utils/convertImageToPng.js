@@ -14,12 +14,13 @@ export const convertImageToPng = async (file) => {
     ) {
         try {
         const convertedBlob = await heic2any({ blob: file, toType: "image/png" });
-        // convertedBlob이 유효한지 확인
-        if (!convertedBlob) {
-            throw new Error("HEIC 변환 실패: 변환된 Blob이 유효하지 않음");
-        }
-        const baseName = file.name.slice(0, file.name.lastIndexOf('.'));
-        return new File([convertedBlob], baseName + ".png", { type: "image/png" });
+        // convertedBlob이 유효한지 추가 확인
+        if (!convertedBlob) throw new Error("HEIC 변환 실패: 변환된 Blob이 유효하지 않음");
+        return new File(
+            [convertedBlob],
+            file.name.replace(/\.[^/.]+$/, '.png'),
+            { type: "image/png" }
+        );
         } catch (error) {
         console.error("HEIC 변환 실패:", error);
         throw error;
@@ -31,12 +32,11 @@ export const convertImageToPng = async (file) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
         reader.onload = (event) => {
-        // blueimp-load-image를 사용하여 EXIF 방향 보정 및 캔버스 출력
+        // blueimp-load-image를 사용하여 EXIF 방향 보정 및 캔버스 반환
         loadImage(
             event.target.result,
             (img) => {
-            // loadImage가 캔버스 객체를 반환하도록 설정했으므로, 여기서 img는 캔버스입니다.
-            // 이미지 리사이즈: 최대 허용 크기 지정
+            // 최대 허용 크기 지정
             const MAX_WIDTH = 1920;
             const MAX_HEIGHT = 1080;
             const originalWidth = img.naturalWidth || img.width;
@@ -60,12 +60,15 @@ export const convertImageToPng = async (file) => {
             resizeCanvas.toBlob(
                 (blob) => {
                 if (blob) {
-                    const baseName = file.name.slice(0, file.name.lastIndexOf('.'));
-                    resolve(new File([blob], baseName + ".png", { type: "image/png" }));
+                    resolve(new File(
+                    [blob],
+                    file.name.replace(/\.[^/.]+$/, '.png'),
+                    { type: "image/png" }
+                    ));
                 } else {
                     reject(new Error("Blob 생성 실패"));
                 }
-                // 메모리 누수 방지: 캔버스 제거
+                // 메모리 누수 방지: 사용한 캔버스 제거
                 resizeCanvas.remove();
                 if (img !== resizeCanvas && img.remove) {
                     img.remove();
@@ -77,7 +80,7 @@ export const convertImageToPng = async (file) => {
             },
             {
             orientation: true,
-            canvas: true, // 결과를 캔버스로 반환
+            canvas: true, // 캔버스로 결과를 반환
             }
         );
         };
