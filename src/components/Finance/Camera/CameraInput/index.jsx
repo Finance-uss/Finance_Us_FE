@@ -16,21 +16,23 @@ const CameraInput = () => {
         if(!file) return;
 
         try {
-            const imageFormData = new FormData();
-            imageFormData.append("file", file);
-            const s3Response = await axiosInstance(postS3(imageFormData));
+            const s3Response = await axiosInstance(postS3(file));
             if (s3Response.data.isSuccess) {
-                const { imageUrl, imageName } = s3Response.data.result;
+                const imageUrl = response.data.result.imageUrl;
+                const imageName = response.data.result.imageName;
                 const formData = { imageUrl, imageName };
-
                 localStorage.setItem("handwriteData", JSON.stringify(formData));
 
-                const receiptResponse = await axiosInstance(postAccountReceipt(imageFormData));
+                const receiptResponse = await axiosInstance(postAccountReceipt(file));
                 if (receiptResponse.data.isSuccess) {
                     console.log("API 호출 성공:", receiptResponse.data.result);
-                    const storedData = JSON.parse(localStorage.getItem("handwriteData") || "{}");
+                    const storedData = localStorage.getItem("handwriteData") || {};
                     const finalData = { ...storedData, ...receiptResponse.data.result };
                     localStorage.setItem("handwriteData", JSON.stringify(finalData));
+                    navigate("/finance/handwrite");
+                }
+                else {
+                    navigate("/finance/handwrite");
                 }
             }
         } catch (error) {
