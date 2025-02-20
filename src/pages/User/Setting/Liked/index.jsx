@@ -5,6 +5,16 @@ import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import UserPostCard from '../../../../components/User/UserPostCard';
 
+const categoryMapping = {
+    FREE: "자유",
+    INFO: "정보",
+    WASTE: "낭비했어요",
+    SAVE: "절약했어요",
+    COLUMN: "칼럼",
+    LECTURE: "강연",
+    PROMOTION: "홍보",
+};
+
 const LikedPosts = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
@@ -59,6 +69,10 @@ const LikedPosts = () => {
         fetchLikedPosts();
     }, [userId]);
 
+    const handlePostClick = (postId) => {
+        navigate(`/community/postdetail/${postId}`);
+    };
+
     return (
         <LikedPostsContainer>
             <BackHeaderWrapper>
@@ -70,12 +84,13 @@ const LikedPosts = () => {
                     posts.map((post, index) => (
                         <UserPostCard
                             key={index} // id가 없으므로 index 사용
-                            category={post.category}
+                            category={categoryMapping[post.category]}
                             title={post.title}
                             preview={post.content} // API에서는 preview가 content
                             postImage={post.imgUrl} // API에서는 postImage가 imgUrl
                             likes={post.likeCnt}
                             comments={post.commentCnt}
+                            onClick={() => handlePostClick(post.postId)}
                         />
                     ))
                 ) : (
@@ -92,7 +107,8 @@ export default LikedPosts;
 const LikedPostsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 `;
 

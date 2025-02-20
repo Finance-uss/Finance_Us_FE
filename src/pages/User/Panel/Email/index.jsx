@@ -153,7 +153,7 @@ const ChangeEmailPage = () => {
                     <AuthCodeInputWithTimer
                         value={authCode}
                         onChange={handleAuthCodeChange}
-                        onButtonClick={() => console.log("인증 확인 버튼 클릭!")}
+                        onButtonClick={handleEmailCodeCheck}
                         timer={countdown} // 타이머 추가
                     />
                 )}

@@ -5,6 +5,16 @@ import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import UserPostCard from '../../../../components/User/UserPostCard';
 
+const categoryMapping = {
+    FREE: "자유",
+    INFO: "정보",
+    WASTE: "낭비했어요",
+    SAVE: "절약했어요",
+    COLUMN: "칼럼",
+    LECTURE: "강연",
+    PROMOTION: "홍보",
+};
+
 const ScrappedPosts = () => {
     const navigate = useNavigate();
     const [posts, setPosts] = useState([]);
@@ -53,8 +63,23 @@ const ScrappedPosts = () => {
         }
     };
 
-    const handleUnscrap = (id) => {
-        setPosts(posts.filter((post) => post.id !== id)); // 해당 포스트 삭제
+    const handleUnscrap = async (postId, event) => {
+        event.stopPropagation();
+
+        try {
+            const response = await axiosInstance.post(`/api/scrap/${postId}`, null, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
+
+            if (response.data.isSuccess) {
+                setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
+                console.log(`게시물 ${postId} 스크랩 취소 완료`);
+            } else {
+                console.error("스크랩 취소 실패:", response.data);
+            }
+        } catch (error) {
+            console.error("스크랩 취소 API 호출 실패:", error);
+        }
     };
     
     // 페이지 진입 시 API 호출
@@ -62,6 +87,10 @@ const ScrappedPosts = () => {
         fetchScrappedPosts();
     }, [userId]);
     
+    const handlePostClick = (postId) => {
+        navigate(`/community/postdetail/${postId}`);
+    };
+
     return (
         <ScrappedPostsContainer>
             <BackHeaderWrapper>
@@ -73,14 +102,15 @@ const ScrappedPosts = () => {
                     posts.map((post, index) => (
                         <UserPostCard
                             key={index} // id가 없으므로 index 사용
-                            category={post.category}
+                            category={categoryMapping[post.category]}
                             title={post.title}
                             preview={post.content} // API에서 preview가 content
                             postImage={post.imgUrl} // API에서 postImage가 imgUrl
                             likes={post.likeCnt} // 좋아요 수 추가
                             comments={post.commentCnt} // 댓글 수 추가
                             isScrapped={true} 
-                            onScrapClick={() => handleUnscrap(index)} // UI에서 제거
+                            onScrapClick={(event) => handleUnscrap(post.postId, event)} // UI에서 제거
+                            onClick={() => handlePostClick(post.postId)}
                         />
                     ))
                 ) : (

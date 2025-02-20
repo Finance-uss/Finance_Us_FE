@@ -1,5 +1,5 @@
 import React from "react";
-import * as S from "../../../../styles/Finance/HandWrite/style.js";
+import * as S from "../../../../styles/Finance/HandWrite/RatingModal/style.js";
 import { useAccountDetail } from "../../../../contexts/AccountDetailContext.jsx";
 
 const satisfactionTexts = ["아쉬워요", "그저 그래요", "괜찮아요", "만족해요", "좋아요"];
