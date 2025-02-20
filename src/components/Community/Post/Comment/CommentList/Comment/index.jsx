@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as S from '../../../../../../styles/Community/PostDetail/Comment/style';
 import commentIcon from '../../../../../../assets/icons/common/Community/comment.svg';
 import likeIcon from '../../../../../../assets/icons/common/Community/heart.svg';
@@ -12,18 +12,28 @@ import { addLikeComment, getLikeComment } from '../../../../../../api/Comment/co
 
 const Comment = ({ data, onReplyClick, onEditClick, onDelete, isReply, depth=0 }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLiked, setIsLiked] = useState(data.isLiked); 
-  const [likesCount,setLikesCount]=useState(data.likesCount||0);
+  const [isLiked, setIsLiked] = useState(data.isLiked);
+  const [likesCount,setLikesCount]=useState(0)
+  useEffect(() => {
+    const fetchLikes = async () => {
+      const count = await getLikeComment(data.commentId);
+      setLikesCount(count || 0);
+    };
+    fetchLikes();
+  }, [data.commentId]);
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
 
   const isDeleted = data.content === "삭제된 댓글입니다.";
 
-  const handleLike = async (commentId) => {
-      const result = await addLikeComment(commentId); 
-      if (result) {setIsLiked(!isLiked); setLikesCount(result.likesCount);}
+  const handleLike = async () => {
+    const result = await addLikeComment(data.commentId);
+    if (result !== undefined) {
+      setIsLiked(!isLiked);
+      setLikesCount(result); 
+    }
   };
-  
+
   const sortedReplies = (replies) => {
     return replies?.slice().sort((a, b) => a.commentId - b.commentId).map(reply => ({
       ...reply,
@@ -56,11 +66,11 @@ const Comment = ({ data, onReplyClick, onEditClick, onDelete, isReply, depth=0 }
           )}
           <S.Likes>
             <S.LikeIcon
-              src={isLiked ? likeFill : likeIcon}  
+              src={isLiked ? likeFill : likeIcon}
               alt="좋아요 아이콘"
-              onClick={() => handleLike(data.commentId)}  
+              onClick={handleLike}
             />
-            <S.LikeCount>{likesCount}</S.LikeCount>
+            <S.LikeCount>{likesCount}</S.LikeCount> 
           </S.Likes>
           <S.MoreIcon src={moreIcon} alt="더보기 아이콘" onClick={openMenu} />
         </S.Active>
@@ -86,10 +96,9 @@ const Comment = ({ data, onReplyClick, onEditClick, onDelete, isReply, depth=0 }
               key={reply.commentId}
               data={reply}
               onReplyClick={onReplyClick}
-              onLike={handleLike} 
               onEditClick={onEditClick}
               onDelete={onDelete}
-              depth={depth + 1} 
+              depth={depth + 1}
             />
           ))}
         </S.Replies>

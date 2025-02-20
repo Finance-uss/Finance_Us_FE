@@ -33,7 +33,7 @@ export const addLikeComment = async (commentId) => {
     const response = await axiosInstance.post(
       `/api/like/comment/${commentId}`
     );
-    return response.data.result;
+    return response.data.result.likesCount;
   } catch (error) {
     if (error.response) {
       const errorMessage = error.response.data.result;
@@ -50,9 +50,7 @@ export const addLikeComment = async (commentId) => {
 };
 
 export const getLikeComment = async (commentId) => {
-  const response = await axiosInstance.get(
-    `/api/like/comment/${commentId}`
-  );
-  return response.data.likesCount;  
+  const response = await axiosInstance.get(`/api/like/comment/${commentId}`);
+  return response.data.result?.likesCount;
 };
 
