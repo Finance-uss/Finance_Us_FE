@@ -18,7 +18,12 @@ const CameraInput = () => {
             if(!file) return;
 
             if (file.type !== "image/png") {
-                file = await convertImageToPng(file);
+                try {
+                    file = await convertImageToPng(file);
+                } catch (error) {
+                    alert("이미지 변환 중 오류가 발생했습니다: " + error.message);
+                }
+                
                 console.log("변환된 파일 타입:", file.type);
             }
 
@@ -29,8 +34,9 @@ const CameraInput = () => {
                     const imageName = s3Response.data.result.imageName;
                     const formData = { imageUrl, imageName };
                     localStorage.setItem("handwriteData", JSON.stringify(formData));
-                }
+                } 
             } catch (error) {
+                alert("이미지 업로드 중 오류가 발생했습니다: " + error.message);
                 console.error("이미지 업로드 또는 API 호출 실패:", error);
             }
 
