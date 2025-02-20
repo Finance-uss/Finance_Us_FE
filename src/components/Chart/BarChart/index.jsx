@@ -19,6 +19,10 @@ const BarChart = ({ token, startDate, endDate, type }) => {
             try {
                 const data = await getPeriodStatisticsData(token, startDate.year, startDate.month, endDate.year, endDate.month, type);
                 setPeriodData(data.result.monthlyData);
+                // 기간 변경 시 세부 데이터 및 클릭된 바 인덱스 초기화
+                setSelectedMonthData(null);
+                setTotalAmount(0);
+                setClickedBarIndex(null); // 클릭된 바 인덱스 초기화
             } catch (err) {
                 setError(err);
             } finally {
@@ -42,7 +46,19 @@ const BarChart = ({ token, startDate, endDate, type }) => {
     };
 
     const getFilteredMonthlyData = () => {
+        // 기간 유효성 검사: 시작 날짜가 종료 날짜보다 미래인지 확인
+        if (endDate.year < startDate.year || 
+            (endDate.year === startDate.year && endDate.month < startDate.month)) {
+            return []; // 유효하지 않은 경우 빈 배열 반환
+        }
+
         const totalMonths = (endDate.year - startDate.year) * 12 + (endDate.month - startDate.month) + 1;
+
+        // totalMonths가 0 이하일 경우 빈 배열 반환
+        if (totalMonths <= 0) {
+            return [];
+        }
+
         const filteredData = Array(totalMonths).fill(0); 
 
         periodData.forEach(data => {
@@ -63,7 +79,7 @@ const BarChart = ({ token, startDate, endDate, type }) => {
         datasets: [
             {
                 label: type === 'expense' ? '지출' : '수익',
-                data: filteredMonthlyData,
+                data: filteredMonthlyData, // 데이터가 빈 배열일 경우 빈 그래프 표시
                 backgroundColor: filteredLabels.map((_, index) => 
                     index === clickedBarIndex ? '#FFB55D' : '#142755'
                 ),
@@ -116,7 +132,7 @@ const BarChart = ({ token, startDate, endDate, type }) => {
             const index = elements[0].index;
             const selectedMonth = startDate.month - 1 + index; 
 
-            setClickedBarIndex(index);
+            setClickedBarIndex(index); // 클릭된 바 인덱스 설정
 
             try {
                 const monthData = await getPeriodDetails(token,
