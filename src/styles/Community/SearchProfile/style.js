@@ -49,4 +49,10 @@ export const FollowButton = styled.button`
     cursor:pointer;
     margin-left: auto; 
     font-size:16px;
+    flex-shrink: 0;
+
+    @media (max-width: 393px) {
+        font-size: 12px;
+    }
+
 `;
