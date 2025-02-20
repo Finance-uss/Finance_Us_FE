@@ -43,7 +43,7 @@ const OtherSection = () => {
                     id="image-upload"
                     type="file"
                     accept="image/*"
-                    capture="gallery"
+                    capture="filesystem"
                     onChange={handleImageUpload}
                 />
             </S.ImageUpload>
