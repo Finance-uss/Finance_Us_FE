@@ -179,7 +179,32 @@ export const ModalOverlay = styled.div`
     z-index: 1000;
 `;
 
+export const Blank1 = styled.div`
+    position: fixed;
+    top: ${(props) => props.$top}px;
+    width: calc(100% - 40px);
+    left: 20px;
+    height: 33px;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+    background-color: white;
+`;
+
+export const Blank2 = styled.div`
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 13px;
+    height: 13px;
+    background-color: white;
+    color: white;
+`;
+
 export const ModalLine = styled.div`
+    position: fixed;
+    top: ${(props) => props.$top + 20}px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 40%;
     height: 5px;
     background-color: #D9D9D9;
@@ -191,22 +216,27 @@ export const ModalLine = styled.div`
     
 `;
 
-export const ModalContent = styled.div`
+export const ContentWrapper = styled.div`
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100%;
-    height: fit-content;
     max-height: 481px;
+    overflow: hidden;
+`;
+
+export const ModalContent = styled.div`
+    width: 100%;
+    height: auto;
     background: #fff;
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
-    padding-top: 20px;
     text-align: center;
     z-index: 1001;
+    overflow-y: auto;
 
-    overflow-y: auto; /* ✅ 내부 요소가 많아질 경우 세로 스크롤 가능 */
     -ms-overflow-style: none;  /* ✅ IE, Edge에서 스크롤바 숨기기 */
     scrollbar-width: none;  /* ✅ Firefox에서 스크롤바 숨기기 */
 

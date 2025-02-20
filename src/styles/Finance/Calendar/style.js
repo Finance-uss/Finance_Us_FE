@@ -74,9 +74,8 @@ export const DayCell = styled.div`
     transition: background-color 0.2s;
     color: ${({ $isSelected }) => ($isSelected ? "white" : "#333")};
     
-    ${({ $isSelected }) => $isSelected && `
-        background-color: #5C5C5C;
-    `}
+    background-color: ${({ $isSelected, $highlightColor }) =>
+        $isSelected ? "#5C5C5C" : ($highlightColor ? $highlightColor : "transparent")};
 
     &:hover {
         background-color: #ddd;

@@ -4,24 +4,31 @@ import styled from 'styled-components';
 import axiosInstance from '../../../../api/axiosInstance';
 import BackHeader from '../../../../components/User/BackHeader';
 import CompleteButtonComponent from '../../../../components/User/CompleteButton';
-import PlusCateButton from '../../../../components/User/PlusCateButton';
 import AmountInputContainer from '../../../../components/User/AmountInputContainer';
 import AmountInput from '../../../../components/User/AmountInput';
 
 const ExpensePage = () => {
     const navigate = useNavigate();
-    const [totalExpense, setTotalExpense] = useState('');
+    const [totalExpense, setTotalExpense] = useState(0);
     const [categories, setCategories] = useState([]);
     const [errorMessage, setErrorMessage] = useState("");
 
     // 지출 목표 금액 조회 API (GET)
     const loadExpenseGoals = async () => {
         try {
+            const token = localStorage.getItem("token");
+            if (!token) {
+                setErrorMessage("로그인이 필요합니다.");
+                return;
+            }
+
             const response = await axiosInstance.get(`/api/mypage/goal-asset`, {
-                params: { type: "expense" },
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+                headers: { Authorization: `Bearer ${token}` },
+                params: { type: "EXPENSE" },
             });
 
+            console.log("🔄 서버에서 불러온 데이터:", response.data.result);
+            
             if (!response.data.isSuccess) {
                 setErrorMessage("목표 금액 데이터를 불러올 수 없습니다.");
                 return;
@@ -29,8 +36,8 @@ const ExpensePage = () => {
 
             const goalData = response.data.result;
 
-            setTotalExpense(goalData.monthlyGoal || ""); 
-            setCategories(goalData.subCategories || []); 
+            setTotalExpense(goalData.monthlyGoal || 0); // 🔹 총 목표 금액 설정
+            setCategories(goalData.subCategories || []); // 🔹 카테고리 목록 설정
         } catch (error) {
             setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.");
             console.error("목표 금액 조회 실패:", error);
@@ -42,63 +49,73 @@ const ExpensePage = () => {
         loadExpenseGoals();
     }, []);
 
-    const addCategory = () => {
-        const newId = categories.length + 1; 
-        const newCategory = {
-            id: newId,
-            name: `새 카테고리 ${newId}`,
-            subCategories: [{ id: `${newId}-1`, name: "소분류 없음", goal: 0 }], // ✅ 기본 소분류 추가
-        };
-        setCategories((prev) => [...prev, newCategory]);
-    };
-
-    // 총 목표 금액 업데이트
-    const updateTotalExpense = (value) => {
-        if (!/^\d*$/.test(value)) return; // 숫자만 허용
-        setTotalExpense(value);
-    };
-
-    // 카테고리별 목표 금액 업데이트
-    const updateCategoryAmount = (categoryId, subCategoryId, value) => {
+    // 카테고리 목표 금액 수정 시 반영
+    const updateCategoryAmount = (subId, value) => {
         if (!/^\d*$/.test(value)) return; // 숫자만 입력 가능
-        setCategories((prev) =>
-            prev.map((category) => ({
-                ...category,
-                subCategories: category.subCategories.map((sub) =>
-                    sub.id === subCategoryId ? { ...sub, goal: value } : sub
-                ),
-            }))
-        );
+    
+        setCategories((prev) => {
+            const updatedCategories = prev.map((sub) =>
+                sub.id === subId ? { ...sub, goal: value } : sub
+            );
+    
+            // 업데이트된 categories를 기반으로 총 목표 금액 계산
+            const updatedTotal = updatedCategories.reduce(
+                (sum, sub) => sum + Number(sub.goal || 0),
+                0
+            );
+            setTotalExpense(updatedTotal);
+    
+            return updatedCategories;
+        });
     };
 
-    const removeCategory = (id) => {
-        setCategories((prev) => prev.filter((item) => item.id !== id));
-    };
-
-    // 목표 금액 저장 (PATCH 요청)
+    // 목표 금액 저장 (PATCH)
     const saveChanges = async () => {
         try {
-            const payload = {
-                type: "expense",
-                subGoals: categories.map((item) => ({
-                    id: item.id,
-                    goal: item.goal || 0,
-                })),
-            };
+            const token = localStorage.getItem("token");
+            if (!token) {
+                alert("로그인이 필요합니다.");
+                return;
+            }
+            
+            const subGoals = categories.map((sub) => ({
+                id: sub.id,
+                goal: Number(sub.goal) || 0, // 숫자로 변환
+            }));
 
-            const response = await axiosInstance.patch(`/api/mypage/goal-asset`, payload, {
-                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-            });
+            console.log("서버로 보낼 데이터 (body):", subGoals);
+
+            const response = await axiosInstance.patch(
+                `/api/mypage/goal-asset`,
+                { // body에 데이터 포함
+                    type: "EXPENSE",
+                    subGoals: subGoals, // 배열을 body에 직접 전달
+                },
+                {
+                    headers: { Authorization: `Bearer ${token}` },
+                }
+            );
+            
+            console.log("서버 응답:", response.data);
 
             if (response.data.isSuccess) {
                 alert("지출 목표 금액이 저장되었습니다.");
                 navigate("/user");
             } else {
                 setErrorMessage("목표 금액 저장에 실패했습니다.");
+                console.error("❌ 서버 응답 오류:", response.data);
             }
         } catch (error) {
             setErrorMessage("서버 에러가 발생했습니다. 다시 시도해 주세요.");
-            console.error("목표 금액 저장 실패:", error);
+            if (error.response) {
+                console.error("❌ 저장 실패 (서버 에러 응답 데이터):", error.response.data);
+                console.error("❌ 저장 실패 (서버 응답 상태 코드):", error.response.status);
+                console.error("❌ 저장 실패 (서버 응답 헤더):", error.response.headers);
+            } else if (error.request) {
+                console.error("❌ 저장 실패 (서버 응답 없음):", error.request);
+            } else {
+                console.error("❌ 저장 실패 (기타 오류):", error.message);
+            }
         }
     };
 
@@ -115,24 +132,21 @@ const ExpensePage = () => {
                 <AmountInputWrapper>
                     <AmountInput
                         value={totalExpense}
-                        onChange={updateTotalExpense}
+                        onChange={() => {}} readOnly
                     />
                 </AmountInputWrapper>
                 <SectionTitle style={{ marginTop: '40px' }}>이번 달 카테고리 별 지출 목표 금액</SectionTitle>
                 <CategoryList>
-                    {categories.map((item) => (
+                    {categories.map((sub) => (
                         <AmountInputContainer
-                            key={item.id}
-                            category={item.name}
-                            value={item.goal || ""}
-                            onChange={(value) => updateCategoryAmount(item.id, value)}
-                            onRemove={() => removeCategory(item.id)}
+                            key={sub.id}
+                            mainName={sub.mainName} // 대분류 전달
+                            name={sub.name} // 소분류 전달
+                            value={sub.goal || ""}
+                            onChange={(value) => updateCategoryAmount(sub.id, value)}
                         />
                     ))}
                 </CategoryList>
-                <PlusCateButtonWrapper>
-                    <PlusCateButton onClick={addCategory} />
-                </PlusCateButtonWrapper>
             </ContentWrapper>
             <CompleteButtonComponent label="지출 목표 금액 설정 완료" onSave={saveChanges} />
         </PageContainer>
@@ -184,12 +198,6 @@ const CategoryList = styled.div`
   margin-top: 20px;
   display: flex;
   flex-direction: column;
-`;
-
-const PlusCateButtonWrapper = styled.div`
-  margin-top: 40px;
-  display: flex;
-  justify-content: center;
 `;
 
 const ErrorText = styled.p`

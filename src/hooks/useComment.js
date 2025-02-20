@@ -11,19 +11,26 @@ const useComment = (postId) => {
   });
   const commentCount = data?.commentCount || 0;     
   const addCommentMutation = useMutation({
-    mutationFn: (newComment) => addComment(postId, newComment),
+    mutationFn: ({ content, parentCommentId = null }) =>
+      addComment(postId, content, parentCommentId), 
     onSuccess: () => {
       queryClient.invalidateQueries(["comments", postId]); 
     },
     onError: (error) => {
-      console.error(error);
+      console.error("댓글 추가 오류:", error);
     },
   });
-
+  
   const editCommentMutation = useMutation({
-    mutationFn: ({ commentId, content }) => editComment(commentId, content),
+    mutationFn: ({ commentId, content }) => {
+      if (!commentId) {
+        console.error("댓글 수정 오류: commentId가 없습니다.");
+        return;
+      }
+      return editComment(commentId, content); 
+    },
     onSuccess: () => {
-      queryClient.invalidateQueries(["comments", postId]); 
+      queryClient.invalidateQueries(["comments", postId]);
     },
   });
 
