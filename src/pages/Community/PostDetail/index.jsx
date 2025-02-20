@@ -55,6 +55,7 @@ const PostDetail = () => {
             image={post.imageUrl} 
             content={post.content} 
             isLike={post.isLiked}
+            isScrap={post.isScraped}
             isAuth={post.isAuthenticated}
             isOwner={post.isMine} 
             category={post.category} 

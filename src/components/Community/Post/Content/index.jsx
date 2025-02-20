@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as S from "../../../../styles/Community/PostDetail/Content/style";
 import likeIcon from "../../../../assets/icons/common/Community/heart.svg";
 import likeFill from "../../../../assets/icons/common/Community/heartFill.svg";
@@ -13,12 +13,12 @@ import {scrapPost, postLike} from "../../../../api/postAPI";
 import bookmarkFillIcon from "../../../../assets/icons/common/Community/Scrap.svg";
 import { formatDate } from "../../../../utils/dateUtils";
 
-const Content = ({ title, userImg, userName, createdAt, updatedAt, image, content, isOwner,category, postId, isLike, updatedCount, isAuth }) => {
+const Content = ({ title, userImg, userName, createdAt, updatedAt, image, content, isOwner, category, postId, isLike, updatedCount, isAuth, isScrap }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { commentCount } = useComment(postId);
-  const [isScrapped, setIsScrapped] = useState(false); 
-
+  const [isScrapped, setIsScrapped] = useState(isScrap); 
+ 
   const openMenu = () => setIsMenuOpen(true);
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -54,7 +54,7 @@ const Content = ({ title, userImg, userName, createdAt, updatedAt, image, conten
       console.error("좋아요 처리 오류:", error);
     }
   };
-  
+
   return (
     <S.PageContainer>
       <S.PostConatiner>
@@ -91,20 +91,20 @@ const Content = ({ title, userImg, userName, createdAt, updatedAt, image, conten
             </S.Stat>
           </S.StateContainer>
         </S.Stats>
-        <S.BookMark src={isScrapped ? bookmarkFillIcon : bookmarkIcon} alt="북마크 아이콘" 
-         onClick= {handleBookmark}/>
+        <S.BookMark src={isScrapped ? bookmarkFillIcon : bookmarkIcon}alt="북마크 아이콘" 
+          onClick={handleBookmark}/>
       </S.PostConatiner>
 
       {isMenuOpen && (
         <PostMenuBar
-    isOpen={isMenuOpen}
-    closeModal={closeMenu}
-    isOwner={isOwner}
-    onEdit={() => handleEdit({ title, content, category, image, postId })}
-    onDelete={handleDelete}
-    onReport={handleReport}
-    postId={postId} 
-  />
+          isOpen={isMenuOpen}
+          closeModal={closeMenu}
+          isOwner={isOwner}
+          onEdit={() => handleEdit({ title, content, category, image, postId })}
+          onDelete={handleDelete}
+          onReport={handleReport}
+          postId={postId} 
+        />
       )}
     </S.PageContainer>
   );
