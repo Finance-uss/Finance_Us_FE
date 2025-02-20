@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDate } from '../../../contexts/DateContext'; 
-import { Container, IconContainer, Icon, TopSection } from '../../../styles/Statistics/style';
+import { Container, TopSection } from '../../../styles/Statistics/style';
 import TopBar from '../../../components/common/TopBar';
 import FinanceButton from '../../../components/common/FinanceButton';
 import NavBar1 from '../../../components/common/NavBar1';
 import NavBar2 from '../../../components/common/NavBar2'; 
-import SearchIcon from '../../../assets/icons/common/Search.svg';
-import BellIcon from '../../../assets/icons/common/Bell.svg';
+import SearchHeader from '../../../components/common/SearchHeader';
 import DonutChart from '../../../components/Chart/DonutChart';
 import BarChart from '../../../components/Chart/BarChart';
 import Category from '../../../components/Stat/Category'; 
@@ -38,66 +37,55 @@ const StatMain = () => {
 
   const fetchData = async (year, month, type) => {
     try {
-        const statisticsData = await getStatisticsData(formData.token, year, month, type);
-        const categoryGoalData = await getCategoryGoalData(formData.token, year, month, type);
-        const totalSpentData = await getGoalStatisticsData(formData.token, year, month, type); 
+      const [statisticsData, categoryGoalData, totalSpentData] = await Promise.all([
+        getStatisticsData(formData.token, year, month, type),
+        getCategoryGoalData(formData.token, year, month, type),
+        getGoalStatisticsData(formData.token, year, month, type),
+      ]);
 
-        let totalSpent = 0;
-        const updatedCategoryData = {};
+      let totalSpent = totalSpentData.isSuccess ? totalSpentData.result.totalSpent || 0 : 0;
+      const updatedCategoryData = {};
 
-        // 카테고리 목표 데이터 처리
-        if (categoryGoalData.isSuccess && categoryGoalData.result) {
-            const categories = categoryGoalData.result.categories;
-
-            categories.forEach(category => {
-                updatedCategoryData[category.mainCategory] = {
-                    spent: category.totalSpent || 0,
-                    goal: category.goal || 0,
-                    percentage: category.percentage || 0 
-                };
-            });
-        }
-
-        // API 응답 확인 및 총 지출 설정
-        if (totalSpentData.isSuccess && totalSpentData.result) {
-            totalSpent = totalSpentData.result.totalSpent || 0;
-            console.log("Total Spent from API:", totalSpent); 
-        }
-
-        const goalAmount = totalSpentData.isSuccess ? (totalSpentData.result.goal || 0) : 0; 
-        const progressPercentage = totalSpentData.isSuccess ? (totalSpentData.result.percentage || 0) : 0; 
-
-        Object.keys(updatedCategoryData).forEach(category => {
-            updatedCategoryData[category].earned = statisticsData.result.categories.find(cat => cat.mainCategory === category)?.totalSpent || 0; // 수익 데이터 추가
+      if (categoryGoalData.isSuccess && categoryGoalData.result) {
+        categoryGoalData.result.categories.forEach(category => {
+          updatedCategoryData[category.mainCategory] = {
+            spent: category.totalSpent || 0,
+            goal: category.goal || 0,
+            percentage: category.percentage || 0,
+            earned: statisticsData.result.categories.find(cat => cat.mainCategory === category.mainCategory)?.totalSpent || 0,
+          };
         });
+      }
 
-        setState(prevState => ({
-            ...prevState,
-            categoryData: updatedCategoryData,
-            goalAmount: goalAmount, 
-            totalAmount: totalSpent, 
-            progressPercentage: progressPercentage 
-        }));
+      const goalAmount = totalSpentData.isSuccess ? (totalSpentData.result.goal || 0) : 0; 
+      const progressPercentage = totalSpentData.isSuccess ? (totalSpentData.result.percentage || 0) : 0; 
+
+      setState(prevState => ({
+        ...prevState,
+        categoryData: updatedCategoryData,
+        goalAmount,
+        totalAmount: totalSpent,
+        progressPercentage,
+      }));
 
     } catch (error) {
-        console.error("데이터 조회 실패:", error);
-        setState(prevState => ({
-            ...prevState,
-            categoryData: {},
-            goalAmount: 0,
-            totalAmount: 0,
-            progressPercentage: 0
-        }));
+      console.error("데이터 조회 실패:", error);
+      setState(prevState => ({
+        ...prevState,
+        categoryData: {},
+        goalAmount: 0,
+        totalAmount: 0,
+        progressPercentage: 0,
+      }));
     }
-};
-
+  };
 
   const fetchPeriodData = async (startYear, startMonth, endYear, endMonth, type) => {
     try {
       const data = await getPeriodStatisticsData(formData.token, startYear, startMonth, endYear, endMonth, type);
       setState(prevState => ({
         ...prevState,
-        periodData: Array.isArray(data.result.monthlyData) ? data.result.monthlyData : []
+        periodData: Array.isArray(data.result.monthlyData) ? data.result.monthlyData : [],
       }));
     } catch (error) {
       console.error("기간 데이터 조회 실패:", error);
@@ -134,10 +122,7 @@ const StatMain = () => {
 
   return (
     <Container>
-      <IconContainer>
-        <Icon src={SearchIcon} alt="검색 아이콘" onClick={() => navigate('/search')} />
-        <Icon src={BellIcon} alt="알림 아이콘" onClick={() => navigate('/alarm')} />
-      </IconContainer>
+      <SearchHeader />
       <TopSection style={{ gap: '20px' }}>
         <TopBar 
           leftText="카테고리" 
