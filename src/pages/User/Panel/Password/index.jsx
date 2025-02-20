@@ -61,7 +61,9 @@ const ChangePasswordPage = () => {
                 alert("로그인이 필요합니다.");
                 return;
             }
-    
+
+            setResponseMessage("");
+
             const response = await axiosInstance.get(`/api/user/passwordCheck`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -72,7 +74,7 @@ const ChangePasswordPage = () => {
             console.log("[GET 요청] 비밀번호 확인 API 호출");
             console.log("[응답 데이터]:", response.data);
     
-            if (response.data.isSuccess) {
+            if (response.data.result === true) {
                 setIsPasswordCorrect(true);
                 setResponseMessage("비밀번호가 일치합니다.");
                 setShowNewPasswordFields(true);
