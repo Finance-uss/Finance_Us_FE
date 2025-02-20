@@ -63,8 +63,23 @@ const ScrappedPosts = () => {
         }
     };
 
-    const handleUnscrap = (id) => {
-        setPosts(posts.filter((post) => post.id !== id)); // 해당 포스트 삭제
+    const handleUnscrap = async (postId, event) => {
+        event.stopPropagation();
+
+        try {
+            const response = await axiosInstance.post(`/api/scrap/${postId}`, null, {
+                headers: { Authorization: `Bearer ${localStorage.getItem("token")}` }
+            });
+
+            if (response.data.isSuccess) {
+                setPosts((prevPosts) => prevPosts.filter((post) => post.postId !== postId));
+                console.log(`게시물 ${postId} 스크랩 취소 완료`);
+            } else {
+                console.error("스크랩 취소 실패:", response.data);
+            }
+        } catch (error) {
+            console.error("스크랩 취소 API 호출 실패:", error);
+        }
     };
     
     // 페이지 진입 시 API 호출
@@ -94,7 +109,7 @@ const ScrappedPosts = () => {
                             likes={post.likeCnt} // 좋아요 수 추가
                             comments={post.commentCnt} // 댓글 수 추가
                             isScrapped={true} 
-                            onScrapClick={() => handleUnscrap(index)} // UI에서 제거
+                            onScrapClick={(event) => handleUnscrap(post.postId, event)} // UI에서 제거
                             onClick={() => handlePostClick(post.postId)}
                         />
                     ))
