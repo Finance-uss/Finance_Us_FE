@@ -3,21 +3,15 @@ import axiosInstance from "../../api/axiosInstance";
 import BeforeHeader from "../../components/common/BeforeHeader";
 import AlarmList from "../../components/Alarm/AlarmList";
 import { Container } from "../../styles/Alarm/style";
-import { useAuth } from "../../contexts/AuthContext";
 
 const Alarm = () => {
-  const { formData } = useAuth();
-  const token = formData.token;
   const [alarms, setAlarms] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const fetchAlarms = async () => {
-    if (!token) return;
     setIsLoading(true);
     try {
-      const response = await axiosInstance.get("/api/notifications", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.get("/api/notifications");
       const notifications = response.data.result.notifications;
       const alarmsWithTitle = notifications.map((alarm) => ({
         ...alarm,
@@ -32,14 +26,10 @@ const Alarm = () => {
   
   useEffect(() => {
       fetchAlarms();
-    }, [token]);
+    }, []);
     const markRead = async (notificationId) => {
       try {
-        const response = await axiosInstance.patch(`/api/notifications/${notificationId}`,{},{
-            headers: { Authorization: `Bearer ${token}`, 
-            },
-          }
-        );
+        const response = await axiosInstance.patch(`/api/notifications/${notificationId}`,{},);
         if (response.data.isSuccess) {
           console.log("알림이 읽음으로 표시되었습니다.");
         } else {

@@ -9,7 +9,7 @@ export const ButtonWrapper = styled.div`
   margin-bottom:10px;
   box-sizing: border-box;
   gap: 15px;
-`;
+`; 
 
 export const Button = styled.button`
   width: 77px;

@@ -1,14 +1,10 @@
 import React from "react";
 import AlarmCard from "../AlarmCard";
-import styled from "styled-components";
-
-const Container = styled.div`
-  margin-top: 40px;
-`;
+import {AlarmListContainer} from "../../../styles/Alarm/style";
 
 const AlarmList = ({ alarms, markRead }) => {
   return (
-    <Container>
+    <AlarmListContainer>
       {alarms?.map((alarm) => (
         <AlarmCard
           key={alarm.id}
@@ -16,7 +12,7 @@ const AlarmList = ({ alarms, markRead }) => {
           markRead={markRead} 
         />
       ))}
-    </Container>
+    </AlarmListContainer>
   );
 };
 
