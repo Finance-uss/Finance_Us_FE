@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useAccountData } from '../../../hooks/useAccountData';
 import { useDate } from '../../../contexts/DateContext';
 
@@ -6,6 +6,8 @@ import BeforeHeader from '../../../components/common/BeforeHeader';
 import NavBar from '../../../components/common/NavBar';
 import Activity from '../../../components/Finance/Account/Activity';
 import { Container } from '../../../styles/Finance/style';
+
+import styled from 'styled-components';
 
 const Report = () => {
     const { selectedDate } = useDate();
@@ -17,7 +19,8 @@ const Report = () => {
     return (
         <Container>
             <BeforeHeader text="경제 활동 만족도 레포트" />
-            <NavBar modalTop="142px" />
+            <Blank />
+            <NavBar />
             {/* 아쉬운 활동 줄이기 (★1~2점) */}
             {activities?.reduceActivity?.length > 0 && (
                 <Activity 
@@ -50,3 +53,7 @@ const Report = () => {
 };
 
 export default Report;
+
+const Blank = styled.div`
+    height: 20px;
+`;

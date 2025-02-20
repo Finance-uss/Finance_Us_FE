@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import axiosInstance from "../../../../api/axiosInstance.js";
 import { useHandWrite } from "../../../../contexts/HandWriteContext.jsx";
 import useApi from "../../../../hooks/useApi.js";
 import { postS3 } from "../../../../api/s3API.js";
@@ -41,6 +42,7 @@ const HandWriteContent = () => {
 
     const [isDisabled, setIsDisabled] = useState(true);
     const [defaultImageFile, setDefaultImageFile] = useState(null);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const convertImageToFile = async () => {
@@ -50,7 +52,31 @@ const HandWriteContent = () => {
             setDefaultImageFile(file); // 변환된 파일을 상태로 저장
         };
 
+        
+        const fetchData = async () => {
+            const storedData = localStorage.getItem("handwriteData");
+            if (storedData) {
+                try {
+                    const parsedData = JSON.parse(storedData);
+                    // 🔹 formData의 모든 필드를 업데이트
+                    Object.keys(parsedData).forEach((key) => {
+                        if (parsedData[key]) {
+                            setFormField(key, parsedData[key]);
+                        }
+                    });                    
+                } catch (error) {
+                    console.error("로컬스토리지 데이터 파싱 오류:", error);
+                } finally {
+                    setIsLoading(false);
+                    localStorage.removeItem("handwriteData");
+                }
+            } else {
+                setIsLoading(false);
+            }
+        };
+
         convertImageToFile();
+        fetchData();
     }, []);
 
 
@@ -60,28 +86,36 @@ const HandWriteContent = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if(isDisabled) return;
         if(formData.imageUrl === "") {
-            const defaultImageForm = new FormData();
-            defaultImageForm.append("file", defaultImageFile);        
-            const response = await request(postS3(defaultImageForm));
-            if (response && response.result) {
-                const imageUrl = response.result.imageUrl;
-                const imageName = response.result.imageName;
-                const formattedData = formatFormData({ 
-                    ...formData, 
-                    imageUrl,
-                    imageName,
-                });
-                await request(postAccount(formattedData));
-                navigate(-1);
+            try {
+                const response = await axiosInstance(postS3(defaultImageFile));
+                if(response.data.isSuccess) {
+                    const imageUrl = response.data.result.imageUrl;
+                    const imageName = response.data.result.imageName;
+                    const formattedData = formatFormData({ 
+                        ...formData, 
+                        imageUrl,
+                        imageName,
+                    });
+                    console.log(formattedData);
+                    await axiosInstance(postAccount(formattedData));
+                    navigate("/finance");
+                }
+            } catch (error) {
+                console.error(error);
             }
         }
         else{
             const formattedData = formatFormData(formData);
             await request(postAccount(formattedData));
-            navigate(-1);
+            navigate("/finance");
         }
     };
+
+    if (isLoading) {
+        return <></>; 
+    }
 
     return (
         <Container>

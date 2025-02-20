@@ -35,6 +35,7 @@ import ChangeEmailPage from './pages/User/Panel/Email'; // 이메일 변경
 import ChangePasswordPage from './pages/User/Panel/Password'; // 비밀번호 변경
 import Finance from './pages/Finance'; // 가계부
 import FinanceMain from './pages/Finance/FinanceMain';
+import Camera from './pages/Finance/Camera';
 import Report from './pages/Finance/Report';
 import HandWrite from './pages/Finance/HandWrite';
 import AccountDetail from './pages/Finance/AccountDetail';
@@ -68,6 +69,7 @@ function App() {
           <Route path="/finance" element={<Finance />} >
             <Route index element={<FinanceMain />} />
             <Route path="report" element={<Report />} />
+            <Route path="camera" element={<Camera />} />
             <Route path="handwrite" element={<HandWrite />} />
             <Route path="account/:accountId" element={<AccountDetail />} />
           </Route>
@@ -79,9 +81,9 @@ function App() {
             <Route path="postwrite" element={<PostWrite />} />
             <Route path="postdetail/:postId" element={<PostDetail/>}/>
             {/* 게시글 수정 */}
-             <Route path="update/:postId" element={<PostWrite />} />     
+            <Route path="update/:postId" element={<PostWrite />} />     
           </Route>
-               
+
           
           {/* 검색 페이지 */}
           <Route>

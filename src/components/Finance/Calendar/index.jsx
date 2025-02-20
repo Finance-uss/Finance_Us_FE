@@ -4,7 +4,7 @@ import Header from "./Header";
 import CalendarGrid from "./CalendarGrid";
 import { useCalendar } from "../../../hooks/useCalendar.js";
 
-const Calendar = ({ top, header }) => {
+const Calendar = ({ top, header, highlightData }) => {
     const { calendarDays, selectedDate, onClickDay, isSameDay } = useCalendar();
 
     return (
@@ -15,6 +15,7 @@ const Calendar = ({ top, header }) => {
                 selectedDate={selectedDate} 
                 onClickDay={onClickDay}
                 isSameDay={isSameDay}
+                highlightData={highlightData}
             />
         </S.CalendarContainer>
     );

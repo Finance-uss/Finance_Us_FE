@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 export const ProfileContainer = styled.div`
     position: absolute;
-    top: 79px;
+    top: 109px;
     left: 20px;
     display: flex;
     align-items: center;
@@ -19,6 +19,18 @@ export const ProfileInfo = styled.div`
     display: flex;
     flex-direction: column;
     margin-left: 16px;
+`;
+
+export const ProfileNameWrapper = styled.div`
+    display: flex;
+    align-items: center;
+`;
+
+export const VerifiedBadge = styled.img`
+    width: 24px;
+    height: 24px;
+    margin-left: 8px;
+    margin-top: 4px;
 `;
 
 export const ProfileName = styled.p`

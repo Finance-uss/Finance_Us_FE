@@ -1,22 +1,22 @@
 import styled from "styled-components";
 
 export const ModalWrapper = styled.div`
+    position: absolute;
     display: flex;
     justify-content: center;
-    position: absolute;
-    width: 100%; 
-    height: calc(100% - 75px);
-    top: ${(props) => props.$modalTop || "75px"};
+    width: 100%;
+    height: auto;
+    top: 24px;
     left: 0;
 `;
 
 export const ModalContent = styled.div`
-    position: absolute;
+    position: relative;
     display: flex;
     background: #F7F7F7;
     justify-content: center;
     align-items: center;
-    width: calc(100% - 0px);
+    width: 100%;
     height: 207px;
     top: 10px;
     border-radius: 8px;
