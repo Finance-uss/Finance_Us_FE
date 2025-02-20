@@ -127,7 +127,8 @@ export default ScrappedPosts;
 const ScrappedPostsContainer = styled.div`
     display: flex;
     flex-direction: column;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
 `;
 
