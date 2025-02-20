@@ -10,13 +10,6 @@ export const Container = styled.div`
     padding: 44px 20px 60px 20px;
 `;
 
-export const IconContainer = styled.div`
-  display: flex;
-  justify-content: flex-end; 
-  margin-bottom: 8px;
-  
-`;
-
 export const TopSection = styled.div`
   display: flex;
   flex-direction: column; 
@@ -52,12 +45,6 @@ export const Amount = styled.div`
   font-size: 16px;
 `;
 
-export const Icon = styled.img`
-  height: 25px;
-  margin-left: 16px; 
-  cursor: pointer; 
-`;
-
 export const CategoryProgressContainer = styled.div`
   margin: 20px 0;
 `;
@@ -74,7 +61,7 @@ export const Separator = styled.div`
   width: 100%;
   height: 1px;
   background-color: #D7D8D9;
-  margin: 10px 0; // 위아래 여백
+  margin: 10px 0;
 `;
 
 export const Title = styled.h3`
@@ -87,8 +74,8 @@ export const Title = styled.h3`
 export const HistoryContainer = styled.div`
   margin-top: 20px;
   padding: 10px;
-  max-height: 900px; /* 높이를 늘려서 더 많은 내용을 표시 */
-  overflow-y: auto; /* 세로 스크롤 활성화 */
+  max-height: 900px; 
+  overflow-y: auto; 
 `;
 
 export const HistoryItem = styled.div`

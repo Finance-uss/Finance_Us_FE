@@ -18,7 +18,10 @@ const BarChart = ({ token, startDate, endDate, type }) => {
         const fetchStatisticsData = async () => {
             try {
                 const data = await getPeriodStatisticsData(token, startDate.year, startDate.month, endDate.year, endDate.month, type);
-                setPeriodData(data.result.monthlyData); 
+                setPeriodData(data.result.monthlyData);
+                setSelectedMonthData(null);
+                setTotalAmount(0);
+                setClickedBarIndex(null); 
             } catch (err) {
                 setError(err);
             } finally {
@@ -31,17 +34,37 @@ const BarChart = ({ token, startDate, endDate, type }) => {
 
     const getFilteredLabels = () => {
         const labels = ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'];
-        return labels.slice(startDate.month - 1, endDate.month); 
+        const startIdx = startDate.month - 1;
+        const endIdx = endDate.month - 1; 
+
+        if (startDate.year === endDate.year) {
+            return labels.slice(startIdx, endIdx + 1);
+        } else {
+            return [...labels.slice(startIdx), ...labels.slice(0, endIdx + 1)];
+        }
     };
 
     const getFilteredMonthlyData = () => {
-        const filteredData = Array(endDate.month - startDate.month + 1).fill(0);
+        if (endDate.year < startDate.year || 
+            (endDate.year === startDate.year && endDate.month < startDate.month)) {
+            return [];
+        }
+
+        const totalMonths = (endDate.year - startDate.year) * 12 + (endDate.month - startDate.month) + 1;
+
+        if (totalMonths <= 0) {
+            return [];
+        }
+
+        const filteredData = Array(totalMonths).fill(0); 
+
         periodData.forEach(data => {
-            const monthIndex = data.month - startDate.month; 
+            const monthIndex = (data.year - startDate.year) * 12 + (data.month - startDate.month);
             if (monthIndex >= 0 && monthIndex < filteredData.length) {
                 filteredData[monthIndex] += data.totalMoney;
             }
         });
+
         return filteredData;
     };
 
@@ -53,9 +76,9 @@ const BarChart = ({ token, startDate, endDate, type }) => {
         datasets: [
             {
                 label: type === 'expense' ? '지출' : '수익',
-                data: filteredMonthlyData,
+                data: filteredMonthlyData, 
                 backgroundColor: filteredLabels.map((_, index) => 
-                  index === clickedBarIndex ? '#FFB55D' : '#142755' 
+                    index === clickedBarIndex ? '#FFB55D' : '#142755'
                 ),
                 borderWidth: 1,
                 borderRadius: 5,
@@ -92,27 +115,31 @@ const BarChart = ({ token, startDate, endDate, type }) => {
             },
         },
         plugins: {
-          legend: {
-              display: false,
-          },
-          tooltip: {
-              enabled: false, 
-          },
+            legend: {
+                display: false,
+            },
+            tooltip: {
+                enabled: false,
+            },
         },
     };
 
     const handleBarClick = async (event, elements) => {
         if (elements.length > 0) {
-            const index = elements[0].index; 
+            const index = elements[0].index;
             const selectedMonth = startDate.month - 1 + index; 
 
-            setClickedBarIndex(index);
+            setClickedBarIndex(index); 
 
             try {
-                const monthData = await getPeriodDetails(token, startDate.year, selectedMonth + 1, type);
+                const monthData = await getPeriodDetails(token,
+                    selectedMonth >= 12 ? startDate.year + 1 : startDate.year,
+                    selectedMonth >= 12 ? selectedMonth - 11 : selectedMonth + 1, 
+                    type
+                );
                 const sortedDetails = monthData.result.details.sort((a, b) => a.day - b.day);
-                setSelectedMonthData(sortedDetails); 
-                setTotalAmount(monthData.result.totalMoney); 
+                setSelectedMonthData(sortedDetails);
+                setTotalAmount(monthData.result.totalMoney);
             } catch (error) {
                 console.error("세부 데이터 조회 실패:", error);
             }
@@ -124,7 +151,7 @@ const BarChart = ({ token, startDate, endDate, type }) => {
             return (
                 <>
                     <DetailsHeader>
-                        <span>{startDate.month + clickedBarIndex}월</span> 
+                        <span>{startDate.month + clickedBarIndex + (startDate.month + clickedBarIndex > 12 ? -12 : 0)}월</span>
                         <span>{totalAmount.toLocaleString()} 원</span> 
                     </DetailsHeader>
                     <Separator />
@@ -142,10 +169,7 @@ const BarChart = ({ token, startDate, endDate, type }) => {
                 </>
             );
         }
-    };
-
-    if (loading) return <p>로딩 중...</p>;
-    if (error) return <p>오류 발생: {error.message}</p>;
+    }; 
 
     return (
         <>
