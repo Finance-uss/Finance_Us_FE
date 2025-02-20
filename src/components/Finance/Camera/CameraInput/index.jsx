@@ -14,7 +14,7 @@ const CameraInput = () => {
 
     const handleCapture = async (e) => {
         setTimeout(async () => {
-            const file = e.target.files[0];
+            let file = e.target.files[0];
             if(!file) return;
 
             if (file.type !== "image/png") {
