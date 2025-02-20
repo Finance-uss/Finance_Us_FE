@@ -7,6 +7,9 @@ export const Container = styled.div`
     height: auto;
     padding: 44px 20px 24px 20px; // top right bottom left
 `;
+export const AlarmListContainer = styled.div`
+    margin-top:40px;
+`;
 export const AlarmContainer = styled.div`
     width: 100%;
     padding: 16px 0 0 0;

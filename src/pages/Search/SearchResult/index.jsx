@@ -20,33 +20,30 @@ const SearchResult = () => {
     navigate(`/community/postdetail/${postId}`);
   };
 
-  const fetchPosts = useCallback(async () => {
+  const fetchPosts = useCallback(async (currentPage = 1) => {
     try {
       const [freeResponse, infoResponse] = await Promise.all([
         axiosInstance.get('/api/search/posts', {
-          params: { keyword: query, boardType: 'FREE', size: 10, page },
+          params: { keyword: query, boardType: 'FREE', size: 10, page: currentPage },
         }),
         axiosInstance.get('/api/search/posts', {
-          params: { keyword: query, boardType: 'INFO', size: 10, page },
+          params: { keyword: query, boardType: 'INFO', size: 10, page: currentPage },
         }),
       ]);
 
       if (freeResponse.data.isSuccess && infoResponse.data.isSuccess) {
         const mergedPosts = [...freeResponse.data.result.posts, ...infoResponse.data.result.posts];
-        setResultPost(prevPosts => [...prevPosts, ...mergedPosts]); 
+        setResultPost(prevPosts => (currentPage === 1 ? mergedPosts : [...prevPosts, ...mergedPosts]));
       }
     } catch (error) {
       console.error('Error fetching posts:', error);
     }
-  }, [query, page]);
+  }, [query]);
 
   const fetchProfiles = async () => {
     try {
       const response = await axiosInstance.get('/api/search/users', {
-        params: {
-          keyword: query,
-          size: 10,
-        },
+        params: {keyword: query,size: 10},
       });
       if (response.data.isSuccess) {
         setResultProfile(response.data.result.users);
@@ -65,10 +62,20 @@ const SearchResult = () => {
 
   useEffect(() => {
     if (query) {
-      if (selectedTab === 0) fetchPosts();
-      else fetchProfiles();
+      if (selectedTab === 0) {
+        fetchPosts(page);
+      } else {
+        fetchProfiles();
+      }
     }
-  }, [query, selectedTab, page, fetchPosts]);
+  }, [query, selectedTab, fetchPosts]);
+
+  useEffect(() => {
+    setResultPost([]);
+    setResultProfile([]);
+    setPage(1);
+    if (selectedTab === 0) fetchPosts(1);
+  }, [selectedTab]);
 
   return (
     <Container onScroll={loadMorePostsOnScroll}>

@@ -55,4 +55,10 @@ export const FollowButton = styled.button`
         font-size: 12px;
     }
 
+    @media (max-width: 1024px){ 
+        font-size: 14px;
+    }
+
+
+
 `;
