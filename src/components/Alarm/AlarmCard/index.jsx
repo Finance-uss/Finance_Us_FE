@@ -31,7 +31,7 @@ const AlarmCard = ({ alarm, markRead }) => {
     if (resourceType === "POST") {
       navigate(`/community/postdetail/${resourceId}`); 
     } else if (resourceType === "ACCOUNT") {
-      navigate(`/finance/account/${resourceId}`); 
+      navigate(`/finance`); 
     } else {
       navigate(`/community`);
     }    
