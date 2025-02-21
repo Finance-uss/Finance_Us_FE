@@ -26,6 +26,7 @@ export const Label = styled.label`
     font-size: 16px;
     line-height: 19px;
     color: #000000;
+    white-space: nowrap;
 `;
 
 export const Input = styled.input`

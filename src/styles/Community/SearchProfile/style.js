@@ -50,6 +50,7 @@ export const FollowButton = styled.button`
     margin-left: auto; 
     font-size:16px;
     flex-shrink: 0;
+    white-space: nowrap;
 
     @media (max-width: 393px) {
         font-size: 12px;
