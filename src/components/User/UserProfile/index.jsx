@@ -30,49 +30,34 @@ const UserProfile = () => {
   const location = useLocation();
   const updatedProfile = location.state?.updatedProfile || null;
 
-  useEffect(() => {
-      if (updatedProfile) {
-          // console.log("✅ 새 프로필 데이터 반영:", updatedProfile);
-          setProfileData(updatedProfile);
-      }
-  }, [updatedProfile]);
+  const fetchProfileData = async () => {
+      try {
+          const token = localStorage.getItem("token"); 
+          if (!token) throw new Error("토큰이 없습니다.");
 
+          const response = await axiosInstance.get('/api/user', {
+              headers: { Authorization: `Bearer ${token}` },
+          });
 
+          if (response.data.isSuccess) {
+              setProfileData(response.data.result);
+          }
 
-  useEffect(() => {
-    const fetchProfileData = async () => {
-        try {
-            const token = localStorage.getItem("token"); // Bearer 토큰 가져오기
-            if (!token) {
-                throw new Error("토큰이 없습니다.");
-            }
+          const authResponse = await axiosInstance.get('/api/auth/user', {
+              headers: { Authorization: `Bearer ${token}` },
+          });
 
-            const response = await axiosInstance.get('/api/user', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-
-            if (response.data.isSuccess) {
-                setProfileData(response.data.result);
-            }
-
-            const authResponse = await axiosInstance.get('/api/auth/user', {
-              headers: {
-                  Authorization: `Bearer ${token}`,
-              },
-            });
-
-            if (authResponse.data.isSuccess && authResponse.data.result === "인증된 사용자입니다.") {
+          if (authResponse.data.isSuccess && authResponse.data.result === "인증된 사용자입니다.") {
               setIsVerified(true);
-            }
-        } catch (error) {
-            console.error('회원 정보 조회 실패:', error);
-        }
-    };
+          }
+      } catch (error) {
+          console.error('회원 정보 조회 실패:', error);
+      }
+  };
 
+  useEffect(() => {
     fetchProfileData();
-  }, []);
+  }, [updatedProfile]);
 
   return (
     <ProfileContainer>
